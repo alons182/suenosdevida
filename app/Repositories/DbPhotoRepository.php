@@ -25,7 +25,7 @@ class DbPhotoRepository extends DbRepository implements PhotoRepository {
     public function store($data)
     {
         $cant = count($this->getPhotos($data['product_id']));
-        $data['url'] = ($data['photo']) ? $this->storeImage($data['photo'], 'photo_' . ++ $cant, 'products/' . $data['product_id'], 50, null) : '';
+        $data['url'] = ($data['photo']) ? $this->storeImage($data['photo'], 'photo_' . ++ $cant, 'products/' . $data['product_id'], 1024, null, 50, null) : '';
         $data['url_thumb'] = 'thumb_' . $data['url'];
 
         $photo = $this->model->create($data);
@@ -49,11 +49,13 @@ class DbPhotoRepository extends DbRepository implements PhotoRepository {
      * @param $file
      * @param $name
      * @param $directory
+     * @param null $width
+     * @param null $height
      * @param $thumbWidth
      * @param null $thumbHeight
      * @return string
      */
-    public function storeImage($file, $name, $directory, $thumbWidth, $thumbHeight = null)
+    public function storeImage($file, $name, $directory, $width = null, $height = null, $thumbWidth, $thumbHeight = null)
     {
         $extension = pathinfo($file["name"], PATHINFO_EXTENSION);
         $filename = Str::slug($name) . '.' . $extension;
@@ -63,6 +65,42 @@ class DbPhotoRepository extends DbRepository implements PhotoRepository {
         File::exists($path) or File::makeDirectory($path, null, true);
 
         $image->interlace();
+
+        // IF THE FILE SIZE IS BIGGER(1MB+) RESIZE
+        if($image->filesize() >= 1048576)
+        {
+            if($width)
+            {
+                if($image->width() > $image->height())
+                {
+                    if($image->width() >= $width )
+                    {
+                        $image->resize($width, $height, function ($constraint)
+                        {
+                            $constraint->aspectRatio();
+                        });
+                    }else{
+                        $image->resize($image->width(), $height, function ($constraint)
+                        {
+                            $constraint->aspectRatio();
+                        });
+                    }
+
+                }else{
+                    if($image->height() >= $width )
+                    {
+                        $image->resize($height, $width, function ($constraint)
+                        {
+                            $constraint->aspectRatio();
+                        });
+                    }else{
+                        $image->resize($image->height(), $width, function ($constraint)
+                        {
+                            $constraint->aspectRatio();
+                        });
+                    }
+                }
+            }
 
         $image->save($path . $filename, 60)->resize($thumbWidth, $thumbHeight, function ($constraint)
         {

@@ -26,7 +26,7 @@ class DbProductRepository extends DbRepository implements ProductRepository {
     public function store($data)
     {
         $data = $this->prepareData($data);
-        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'products', 640, null) : '';
+        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'products', 1024, null, 640, null) : '';
 
         $product = $this->model->create($data);
         $this->sync_categories($product, $data['categories']);
@@ -46,7 +46,7 @@ class DbProductRepository extends DbRepository implements ProductRepository {
         $product = $this->model->findOrFail($id);
         $data = $this->prepareData($data);
 
-        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'products', 640, null) : $product->image;
+        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'products', 1024, null, 640, null) : $product->image;
 
         $product->fill($data);
         $product->save();

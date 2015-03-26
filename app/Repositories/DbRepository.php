@@ -65,7 +65,7 @@ class DbRepository {
         return $model;
     }
 
-    public function storeImage($file, $name, $directory, $thumbWidth, $thumbHeight = null)
+    public function storeImage($file, $name, $directory, $width = null, $height = null, $thumbWidth, $thumbHeight = null)
     {
 
         $filename = Str::slug($name) . '.' . $file->getClientOriginalExtension();
@@ -75,6 +75,45 @@ class DbRepository {
         File::exists($path) or File::makeDirectory($path, null, true);
 
         $image->interlace();
+
+        // IF THE FILE SIZE IS BIGGER(1MB+) RESIZE
+        if($image->filesize() >= 1048576)
+        {
+           if($width)
+           {
+               if($image->width() > $image->height())
+               {
+                   if($image->width() >= $width )
+                   {
+                       $image->resize($width, $height, function ($constraint)
+                       {
+                           $constraint->aspectRatio();
+                       });
+                   }else{
+                       $image->resize($image->width(), $height, function ($constraint)
+                       {
+                           $constraint->aspectRatio();
+                       });
+                   }
+
+               }else{
+                   if($image->height() >= $width )
+                   {
+                       $image->resize($height, $width, function ($constraint)
+                       {
+                           $constraint->aspectRatio();
+                       });
+                   }else{
+                       $image->resize($image->height(), $width, function ($constraint)
+                       {
+                           $constraint->aspectRatio();
+                       });
+                   }
+               }
+           }
+
+
+        }
 
         $image->save($path . $filename, 60)
             ->resize($thumbWidth, $thumbHeight, function ($constraint)

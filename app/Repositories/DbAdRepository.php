@@ -20,7 +20,7 @@ class DbAdRepository extends DbRepository implements AdRepository {
     public function store($data)
     {
         $data = $this->prepareData($data);
-        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'ads', 640, null) : '';
+        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'ads', 1024, null, 200, 200) : '';
         $data['publish_date'] = Carbon::now();
 
         $ad = $this->model->create($data);
@@ -100,7 +100,7 @@ class DbAdRepository extends DbRepository implements AdRepository {
         $ad = $this->model->findOrFail($id);
         $data = $this->prepareData($data);
 
-        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'ads', 640, null) : $ad->image;
+        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'ads', 1024, null, 200, 200) : $ad->image;
 
         $ad->fill($data);
         $ad->save();
