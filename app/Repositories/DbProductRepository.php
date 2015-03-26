@@ -78,7 +78,7 @@ class DbProductRepository extends DbRepository implements ProductRepository {
             $cant = count($data['new_photo_file']);
             foreach ($data['new_photo_file'] as $photo)
             {
-                $filename = $this->storeImage($photo, 'photo_' . $cant --, 'products/' . $product->id, 50, null);
+                $filename = $this->storeImage($photo, 'photo_' . $cant --, 'products/' . $product->id, null, null, 50, null);
                 $photos = new Photo;
                 $photos->url = $filename;
                 $photos->url_thumb = 'thumb_' . $filename;

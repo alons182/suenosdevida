@@ -111,10 +111,7 @@ class DbRepository {
                    }
                }
            }
-
-
         }
-
         $image->save($path . $filename, 60)
             ->resize($thumbWidth, $thumbHeight, function ($constraint)
             {
