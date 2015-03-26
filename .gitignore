@@ -1,6 +1,6 @@
 /vendor
 /node_modules
 /public/images_store
-/public/downloads
+/public/downloads_files
 .env
 .idea
