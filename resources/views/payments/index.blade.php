@@ -136,7 +136,7 @@
                                 <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="200"  height="200" />
                             </span>
                         @else
-                            <span class="payments-ad-link payments-ad-link--hit">
+                            <span class="payments-ad-link payments-ad-link--hit" data-msg="Publicidad Vista">
                                 <img src="holder.js/200x200/text:{!! $ad->name !!}" alt="{!! $ad->name !!}">
                             </span>
                         @endif
