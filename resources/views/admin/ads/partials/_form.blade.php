@@ -58,7 +58,7 @@
         @if (isset($ad))
             <div class="main_image">
                 @if ($ad->image)
-                    <img src="{!! photos_path('ads') !!}thumb_{!! $ad->image !!}" alt="{!! $ad->image !!}">
+                    <img src="{!! photos_path('ads') !!}{!! $ad->image !!}" alt="{!! $ad->image !!}">
                 @else
                     <img src="holder.js/140x140" alt="No Image">
                 @endif
