@@ -3,6 +3,7 @@
 use App\Http\Requests\AdRequest;
 use App\Http\Requests\PaymentRequest;
 use App\Repositories\AdRepository;
+use App\Repositories\GainRepository;
 use Carbon\Carbon;
 
 use App\Repositories\PaymentRepository;
@@ -20,12 +21,18 @@ class PaymentsController extends Controller {
      * @var App\Repositories\PaymentRepository
      */
     private $paymentRepository;
+    /**
+     * @var GainRepository
+     */
+    private $gainRepository;
 
-    function __construct(UserRepository $userRepository, PaymentRepository $paymentRepository, AdRepository $adRepository)
+    function __construct(UserRepository $userRepository, PaymentRepository $paymentRepository, AdRepository $adRepository, GainRepository $gainRepository)
     {
         $this->userRepository = $userRepository;
         $this->paymentRepository = $paymentRepository;
         $this->adRepository = $adRepository;
+
+        $this->gainRepository = $gainRepository;
 
         $this->middleware('auth');
     }
@@ -44,15 +51,29 @@ class PaymentsController extends Controller {
             $data = array_add($data, 'month', Carbon::now()->month);
         }
 
-        $payments = $this->paymentRepository->getPaymentsOfYourRed($data);
+        $paymentsOfUser = $this->paymentRepository->getPaymentsOfUser($data);
+        $paymentsOfUserRed = $this->paymentRepository->getPaymentsOfUserRed($data);
 
         $canton = Auth::user()->profiles->canton;
 
-        $ads = $this->adRepository->getByZone($canton, Auth::user()->id);
+        $ads_seen = $this->adRepository->getAdsSeenByZone($canton, Auth::user()->id);
+        $ads_not_seen = $this->adRepository->getAdsNotSeenByZone($canton, Auth::user()->id);
+
+        $hit_per_day = $this->adRepository->hit_per_day(Auth::user()->id);
+
+        $possibleGains = $this->paymentRepository->getPossibleGainsPerAffiliates();
+        $gains = $this->gainRepository->getGains($data);
+        $membership_cost = $this->paymentRepository->getMembershipCost();
 
         return View::make('payments.index')->with([
-            'payments'      => $payments,
-            'ads'      => $ads,
+            'paymentsOfUser'      => $paymentsOfUser,
+            'paymentsOfUserRed'      => $paymentsOfUserRed,
+            'ads_seen'      => $ads_seen,
+            'ads_not_seen'      => $ads_not_seen,
+            'hits_per_day'      => $hit_per_day,
+            'possible_gains'      => $possibleGains,
+            'gains'      => $gains,
+            'membership_cost'      => $membership_cost,
             'selectedMonth' => $data['month']
         ]);
     }

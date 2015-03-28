@@ -1607,11 +1607,40 @@ text-align center .active span,
   background-color: #98ba33;
   padding: 0.3em;
   top: 0;
+  font-size: 12px;
   color: #fff;
 }
 .payments-ad-link--hit img {
   -webkit-filter: grayscale(100%);
           filter: grayscale(100%);
+}
+.countdown span {
+  padding: 0.5em;
+}
+.level-1 {
+  background-color: #00b4ea;
+  color: #fff;
+  padding: 0.3em;
+}
+.level-2 {
+  background-color: #00c658;
+  color: #fff;
+  padding: 0.3em;
+}
+.level-3 {
+  background-color: #fc0;
+  color: #fff;
+  padding: 0.3em;
+}
+.level-4 {
+  background-color: #ff8c00;
+  color: #fff;
+  padding: 0.3em;
+}
+.level-5 {
+  background-color: #f01;
+  color: #fff;
+  padding: 0.3em;
 }
 .gains-container {
   position: absolute;

@@ -12,10 +12,10 @@ class ProfilesTableSeeder extends Seeder {
     {
         $faker = Faker::create();
 
-        foreach (range(1, 6) as $index)
-        {
+        //foreach (range(1, 6) as $index)
+       // {
             Profile::create([
-                'user_id' => $index,
+                'user_id' => 1,
                 'first_name'=> $faker->word,
                 'last_name'=> $faker->word,
                 'ide'=> $faker->randomNumber(),
@@ -31,7 +31,7 @@ class ProfilesTableSeeder extends Seeder {
                 'number_account'=> $faker->creditCardNumber,
                 'skype'=> $faker->word
             ]);
-        }
+       // }
 
 
 

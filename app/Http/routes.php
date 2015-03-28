@@ -11,6 +11,12 @@
 |
 */
 #binding
+use App\Payment;
+use App\Role;
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+
 App::bind('App\Repositories\UserRepository', 'App\Repositories\DbUserRepository');
 App::bind('App\Repositories\PaymentRepository', 'App\Repositories\DbPaymentRepository');
 App::bind('App\Repositories\CategoryRepository', 'App\Repositories\DbCategoryRepository');
@@ -18,7 +24,7 @@ App::bind('App\Repositories\ProductRepository', 'App\Repositories\DbProductRepos
 App::bind('App\Repositories\PhotoRepository', 'App\Repositories\DbPhotoRepository');
 App::bind('App\Repositories\OrderRepository', 'App\Repositories\DbOrderRepository');
 App::bind('App\Repositories\AdRepository', 'App\Repositories\DbAdRepository');
-
+App::bind('App\Repositories\GainRepository', 'App\Repositories\DbGainRepository');
 /**
  * Pages
  */
@@ -82,6 +88,7 @@ Route::get('logout', [
 Route::resource('sessions', 'SessionsController', [
     'only' => ['create', 'store', 'destroy']
 ]);
+
 /**
  * Ads user
  */
@@ -309,11 +316,49 @@ Route::group(['prefix' => 'store'], function ()
 
 });
 
-//Route::get('/', 'WelcomeController@index');
-
-//Route::get('home', 'HomeController@index');
 
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
+
+// helper routes for test
+use Faker\Factory as Faker;
+Route::get('helper/createuser/{parent_id}', function($parent_id){
+    $faker = Faker::create();
+    $repo =  app::make('App\Repositories\UserRepository');
+    foreach (range(1, 5) as $index)
+    {
+        $user = User::create([
+            'username' => $faker->word . $index,
+            'email' => $faker->email. $index,
+            'password' => "123",
+            'parent_id' => $parent_id
+
+        ]);
+        $role = (isset($data['role'])) ? $data['role'] : Role::whereName('member')->first();
+
+        $user->createProfile();
+        $user->assignRole($role);
+
+        $repo->checkLevel($user->parent_id);
+    }
+
+});
+Route::get('helper/createpayment/{id}', function($id){
+
+    $repo =  app::make('App\Repositories\PaymentRepository');
+
+    $payment = Payment::create([
+        'user_id'         => $id,
+        'payment_type'    => "M",
+        'amount'          => '15000',
+        'bank'            => 'Nacional',
+        'transfer_number' => '123',
+        'transfer_date'   => Carbon::now()
+    ]);
+
+
+
+
+});

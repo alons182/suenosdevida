@@ -1,5 +1,7 @@
 <?php namespace App\Repositories;
 
+use App\Gain;
+use App\Level;
 use App\User;
 use Carbon\Carbon;
 use App\Payment;
@@ -27,14 +29,13 @@ class DbUserRepository extends DbRepository implements UserRepository {
         $data = $this->prepareData($data);
         $user = $this->model->create($data);
 
-
-        //  dd($user);
         $role = (isset($data['role'])) ? $data['role'] : Role::whereName('member')->first();
 
         $user->createProfile();
         $user->assignRole($role);
 
-        $user = $this->bonus($user, $parent_id);
+        $this->checkLevel($parent_id);
+
 
         return $user;
     }
@@ -58,7 +59,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
         $user->save();
         $user->roles()->sync($roles);
 
-        //$this->model->rebuild();
+
 
         return $user;
     }
@@ -113,7 +114,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
     }
 
     /**
-     * Generate a report with the user and your payments for month
+     * Generate a report with the payments of day
      * @param $date
      * @internal param $month
      * @internal param $year
@@ -153,7 +154,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
                 'Nombre'             => $payment->users->profiles->present()->fullname,
                 'Cedula'             => $payment->users->profiles->ide,
                 'Cuenta'             => $payment->users->profiles->number_account,
-                'Monto pago'              => $payment->amount,
+                'Monto pago'         => $payment->amount,
                 'Fecha del pago'       => $payment->created_at->toDateTimeString(),
                 'Fecha de la transferencia'       => $payment->transfer_date
 
@@ -182,8 +183,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
         $usersArray = [];
         foreach ($users as $user)
         {
-            $usersOfRed = $user->children()->get()->lists('id');
-
+            //$usersOfRed = $user->children()->get()->lists('id');
 
             $paymentsOfUser =Payment::where(function ($query) use ($user, $month, $year)
             {
@@ -194,29 +194,17 @@ class DbUserRepository extends DbRepository implements UserRepository {
 
             $paymentOfUser = $paymentsOfUser->sum(\DB::raw('amount'));
 
-            if ($usersOfRed)
+            $gainsOfUser = Gain::where(function ($query) use ($user, $month, $year)
             {
-                $paymentsOfRed =Payment::where(function ($query) use ($usersOfRed, $month, $year)
-                {
-                    $query->whereIn('user_id', $usersOfRed)
-                        ->where(\DB::raw('MONTH(created_at)'), '=', $month)
-                        ->where(\DB::raw('YEAR(created_at)'), '=', $year);
-                });
-
-                $gain = $paymentsOfRed->sum(\DB::raw('gain'));
+                $query->where('user_id', '=', $user->id)
+                    ->where('month', '=', $month)
+                    ->where('year', '=', $year);
+            })->sum('amount');
 
 
-
-                $membership_cost = ($paymentsOfRed->count()) ? $paymentsOfRed->first()->membership_cost : $this->membership_cost;
-
+            $membership_cost = Level::where('level','=',$user->level)->first()->payment;
 
 
-            } else
-            {
-                $gain = 0;
-                $membership_cost = $this->membership_cost;
-
-            }
 
             $userArray = array(
                 'id'                 => $user->id,
@@ -226,7 +214,8 @@ class DbUserRepository extends DbRepository implements UserRepository {
                 'Cedula'             => $user->profiles->ide,
                 'Cuenta'             => $user->profiles->number_account,
                 '# Afiliados'        => $user->children()->get()->count(),
-                'Ganancia'           => $gain - $membership_cost,
+                'Nivel'              => $user->level,
+                'Ganancia'           => $gainsOfUser - $membership_cost,
                 'Pago membresia'     => $paymentOfUser,
                 'Mes'                => $month,
                 'Año'                => $year
@@ -248,93 +237,59 @@ class DbUserRepository extends DbRepository implements UserRepository {
      */
     public function prepareData($data)
     {
-        // if (! $data['parent_id'])
-        // {
-        $data = array_except($data, array('parent_id'));
+         if (! $data['parent_id'])
+         {
+            $data = array_except($data, array('parent_id'));
 
-        // }
+         }
 
 
         return $data;
     }
 
     /**
-     * Verify the bonus system
-     * @param $user
+     * Verify the Nivel system
      * @param $parent_id
      * @internal param $data
      * @return mixed
      */
-    public function bonus($user, $parent_id)
-    {
-        if ($parent_id)
-        {
-            $parent_user = $this->model->findOrFail($parent_id);
+    public function checkLevel($parent_id)
+   {
+       if ($parent_id)
+       {
+           $parent_user = $this->model->findOrFail($parent_id);
 
-            if ($parent_user->depth != 0)
-            {
-                if ($parent_user->immediateDescendants()->count() == 4 && $parent_user->bonus != 1) //quinto afiliado
+           if ($parent_user->immediateDescendants()->count() == 5 ) //quinto afiliado
+           {
+                if($parent_user->level > 1)
                 {
-                    $parent_user->bonus = 1;
+
+                    if($parent_user->level == 2 && $parent_user->immediateDescendants()->sum('level') == 10)
+                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
+                    if($parent_user->level == 3 && $parent_user->immediateDescendants()->sum('level') == 15)
+                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
+                    if($parent_user->level == 4 && $parent_user->immediateDescendants()->sum('level') == 20)
+                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
+                    if($parent_user->level == 5 && $parent_user->immediateDescendants()->sum('level') == 25)
+                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
+
                     $parent_user->save();
-                    $this->bonus($user, $parent_user->parent_id);
-                } else if($parent_user->immediateDescendants()->count() == 9 && $parent_user->bonus != 2) //decimo afiliado
-                {
-                    $parent_user->bonus = 2;
+
+                }else{
+                    $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
                     $parent_user->save();
-                    $this->bonus($user, $parent_user->parent_id);
-                } else
-                {
-                    $user->parent_id = $parent_user->id;
-                    $user->save();
+
                 }
-            } else
-            {
-                $user->parent_id = $parent_user->id;
-                $parent_user->bonus = 1;
-                $parent_user->save();
-                $user->save();
+               $this->checkLevel($parent_user->parent_id);
+           }
 
 
-            }
+       }
 
 
-        }
 
-        /*
-         *  if ($parent_id)
-        {
-            $parent_user = $this->model->findOrFail($parent_id);
+   }
 
-            if ($parent_user->depth != 0)
-            {
-                if ($parent_user->immediateDescendants()->count() == 4 && $parent_user->bonus != 1)
-                {
-                    $parent_user->bonus = 1;
-                    $parent_user->save();
-                    $this->bonus($user, $parent_user->parent_id);
-                } else
-                {
-                    $user->parent_id = $parent_user->id;
-                    $user->save();
-                }
-            } else
-            {
-                $user->parent_id = $parent_user->id;
-                $parent_user->bonus = 1;
-                $parent_user->save();
-                $user->save();
-
-
-            }
-
-
-        }
-         * */
-
-
-        return $user;
-    }
 
     //List of patners user for the modal view of user.
 

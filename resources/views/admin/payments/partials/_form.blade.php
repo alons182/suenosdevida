@@ -19,7 +19,7 @@
         <!-- Tipo de pago Form Input -->
         <div class="form-group">
             {!! Form::label('payment_type', 'Tipo de pago:') !!}
-            {!! Form::select('payment_type', ['M' => 'Membrecia (₡20,000)', 'A' => 'Administrativo (₡5,000)'], null,['class'=>'form-control']) !!}
+            {!! Form::select('payment_type', ['M1' => 'Membrecia Nivel 1 (₡15,000)', 'M2' => 'Membrecia Nivel 2 (₡25,000)', 'M3' => 'Membrecia Nivel 1 (₡50,000)','M4' => 'Membrecia Nivel 1 (₡75,000)','M5' => 'Membrecia Nivel 1 (₡100,000)'], null,['class'=>'form-control']) !!}
             {!! errors_for('payment_type',$errors) !!}
         </div>
         <!-- Banco Form Input -->

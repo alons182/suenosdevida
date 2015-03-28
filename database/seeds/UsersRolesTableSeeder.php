@@ -12,7 +12,11 @@ class UsersRolesTableSeeder extends Seeder {
     {
         $faker = Faker::create();
 
-        $usersIds = User::lists('id');
+        DB::table('role_user')->insert([
+            'role_id' => 1,
+            'user_id' => 1
+        ]);
+        /*$usersIds = User::lists('id');
         $rolesIds = Role::lists('id');
         foreach(range(1, 6) as $index)
         {
@@ -22,7 +26,7 @@ class UsersRolesTableSeeder extends Seeder {
                 'user_id' => $index
             ]);
 
-        }
+        }*/
 
 
     }

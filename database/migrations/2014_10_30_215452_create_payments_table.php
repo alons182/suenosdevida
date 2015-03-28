@@ -21,9 +21,6 @@ class CreatePaymentsTable extends Migration {
             $table->string('transfer_number');
             $table->dateTime('transfer_date');
             $table->double('amount', 15, 2)->default(0);
-            $table->double('possible_gain', 15, 2)->default(0);
-            $table->double('gain', 15, 2)->default(0);
-            $table->double('membership_cost', 15, 2)->default(0);
             $table->string('payment_type',3);
 			$table->timestamps();
 		});

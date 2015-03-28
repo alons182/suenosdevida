@@ -40,6 +40,13 @@
         {!! errors_for('canton',$errors) !!}
     </div>
 
+    <div class="form-group">
+        {!! Form::label('publish_date', 'Fecha Publicado:') !!}
+        {!! Form::text('publish_date', null, ['class' => 'form-control datepicker-ads']) !!}
+        {!! errors_for('publish_date',$errors) !!}
+    </div>
+
+
 
     <div class="form-group">
         {!! Form::label('published','Publicado:')!!}
@@ -74,7 +81,6 @@
         {!! errors_for('video',$errors) !!}
 
     </div>
-
 
 
 </div>

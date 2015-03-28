@@ -64,6 +64,10 @@ class User extends Node implements AuthenticatableContract, CanResetPasswordCont
     {
         return $this->hasMany('App\Payment');
     }
+    public function gains()
+    {
+        return $this->hasMany('App\Gain');
+    }
     public function profiles()
     {
         return $this->hasOne('App\Profile');

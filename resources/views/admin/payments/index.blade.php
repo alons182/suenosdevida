@@ -15,8 +15,6 @@
                 <th>#</th>
                 <th>Nombre Afiliado</th>
                 <th>Monto</th>
-                <th>Ganancia Posible</th>
-                <th>Ganancia</th>
                 <th>Correo</th>
                 <th>Telefono</th>
                 <th>Tipo de pago</th>
@@ -38,21 +36,6 @@
                     {!! money($payment->amount,'₡') !!}
                 @endif
                 </td>
-                <td>
-                @if($currentUser->hasrole('administrator'))
-                    <a href="#" class="x-edit" data-type="text" data-name="possible_gain" data-pk="{!! $payment->id !!}" data-url="{!! URL::route("store.admin.payments.update", [$payment->id]) !!}" data-title="Enter Ganancia Posible">{!! money($payment->possible_gain,'₡') !!}</a>
-                @else
-                    {!! money($payment->possible_gain,'₡') !!}
-                @endif
-                </td>
-                <td>
-                    @if($currentUser->hasrole('administrator'))
-                        <a href="#" class="x-edit" data-type="text" data-name="gain" data-pk="{!! $payment->id !!}" data-url="{!! URL::route("store.admin.payments.update", [$payment->id]) !!}" data-title="Enter Ganancia">{!! money($payment->gain,'₡') !!}</a>
-                    @else
-                        {!! money($payment->gain,'₡') !!}
-                    @endif
-                </td>
-
                 <td>
                    {!! $payment->users->email !!}
                 </td>

@@ -7,7 +7,7 @@
    
 	
 	<div class="table-responsive">
-        {!! link_to_route('store.admin.ads.create','Nuevo Producto',null,['class'=>'btn btn-success']) !!}
+        {!! link_to_route('store.admin.ads.create','Nuevo Anuncio',null,['class'=>'btn btn-success']) !!}
         
         {!! Form::open(['route' =>['destroy_multiple'],'method' => 'post', 'id' =>'form-delete-chk','data-confirm' => 'Estas seguro?']) !!}
         <button type="submit" class="delete-multiple btn btn-danger btn-sm "><i class="glyphicon glyphicon-trash"></i></button>     

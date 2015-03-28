@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentRequest;
 use App\Mailers\ContactMailer;
 use App\Repositories\AdRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -80,8 +81,9 @@ class AdsController extends Controller {
 	public function show($id)
 	{
         $ad = $this->adRepository->findById($id);
+       $targetDate =  Carbon::now()->addMinutes(3);
 
-		return view::make('ads.show')->with(compact('ad'));
+		return view::make('ads.show')->with(compact('ad','targetDate'));
 	}
 
 

@@ -181,8 +181,8 @@ class UsersController extends Controller {
      */
     public function exportGainsList()
     {
-        $month = Input::get('month');
-        $year = Input::get('year');
+        $month = Request::get('month');
+        $year = Request::get('year');
 
         Excel::create('Ganancias', function ($excel) use ($month, $year)
         {
@@ -206,7 +206,7 @@ class UsersController extends Controller {
      */
     public function exportPaymentsList()
     {
-        $payment_date = Input::get('payment_date_submit');
+        $payment_date = Request::get('payment_date_submit');
 
         Excel::create('Pagos', function ($excel) use ($payment_date)
         {

@@ -98,6 +98,7 @@ class AdsController extends Controller {
 	public function update(AdRequest $request, $id)
 	{
 		$data = $request->all();
+
         $this->adRepository->update($id,$data);
 
         Flash::message('Ad Updated');

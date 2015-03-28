@@ -52,14 +52,16 @@ class RegistrationController extends Controller {
 
         $user = $this->userRepository->store($input);
 
-        Auth::login($user);
 
-        Flash::message('Usuario creado. se te ha enviado un correo con la información de usuario y una url para que la compartas con otros usuarios que quieras para que se agreguen a tu red. Completa tu perfil por favor, es importante !');
+            Auth::login($user);
 
-        $this->mailer->sendWelcomeMessageTo($user,$input['password']);
+            Flash::message('Usuario creado. se te ha enviado un correo con la información de usuario y una url para que la compartas con otros usuarios que quieras para que se agreguen a tu red. Completa tu perfil por favor, es importante !');
+
+            $this->mailer->sendWelcomeMessageTo($user,$input['password']);
 
 
-        return Redirect::route('profile.edit', $user->username);
+            return Redirect::route('profile.edit', $user->username);
+
     }
 
 
