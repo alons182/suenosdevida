@@ -66,13 +66,15 @@ Route::get('descargas', [
  */
 Route::get('register', [
     'as'   => 'registration.create',
-    'uses' => 'RegistrationController@create'
-])->before('guest');
+    'uses' => 'RegistrationController@create',
+    'middleware' => 'guest'
+]);
 
 Route::post('register', [
     'as'   => 'registration.store',
-    'uses' => 'RegistrationController@store'
-])->before('guest');
+    'uses' => 'RegistrationController@store',
+    'middleware' => 'guest'
+]);
 
 /**
  * Authentication
@@ -118,19 +120,22 @@ Route::get('cart', [
 
 Route::get('cart/checkout', [
     'as'   => 'cart_checkout',
-    'uses' => 'OrdersController@formCheckout'
-])->before('auth');
+    'uses' => 'OrdersController@formCheckout',
+    'middleware' => 'auth'
+]);
 
 Route::post('cart/checkoutConfirm', [
     'as'   => 'cart_checkout.confirm',
-    'uses' => 'OrdersController@formPostCheckout'
-])->before('auth');
+    'uses' => 'OrdersController@formPostCheckout',
+    'middleware' => 'auth'
+]);
 
 
 Route::post('cart/checkout', [
     'as'   => 'cart_checkout.store',
-    'uses' => 'OrdersController@store'
-])->before('auth');
+    'uses' => 'OrdersController@store',
+    'middleware' => 'auth'
+]);
 
 
 /**
@@ -138,8 +143,9 @@ Route::post('cart/checkout', [
  */
 Route::get('red', [
     'as'   => 'red.show',
-    'uses' => 'PaymentsController@red'
-])->before('auth');
+    'uses' => 'PaymentsController@red',
+    'middleware' => 'auth'
+]);
 /**
  * Profile
  */
@@ -149,8 +155,9 @@ Route::resource('profile', 'ProfilesController', [
 
 Route::get('/{profile}', [
     'as'   => 'profile.register',
-    'uses' => 'RegistrationController@create'
-])->before('guest');
+    'uses' => 'RegistrationController@create',
+    'middleware' => 'guest'
+]);
 
 /**
  * Administration Store
