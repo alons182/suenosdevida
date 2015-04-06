@@ -62,7 +62,7 @@ class DbPhotoRepository extends DbRepository implements PhotoRepository {
         $path = dir_photos_path($directory);
         $image = Image::make($file["tmp_name"]);
 
-        File::exists($path) or File::makeDirectory($path, null, true);
+        File::exists($path) or File::makeDirectory($path, 0775, true);
 
         $image->interlace();
 
