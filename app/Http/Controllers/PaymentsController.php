@@ -64,7 +64,7 @@ class PaymentsController extends Controller {
         $possibleGains = $this->paymentRepository->getPossibleGainsPerAffiliates();
         $gains = $this->gainRepository->getGains($data);
         $membership_cost = $this->paymentRepository->getMembershipCost();
-
+        //dd($possibleGains);
         return View::make('payments.index')->with([
             'paymentsOfUser'      => $paymentsOfUser,
             'paymentsOfUserRed'      => $paymentsOfUserRed,

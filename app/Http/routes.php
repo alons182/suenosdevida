@@ -25,6 +25,7 @@ App::bind('App\Repositories\PhotoRepository', 'App\Repositories\DbPhotoRepositor
 App::bind('App\Repositories\OrderRepository', 'App\Repositories\DbOrderRepository');
 App::bind('App\Repositories\AdRepository', 'App\Repositories\DbAdRepository');
 App::bind('App\Repositories\GainRepository', 'App\Repositories\DbGainRepository');
+
 /**
  * Pages
  */
@@ -344,19 +345,7 @@ Route::get('helper/createuser/{parent_id}', function($parent_id){
 
         ];
         $repo->store($data);
-        /*$user = User::create([
-            'username' => $faker->word . $index,
-            'email' => $faker->email. $index,
-            'password' => "123",
-            'parent_id' => $parent_id
 
-        ]);
-        $role = (isset($data['role'])) ? $data['role'] : Role::whereName('member')->first();
-
-        $user->createProfile();
-        $user->assignRole($role);
-
-        $repo->checkLevel($user->parent_id);*/
     }
 
 });
@@ -364,14 +353,6 @@ Route::get('helper/createpayment/{id}', function($id){
 
     $repo =  app::make('App\Repositories\PaymentRepository');
 
-    /*$payment = Payment::create([
-        'user_id'         => $id,
-        'payment_type'    => "M",
-        'amount'          => '15000',
-        'bank'            => 'Nacional',
-        'transfer_number' => '123',
-        'transfer_date'   => Carbon::now()
-    ]);*/
     $data = [
         'user_id'         => $id,
         'payment_type'    => "M",
@@ -383,7 +364,17 @@ Route::get('helper/createpayment/{id}', function($id){
 
     $repo->store($data);
 
+});
+Route::get('helper/test/{id}', function($id){
 
+    $repo =  app::make('App\Repositories\UserRepository');
+    $parent_user = $repo->findById($id);
+    $descendants = $parent_user->immediateDescendants();
 
+    $descendantsIds = $descendants->lists('id');
+    dd($descendantsIds);
 
 });
+
+
+
