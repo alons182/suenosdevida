@@ -72,7 +72,7 @@ class DbRepository {
         $path = dir_photos_path($directory);
         $image = Image::make($file->getRealPath());
 
-        File::exists($path) or File::makeDirectory($path, 666, true);
+        File::exists($path) or File::makeDirectory($path, 755, true);
 
         $image->interlace();
 
