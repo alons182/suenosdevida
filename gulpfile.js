@@ -42,7 +42,6 @@ elixir(function(mix) {
         'vendor/picker.date.js',
         'vendor/simpleCart.min.js',
         'vendor/jquery.cycle2.min.js',
-        'vendor/countdown.js',
         'ubicaciones.js',
         'main.js'
     ],'public/js/bundle.js','resources/assets/js')
