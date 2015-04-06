@@ -32,6 +32,10 @@ class ViewComposerServiceProvider extends ServiceProvider {
         view()->composer('payments/index', function($view){
             $view->with('currentUser', Auth::user());
         });
+        view()->composer('layouts/partials._list_categories', function($view){
+            $view->with('categories', Category::where('depth', '=','0')->get());
+        });
+
 
         // admin
         view()->composer('admin/layouts/partials._navbar', function($view){

@@ -258,19 +258,29 @@ class DbUserRepository extends DbRepository implements UserRepository {
        if ($parent_id)
        {
            $parent_user = $this->model->findOrFail($parent_id);
+           $descendants = $parent_user->immediateDescendants();
 
-           if ($parent_user->immediateDescendants()->count() == 5 ) //quinto afiliado
+           $descendantsIds = $descendants->lists('id');
+
+           $paymentsOfRedCount = Payment::where(function ($query) use ($descendantsIds)
+           {
+               $query->whereIn('user_id', $descendantsIds)
+                   ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
+                   ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+           })->count();
+
+           if ($descendants->count() == 5 && $paymentsOfRedCount == 5) //quinto afiliado
            {
                 if($parent_user->level > 1)
                 {
 
-                    if($parent_user->level == 2 && $parent_user->immediateDescendants()->sum('level') == 10)
+                    if($parent_user->level == 2 && $descendants->sum('level') == 10 && $paymentsOfRedCount == 5)
                         $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
-                    if($parent_user->level == 3 && $parent_user->immediateDescendants()->sum('level') == 15)
+                    if($parent_user->level == 3 && $descendants->sum('level') == 15 && $paymentsOfRedCount == 5)
                         $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
-                    if($parent_user->level == 4 && $parent_user->immediateDescendants()->sum('level') == 20)
+                    if($parent_user->level == 4 && $descendants->sum('level') == 20 && $paymentsOfRedCount == 5)
                         $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
-                    if($parent_user->level == 5 && $parent_user->immediateDescendants()->sum('level') == 25)
+                    if($parent_user->level == 5 && $descendants->sum('level') == 25 && $paymentsOfRedCount == 5)
                         $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
 
                     $parent_user->save();

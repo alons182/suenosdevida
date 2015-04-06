@@ -81,7 +81,7 @@ class AdsController extends Controller {
 	public function show($id)
 	{
         $ad = $this->adRepository->findById($id);
-       $targetDate =  Carbon::now()->addMinutes(3);
+       $targetDate =  Carbon::now()->addMinutes(1);
 
 		return view::make('ads.show')->with(compact('ad','targetDate'));
 	}

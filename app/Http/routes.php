@@ -336,7 +336,15 @@ Route::get('helper/createuser/{parent_id}', function($parent_id){
     $repo =  app::make('App\Repositories\UserRepository');
     foreach (range(1, 5) as $index)
     {
-        $user = User::create([
+        $data = [
+            'username' => $faker->word . $index,
+            'email' => $faker->email. $index,
+            'password' => "123",
+            'parent_id' => $parent_id
+
+        ];
+        $repo->store($data);
+        /*$user = User::create([
             'username' => $faker->word . $index,
             'email' => $faker->email. $index,
             'password' => "123",
@@ -348,7 +356,7 @@ Route::get('helper/createuser/{parent_id}', function($parent_id){
         $user->createProfile();
         $user->assignRole($role);
 
-        $repo->checkLevel($user->parent_id);
+        $repo->checkLevel($user->parent_id);*/
     }
 
 });
@@ -356,14 +364,24 @@ Route::get('helper/createpayment/{id}', function($id){
 
     $repo =  app::make('App\Repositories\PaymentRepository');
 
-    $payment = Payment::create([
+    /*$payment = Payment::create([
         'user_id'         => $id,
         'payment_type'    => "M",
         'amount'          => '15000',
         'bank'            => 'Nacional',
         'transfer_number' => '123',
         'transfer_date'   => Carbon::now()
-    ]);
+    ]);*/
+    $data = [
+        'user_id'         => $id,
+        'payment_type'    => "M",
+        'amount'          => '15000',
+        'bank'            => 'Nacional',
+        'transfer_number' => '123',
+        'transfer_date'   => Carbon::now()
+    ];
+
+    $repo->store($data);
 
 
 

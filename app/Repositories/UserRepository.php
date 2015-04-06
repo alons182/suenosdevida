@@ -8,6 +8,7 @@ interface UserRepository {
     public function getLasts();
     public function reportPaymentsByDay($date = null);
     public function reportPaymentsByMonth($month, $year);
+    public function checkLevel($parent_id);
 
 
 

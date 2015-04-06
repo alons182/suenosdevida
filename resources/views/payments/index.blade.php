@@ -125,9 +125,9 @@
                     @if($hits_per_day != 5 && $possible_gains > 0)
                         <a href="{!! URL::route('ads.show', $ad->id) !!}" class="payments-ad-link">
                             @if($ad->image)
-                                <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="200"  height="200"/>
+                                <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="190"  height="190"/>
                             @else
-                                <img src="holder.js/200x200/text:{!! $ad->name !!}" alt="{!! $ad->name !!}">
+                                <img src="holder.js/190x190/text:{!! $ad->name !!}" alt="{!! $ad->name !!}">
                             @endif
                         </a>
                     @else
@@ -157,11 +157,11 @@
                 <div class="payments-ad">
 
                         @if($ad->image)
-                            <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! $ad->hits->first()->hit_date !!}">
+                            <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! $ad->hits->last()->hit_date !!}">
                                 <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="190"  height="190" />
                             </span>
                         @else
-                            <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! $ad->hits->first()->hit_date !!}">
+                            <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! $ad->hits->last()->hit_date !!}">
                                 <img src="holder.js/190x190/text:{!! $ad->name !!}" alt="{!! $ad->name !!}">
                             </span>
                         @endif

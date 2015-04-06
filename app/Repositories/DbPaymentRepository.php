@@ -20,13 +20,23 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
      * @var PaymentMailer
      */
     private $mailer;
+    /**
+     * @var DbUserRepository
+     */
+    private $userRepository;
 
-    function __construct(Payment $model, PaymentMailer $mailer)
+    /**
+     * @param Payment $model
+     * @param PaymentMailer $mailer
+     * @param UserRepository $userRepository
+     */
+    function __construct(Payment $model, PaymentMailer $mailer, UserRepository $userRepository)
     {
         $this->model = $model;
         $this->limit = 20;
         $this->membership_cost = 15000;
         $this->mailer = $mailer;
+        $this->userRepository = $userRepository;
     }
 
 
@@ -43,6 +53,10 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
         if ($this->existsAutomaticPaymentOfMonth()) return false;
 
         $payment = $this->model->create($data);
+
+        //Check level and payments for change level
+        $user = $this->userRepository->findById($data['user_id']);
+        $this->userRepository->checkLevel($user->parent_id);
 
         return $payment;
 

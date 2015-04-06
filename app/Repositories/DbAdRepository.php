@@ -92,8 +92,9 @@ class DbAdRepository extends DbRepository implements AdRepository {
         $hit_per_day = Hit::where(function ($query) use ($user_id)
         {
             $query->where('user_id', '=', $user_id)
-                ->where(\DB::raw('DAY(hit_date)'), '=', Carbon::now()->day);
-
+                ->where(\DB::raw('DAY(hit_date)'), '=', Carbon::now()->day)
+                ->where(\DB::raw('MONTH(hit_date)'), '=', Carbon::now()->month)
+                ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
         })->count();
 
         return $hit_per_day;
@@ -104,7 +105,10 @@ class DbAdRepository extends DbRepository implements AdRepository {
         // get all ads by zone for a user
         $ads =  $this->model->whereHas('hits', function($q)use ($user_id)
         {
-            $q->where('user_id', '=', $user_id);
+            $q->where('user_id', '=', $user_id)
+                ->where(\DB::raw('DAY(hit_date)'), '=', Carbon::now()->day)
+                ->where(\DB::raw('MONTH(hit_date)'), '=', Carbon::now()->month)
+                ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
 
         })->where(function ($query) use ($zone)
         {
@@ -119,7 +123,10 @@ class DbAdRepository extends DbRepository implements AdRepository {
     {
         $ads_seen_ids =  $this->model->whereHas('hits', function($q)use ($user_id)
         {
-            $q->where('user_id', '=', $user_id);
+            $q->where('user_id', '=', $user_id)
+                ->where(\DB::raw('DAY(hit_date)'), '=', Carbon::now()->day)
+                ->where(\DB::raw('MONTH(hit_date)'), '=', Carbon::now()->month)
+                ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
 
         })->where(function ($query) use ($zone)
         {
