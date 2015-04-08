@@ -18,7 +18,7 @@
             <small>Ganancias</small>
             <div class="gains">
                 <h2>Pago de membresia (Nivel {!! $currentUser->level !!}): <span class="amount {!! ($paymentsOfUser->sum('amount') < 12000) ? 'red' : '' !!}">{!! money($paymentsOfUser->sum('amount'),'₡') !!}</span></h2>
-                <h2>Bruta : <span class="amount">{!! money($paymentsOfUserRed->sum('amount'),'₡') !!}</span> </h2>
+                <h2>Bruta : <span class="amount">{!! money($possible_gains,'₡') !!}</span> </h2>
                 <h2>Posible (Por ver publicidad): <span class="amount">{!! money($possible_gains - $gains,'₡') !!}</span></h2>
                 <h2>Neta (Membresia mensual) : <span class="amount">{!! money($gains - $membership_cost ,'₡') !!}</span></h2>
             </div>
@@ -127,7 +127,7 @@
                                 @if($ad->image)
                                     <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="190"  height="190"/>
                                 @else
-                                    <img src="holder.js/190x190/text:{!! $ad->name !!}" alt="{!! $ad->name !!}">
+                                    <img src="holder.js/190x190/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
                                 @endif
                             </a>
                         @else
@@ -137,7 +137,7 @@
                             </span>
                             @else
                                 <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($possible_gains > 0) ? 'Solo 5 por dia' : 'Aun no tienes posible ganacia' !!}">
-                                <img src="holder.js/190x190/text:{!! $ad->name !!}" alt="{!! $ad->name !!}">
+                                <img src="holder.js/190x190/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
                             </span>
                             @endif
                         @endif
@@ -162,7 +162,7 @@
                             </span>
                         @else
                             <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! $ad->hits->last()->hit_date !!}">
-                                <img src="holder.js/190x190/text:{!! $ad->name !!}" alt="{!! $ad->name !!}">
+                                <img src="holder.js/190x190/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
                             </span>
                         @endif
 

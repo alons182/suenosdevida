@@ -61,7 +61,7 @@ class PaymentsController extends Controller {
 
         $hit_per_day = $this->adRepository->hit_per_day(Auth::user()->id);
 
-        $possibleGains = $this->paymentRepository->getPossibleGainsPerAffiliates();
+        $possibleGains = $this->paymentRepository->getPossibleGainsPerAffiliates($data);
         $gains = $this->gainRepository->getGains($data);
         $membership_cost = $this->paymentRepository->getMembershipCost();
         //dd($possibleGains);

@@ -52,8 +52,8 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
         if ($this->existsPaymentOfMonth()) return false;
         if ($this->existsAutomaticPaymentOfMonth()) return false;
 
-        $payment = $this->model->create($data);
 
+        $payment = $this->model->create($data);
         //Check level and payments for change level
         $user = $this->userRepository->findById($data['user_id']);
         $this->userRepository->checkLevel($user->parent_id);
@@ -105,9 +105,10 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
 
     /**
      * Get the possible gains per affiliates for his levels
+     * @param null $data
      * @return int
      */
-    public function getPossibleGainsPerAffiliates()
+    public function getPossibleGainsPerAffiliates($data = null)
     {
         $user_logged = Auth::user();
         $usersOfRed = $user_logged->children()->get();
@@ -116,7 +117,17 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
         foreach($usersOfRed as $user)
         {
             for ($i = 1; $i <= $user->level; $i++) {
-                $gainPerLevel +=  Level::where('level','=',$i)->first()->gain;
+
+                $paymentsOfUser = $this->model->where(function ($query) use ($data, $user)
+                {
+                    $query->where('user_id', '=', $user->id)
+                        ->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
+                        ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+                })->count();
+
+                if($paymentsOfUser > 0)
+                   $gainPerLevel +=  Level::where('level','=',$i)->first()->gain;
+
             }
 
         }

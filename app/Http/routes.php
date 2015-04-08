@@ -351,18 +351,21 @@ Route::get('helper/createuser/{parent_id}', function($parent_id){
 });
 Route::get('helper/createpayment/{id}', function($id){
 
-    $repo =  app::make('App\Repositories\PaymentRepository');
+    //$repo =  app::make('App\Repositories\PaymentRepository');
+    $repo =  app::make('App\Repositories\UserRepository');
 
-    $data = [
+    $payment = Payment::create([
         'user_id'         => $id,
         'payment_type'    => "M",
         'amount'          => '15000',
         'bank'            => 'Nacional',
         'transfer_number' => '123',
         'transfer_date'   => Carbon::now()
-    ];
+    ]);
 
-    $repo->store($data);
+    //Check level and payments for change level
+    $user = $repo->findById($id);
+    $repo->checkLevel($user->parent_id);
 
 });
 Route::get('helper/test/{id}', function($id){
