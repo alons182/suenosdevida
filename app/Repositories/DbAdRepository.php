@@ -58,26 +58,26 @@ class DbAdRepository extends DbRepository implements AdRepository {
         $hit->user_id = $user_id;
         $ad->hits()->save($hit);
         $this->generateGainForClick($ad);
-        if($this->userRepository->completeAds($user_id))
+        if ($this->userRepository->completeAds($user_id))
             $this->userRepository->checkLevel($user_id);
 
         return $ad;
     }
 
-   public function generateGainForClick($ad = null, $user = null)
+    public function generateGainForClick($ad = null, $user = null)
     {
         $user = ($user) ? $user : Auth::user();
         $data['month'] = Carbon::now()->month;
 
-        $possible_gain = $this->gainRepository->getPossibleGainsPerAffiliates($data,$user);
-        $daysForMonth =  Carbon::now()->daysInMonth;
+        $possible_gain = $this->gainRepository->getPossibleGainsPerAffiliates($data, $user);
+        $daysForMonth = Carbon::now()->daysInMonth;
         $countAdsForView = $daysForMonth * 5;
 
         $gain_click = $possible_gain / $countAdsForView;
 
         $gain = new Gain();
         $gain->user_id = $user->id;
-        $gain->description = 'Generado por ver la publicidad '. $ad->name;
+        $gain->description = 'Generado por ver la publicidad ' . $ad->name;
         $gain->amount = $gain_click;
         $gain->gain_type = 'C';
         $gain->month = Carbon::now()->month;
@@ -106,6 +106,7 @@ class DbAdRepository extends DbRepository implements AdRepository {
     {
         return $this->model->SearchSlug($slug)->first();
     }
+
     public function hits_per_week($user_id)
     {
         $hits_per_week = Hit::where(function ($query) use ($user_id)
@@ -115,7 +116,6 @@ class DbAdRepository extends DbRepository implements AdRepository {
                 ->where(\DB::raw('MONTH(hit_date)'), '=', Carbon::now()->month)
                 ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
         })->count();
-
 
 
         return $hits_per_week;
@@ -148,9 +148,9 @@ class DbAdRepository extends DbRepository implements AdRepository {
 
         $totalAdsCount = $ads->count() - $adsWithHits->count();
 
-        if( $ads->count() > 5)
+        if ($ads->count() > 5)
         {
-            for($i = 1;  $i <= (5-$totalAdsCount); $i++ )
+            for ($i = 1; $i <= (5 - $totalAdsCount); $i ++)
             {
                 $ad = $this->model->findOrFail($i);
 
@@ -180,7 +180,6 @@ class DbAdRepository extends DbRepository implements AdRepository {
 
         return $ads->orderBy('created_at', 'desc')->paginate($this->limit);
 
-        
     }
 
     public function update($id, $data)
