@@ -21,7 +21,9 @@ class CreatePaymentsTable extends Migration {
             $table->string('transfer_number');
             $table->dateTime('transfer_date');
             $table->double('amount', 15, 2)->default(0);
+            $table->text('description');
             $table->string('payment_type',3);
+            $table->integer('level')->default(1);
 			$table->timestamps();
 		});
 	}

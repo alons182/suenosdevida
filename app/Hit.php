@@ -7,7 +7,7 @@ class Hit extends Model {
     protected $table = 'hits';
 
     protected $fillable = [
-        'ad_id', 'hit_date', 'user_id'
+        'ad_id', 'hit_date', 'user_id','week_of_month','check'
     ];
 
     public function ad(){

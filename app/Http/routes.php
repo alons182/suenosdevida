@@ -11,6 +11,7 @@
 |
 */
 #binding
+use App\Gain;
 use App\Payment;
 use App\Role;
 use App\User;
@@ -349,6 +350,40 @@ Route::get('helper/createuser/{parent_id}', function($parent_id){
     }
 
 });
+Route::get('helper/createclick/{ad_id}', function($ad_id){
+
+    $repo =  app::make('App\Repositories\AdRepository');
+    $repoUser =  app::make('App\Repositories\UserRepository');
+    $ad = $repo->findById($ad_id);
+    $repo->generateGainForClick($ad,null);
+    if($repoUser->completeAds( Auth::user()->id))
+        $repoUser->checkLevel( Auth::user()->id);
+
+
+
+});
+Route::get('helper/creategainperclick/{amount}', function($amount){
+
+    $repo =  app::make('App\Repositories\AdRepository');
+    $repoUser =  app::make('App\Repositories\UserRepository');
+    $ad = $repo->findById(5);
+
+    $gain = new Gain();
+    $gain->user_id = Auth::user()->id;
+    $gain->description = 'Generado por ver la publicidad '. $ad->name;
+    $gain->amount = $amount;
+    $gain->gain_type = 'C';
+    $gain->month = Carbon::now()->month;
+    $gain->year = Carbon::now()->year;
+    $gain->save();
+
+    if($repoUser->completeAds( Auth::user()->id))
+        $repoUser->checkLevel( Auth::user()->id);
+
+
+
+});
+
 Route::get('helper/createpayment/{id}', function($id){
 
     //$repo =  app::make('App\Repositories\PaymentRepository');
@@ -359,6 +394,7 @@ Route::get('helper/createpayment/{id}', function($id){
         'payment_type'    => "M",
         'amount'          => '15000',
         'bank'            => 'Nacional',
+        'description'     => 'Generado desde la pestaña Pagos',
         'transfer_number' => '123',
         'transfer_date'   => Carbon::now()
     ]);
@@ -378,6 +414,11 @@ Route::get('helper/test/{id}', function($id){
     dd($descendantsIds);
 
 });
+Route::get('helper/generatecut', function()
+{
+    $exitCode = Artisan::call('inspire');
 
+    //
+});
 
 

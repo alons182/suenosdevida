@@ -13,7 +13,7 @@ class Payment extends Model {
     protected $table = 'payments';
 
     protected $fillable = [
-        'user_id', 'bank', 'transfer_number', 'transfer_date', 'amount', 'possible_gain', 'gain', 'payment_type', 'membership_cost', 'click_cost'
+        'user_id', 'bank', 'transfer_number', 'transfer_date', 'amount',  'description', 'payment_type','level'
     ];
 
     public function setAmountAttribute($amount)
@@ -21,10 +21,7 @@ class Payment extends Model {
         $this->attributes['amount'] = (number($amount) == "") ? 0 : number($amount);
     }
 
-    public function setGainAttribute($gain)
-    {
-        $this->attributes['gain'] = (number($gain) == "") ? 0 : number($gain);
-    }
+
 
     /**
      * @param $amount

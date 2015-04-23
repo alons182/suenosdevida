@@ -21,6 +21,8 @@ class CreateGainsTable extends Migration {
             $table->double('amount', 15, 2)->default(0);
             $table->integer('month');
             $table->integer('year');
+            $table->string('gain_type',3);
+            $table->integer('level')->default(1);
             $table->timestamps();
         });
     }

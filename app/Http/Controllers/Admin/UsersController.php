@@ -106,8 +106,8 @@ class UsersController extends Controller {
     public function edit($id)
     {
         $user = $this->userRepository->findById($id);
-
-        return View::make('admin.users.edit')->withUser($user);
+        $hits = $this->userRepository->getHits($user);
+        return View::make('admin.users.edit')->with(compact('user','hits'));
     }
 
     /**

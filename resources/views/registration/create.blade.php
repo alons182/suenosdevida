@@ -3,8 +3,8 @@
 @section('content')
     <section class="main register">
         <h1>Registro | <small> Registrandose a la red de {!!  isset($parent_user) ? $parent_user->username : 'Administrador' !!} </small></h1>
-        @if( isset($parent_user) && $parent_user->immediateDescendants()->count() >= 5)
-            <p>No te puedes registrar a la red del usuario seleccionado. Solo se permiten 5 afiliados por usuario</p>
+        @if( isset($parent_user) && $parent_user->immediateDescendants()->count() >= 10)
+            <p>No te puedes registrar a la red del usuario seleccionado. Solo se permiten 10 afiliados por usuario</p>
         @else
         <div class="col-1">
             {!! Form::open(['route' => 'registration.store']) !!}

@@ -103,38 +103,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
         return Level::where('level','=',$user_logged->level)->first()->payment;
     }
 
-    /**
-     * Get the possible gains per affiliates for his levels
-     * @param null $data
-     * @return int
-     */
-    public function getPossibleGainsPerAffiliates($data = null)
-    {
-        $user_logged = Auth::user();
-        $usersOfRed = $user_logged->children()->get();
-        $gainPerLevel = 0;
 
-        foreach($usersOfRed as $user)
-        {
-            for ($i = 1; $i <= $user->level; $i++) {
-
-                $paymentsOfUser = $this->model->where(function ($query) use ($data, $user)
-                {
-                    $query->where('user_id', '=', $user->id)
-                        ->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
-                        ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
-                })->count();
-
-                if($paymentsOfUser > 0)
-                   $gainPerLevel +=  Level::where('level','=',$i)->first()->gain;
-
-            }
-
-        }
-
-       return $gainPerLevel;
-
-    }
     /**
      * Get all payments of user logged
      * @param null $data
@@ -303,6 +272,11 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
         {
             $data = array_except($data, 'user_id');
             $data = array_add($data, 'user_id', Auth::user()->id);
+        }
+        if (! isset($data['description']) || ! $data['description'] || $data['description'] == "")
+        {
+            $data = array_except($data, 'description');
+            $data = array_add($data, 'description', 'Generado por medio de la pestaña pagos');
         }
         if($data['payment_type'] == "M1" || $data['payment_type'] == "M")
             $data = array_add($data, 'amount', 15000);

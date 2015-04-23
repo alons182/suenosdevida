@@ -18,6 +18,8 @@ class CreateHitsTable extends Migration {
             $table->integer('ad_id')->unsigned()->index();
             $table->foreign('ad_id')->references('id')->on('ads')->onDelete('cascade');
             $table->integer('user_id')->unsigned()->index();
+            $table->integer('week_of_month')->unsigned()->index();
+            $table->tinyInteger('check')->unsigned()->index();
             $table->dateTime('hit_date');
             $table->timestamps();
         });

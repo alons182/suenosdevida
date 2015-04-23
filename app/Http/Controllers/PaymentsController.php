@@ -56,25 +56,28 @@ class PaymentsController extends Controller {
 
         $canton = Auth::user()->profiles->canton;
 
-        $ads_seen = $this->adRepository->getAdsSeenByZone($canton, Auth::user()->id);
-        $ads_not_seen = $this->adRepository->getAdsNotSeenByZone($canton, Auth::user()->id);
+        $ads = $this->adRepository->getAds($canton, Auth::user()->id);
 
-        $hit_per_day = $this->adRepository->hit_per_day(Auth::user()->id);
+        $hits_per_week = $this->adRepository->hits_per_week(Auth::user()->id);
 
-        $possibleGains = $this->paymentRepository->getPossibleGainsPerAffiliates($data);
-        $gains = $this->gainRepository->getGains($data);
+        $possibleGains = $this->gainRepository->getPossibleGainsPerAffiliates($data);
+        $gainsPerClick = $this->gainRepository->getGainsPerClick($data);
+        $accumulatedGains = $this->gainRepository->getAccumulatedGains($data);
         $membership_cost = $this->paymentRepository->getMembershipCost();
+        $week = Carbon::now()->weekOfMonth;
+
         //dd($possibleGains);
         return View::make('payments.index')->with([
-            'paymentsOfUser'      => $paymentsOfUser,
-            'paymentsOfUserRed'      => $paymentsOfUserRed,
-            'ads_seen'      => $ads_seen,
-            'ads_not_seen'      => $ads_not_seen,
-            'hits_per_day'      => $hit_per_day,
-            'possible_gains'      => $possibleGains,
-            'gains'      => $gains,
-            'membership_cost'      => $membership_cost,
-            'selectedMonth' => $data['month']
+            'paymentsOfUser'    => $paymentsOfUser,
+            'paymentsOfUserRed' => $paymentsOfUserRed,
+            'ads'               => $ads,
+            'hits_per_week'     => $hits_per_week,
+            'week'              => $week,
+            'possible_gains'    => $possibleGains,
+            'gainsPerClick'     => $gainsPerClick,
+            'accumulatedGains'  => $accumulatedGains,
+            'membership_cost'   => $membership_cost,
+            'selectedMonth'     => $data['month']
         ]);
     }
 
@@ -101,8 +104,7 @@ class PaymentsController extends Controller {
         $data['transfer_date'] = $data['transfer_date_submit'];
 
 
-
-        if(!$this->paymentRepository->store($data))
+        if (! $this->paymentRepository->store($data))
             Flash::error('Ya existe un pago para este mes.');
         else
             Flash::message('Pago agregado correctamente');

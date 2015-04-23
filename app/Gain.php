@@ -12,7 +12,7 @@ class Gain extends Model {
     protected $table = 'gains';
 
     protected $fillable = [
-        'user_id','description','amount', 'month','year'
+        'user_id','description','amount','gain_type', 'month','year', 'level'
     ];
 
     public function setAmountAttribute($amount)
