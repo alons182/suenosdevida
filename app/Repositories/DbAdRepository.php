@@ -180,7 +180,7 @@ class DbAdRepository extends DbRepository implements AdRepository {
 
         return $ads->orderBy('created_at', 'desc')->paginate($this->limit);
 
-        return $this->model->paginate($this->limit);
+        
     }
 
     public function update($id, $data)
