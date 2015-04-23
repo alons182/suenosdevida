@@ -16,6 +16,7 @@ use App\Payment;
 use App\Role;
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 
 App::bind('App\Repositories\UserRepository', 'App\Repositories\DbUserRepository');
@@ -354,10 +355,12 @@ Route::get('helper/createclick/{ad_id}', function($ad_id){
 
     $repo =  app::make('App\Repositories\AdRepository');
     $repoUser =  app::make('App\Repositories\UserRepository');
-    $ad = $repo->findById($ad_id);
-    $repo->generateGainForClick($ad,null);
-    if($repoUser->completeAds( Auth::user()->id))
-        $repoUser->checkLevel( Auth::user()->id);
+
+        $ad = $repo->findById(500);
+        $repo->generateGainForClick($ad, null);
+        if ($repoUser->completeAds(Auth::user()->id))
+            $repoUser->checkLevel(Auth::user()->id);
+
 
 
 
