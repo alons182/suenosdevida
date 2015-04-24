@@ -115,9 +115,9 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
 
         $paymentsOfUser = $this->model->where(function ($query) use ($data, $user_logged)
         {
-            $query->where('user_id', '=', $user_logged->id)
-                ->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
-                ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+            $query->where('user_id', '=', $user_logged->id);
+                //->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
+                //->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
         })->paginate($this->limit);
 
         return $paymentsOfUser;
@@ -134,9 +134,9 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
 
         $paymentsOfRed = $this->model->with('users', 'users.profiles')->where(function ($query) use ($usersOfRed, $data)
         {
-            $query->whereIn('user_id', $usersOfRed)
-                ->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
-                ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+            $query->whereIn('user_id', $usersOfRed);
+                //->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
+                //->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
         })->paginate($this->limit);
 
 
@@ -207,7 +207,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
             $data = array_add($data, 'amount', 100000);
 
         $data['payment_type'] = "M";
-            //$data = array_add($data, 'amount', ($data['payment_type'] == "M") ? $this->membership_cost : 5000);
+
 
         return $data;
     }

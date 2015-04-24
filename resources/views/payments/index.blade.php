@@ -6,15 +6,15 @@
 
 
         <div class="gains-container">
-            <div class="months">
+            <!--<div class="months">
                 {!! Form::open(['route' => 'payments.index', 'method' => 'get']) !!}
-                <!-- Mes Form Input -->
+
                 <div class="form-group">
                     {!! Form::selectMonth('month', $selectedMonth, ['class' => 'form-control']) !!}
 
                 </div>
                 {!! Form::close() !!}
-            </div>
+            </div>-->
             <small>Ganancias</small>
             <div class="gains">
                 <h2>Nivel Actual: {!! $currentUser->level !!}</h2>

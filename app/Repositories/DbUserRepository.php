@@ -274,9 +274,9 @@ class DbUserRepository extends DbRepository implements UserRepository {
 
             $paymentsOfRedCount = Payment::where(function ($query) use ($descendantsIds)
             {
-                $query->whereIn('user_id', $descendantsIds)
-                    ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
-                    ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+                $query->whereIn('user_id', $descendantsIds);
+                    //->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
+                    //->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
             })->count();
 
 

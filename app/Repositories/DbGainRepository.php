@@ -45,9 +45,9 @@ class DbGainRepository extends DbRepository implements GainRepository {
         $gainOfMonth = $this->model->where(function ($query) use ($data)
         {
             $query->where('user_id', '=', Auth::user()->id)
-                ->where('gain_type', '=', 'B')
-                ->where('month', '=', $data['month'])
-                ->where('year', '=', Carbon::now()->year);
+                ->where('gain_type', '=', 'B');
+                //->where('month', '=', $data['month'])
+                //->where('year', '=', Carbon::now()->year);
         })->sum('amount');
 
         return $gainOfMonth;
@@ -75,9 +75,9 @@ class DbGainRepository extends DbRepository implements GainRepository {
 
                     $paymentsOfUser = Payment::where(function ($query) use ($data, $user)
                     {
-                        $query->where('user_id', '=', $user->id)
-                            ->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
-                            ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+                        $query->where('user_id', '=', $user->id);
+                            //->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
+                            //->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
                     })->count();
 
                     if($paymentsOfUser > 0)
