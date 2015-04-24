@@ -61,12 +61,14 @@ class PaymentsController extends Controller {
         $hits_per_week = $this->adRepository->hits_per_week(Auth::user()->id);
 
         $possibleGains = $this->gainRepository->getPossibleGainsPerAffiliates($data);
-        $gainsPerClick = $this->gainRepository->getGainsPerClick($data);
+
         $accumulatedGains = $this->gainRepository->getAccumulatedGains($data);
+
         $membership_cost = $this->paymentRepository->getMembershipCost();
+
         $week = Carbon::now()->weekOfMonth;
 
-        //dd($possibleGains);
+
         return View::make('payments.index')->with([
             'paymentsOfUser'    => $paymentsOfUser,
             'paymentsOfUserRed' => $paymentsOfUserRed,
@@ -74,7 +76,6 @@ class PaymentsController extends Controller {
             'hits_per_week'     => $hits_per_week,
             'week'              => $week,
             'possible_gains'    => $possibleGains,
-            'gainsPerClick'     => $gainsPerClick,
             'accumulatedGains'  => $accumulatedGains,
             'membership_cost'   => $membership_cost,
             'selectedMonth'     => $data['month']

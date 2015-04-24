@@ -28,7 +28,7 @@ class DbGainRepository extends DbRepository implements GainRepository {
     }
 
 
-    public function getGainsPerClick($data)
+    /*public function getGainsPerClick($data)
     {
         $gainOfMonth = $this->model->where(function ($query) use ($data)
         {
@@ -39,7 +39,7 @@ class DbGainRepository extends DbRepository implements GainRepository {
         })->sum('amount');
 
         return $gainOfMonth;
-    }
+    }*/
     public function getAccumulatedGains($data)
     {
         $gainOfMonth = $this->model->where(function ($query) use ($data)
@@ -94,5 +94,9 @@ class DbGainRepository extends DbRepository implements GainRepository {
 
         return $gainPerLevel;
 
+    }
+    public function getGainsById($id)
+    {
+        return $this->model->where('user_id','=',$id)->paginate($this->limit);
     }
 }

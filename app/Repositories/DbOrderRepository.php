@@ -28,7 +28,7 @@ class DbOrderRepository extends DbRepository implements OrderRepository {
     public function store($data)
     {
         $data = $this->prepareData($data);
-        //dd(substr($data['item_options_1'], 9));
+
         $order = $this->model->create($data);
         $this->sync_orderDetail($order, $data);
 

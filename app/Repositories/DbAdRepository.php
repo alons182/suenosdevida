@@ -57,14 +57,14 @@ class DbAdRepository extends DbRepository implements AdRepository {
         $hit->check = 1;
         $hit->user_id = $user_id;
         $ad->hits()->save($hit);
-        $this->generateGainForClick($ad);
-        if ($this->userRepository->completeAds($user_id))
-            $this->userRepository->checkLevel($user_id);
+        //$this->generateGainForClick($ad);
+        //if ($this->userRepository->completeAds($user_id))
+       //     $this->userRepository->checkLevel($user_id);
 
         return $ad;
     }
 
-    public function generateGainForClick($ad = null, $user = null)
+    /*public function generateGainForClick($ad = null, $user = null)
     {
         $user = ($user) ? $user : Auth::user();
         $data['month'] = Carbon::now()->month;
@@ -85,7 +85,7 @@ class DbAdRepository extends DbRepository implements AdRepository {
         $gain->save();
 
         return $gain;
-    }
+    }*/
 
     /**
      * Find a Ad by ID
@@ -123,7 +123,7 @@ class DbAdRepository extends DbRepository implements AdRepository {
 
     public function getAds($zone, $user_id)
     {
-        //dd(Carbon::now()->weekOfMonth);
+
         $ads = $this->model->with('hits')->where(function ($query) use ($zone)
         {
             $query->where('canton', '=', $zone)
@@ -134,9 +134,6 @@ class DbAdRepository extends DbRepository implements AdRepository {
         $adsWithHits = $this->model->whereHas('hits', function ($q) use ($user_id)
         {
             $q->where('user_id', '=', $user_id);
-            //->where(\DB::raw('DAY(hit_date)'), '=', Carbon::now()->day)
-            // ->where(\DB::raw('MONTH(hit_date)'), '=', Carbon::now()->month)
-            //->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
 
         })->where(function ($query) use ($zone)
         {

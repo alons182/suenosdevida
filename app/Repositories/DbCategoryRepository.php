@@ -41,7 +41,7 @@ class DbCategoryRepository extends DbRepository implements CategoryRepository {
         $category = $this->model->findOrFail($id);
         $data = $this->prepareData($data);
         $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'categories', 200, null) : $category->image;
-        //dd($data);
+
         $category->fill($data);
         $category->save();
 

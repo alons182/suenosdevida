@@ -208,8 +208,12 @@ Route::group(['prefix' => 'store/admin', 'middleware' => 'authByRole'], function
         'as' => 'patners_list',
         'uses' => 'Admin\UsersController@list_patners'
     ]);
-    Route::resource('users', 'Admin\UsersController');
 
+    Route::resource('users', 'Admin\UsersController');
+    # gains
+     Route::resource('gains', 'Admin\GainsController',['only' => ['destroy']]);
+    # hits
+    Route::resource('hits', 'Admin\HitsController',['only' => ['destroy']]);
     # categories
     foreach (['up', 'down', 'pub', 'unpub', 'feat', 'unfeat'] as $key)
     {
@@ -351,60 +355,29 @@ Route::get('helper/createuser/{parent_id}', function($parent_id){
     }
 
 });
-Route::get('helper/createclick/{ad_id}', function($ad_id){
 
-    $repo =  app::make('App\Repositories\AdRepository');
-    $repoUser =  app::make('App\Repositories\UserRepository');
-
-        $ad = $repo->findById(500);
-        $repo->generateGainForClick($ad, null);
-        if ($repoUser->completeAds(Auth::user()->id))
-            $repoUser->checkLevel(Auth::user()->id);
+Route::get('helper/createpayment/{from}/{to}', function($from,$to){
 
 
-
-
-});
-Route::get('helper/creategainperclick/{amount}', function($amount){
-
-    $repo =  app::make('App\Repositories\AdRepository');
-    $repoUser =  app::make('App\Repositories\UserRepository');
-    $ad = $repo->findById(5);
-
-    $gain = new Gain();
-    $gain->user_id = Auth::user()->id;
-    $gain->description = 'Generado por ver la publicidad '. $ad->name;
-    $gain->amount = $amount;
-    $gain->gain_type = 'C';
-    $gain->month = Carbon::now()->month;
-    $gain->year = Carbon::now()->year;
-    $gain->save();
-
-    if($repoUser->completeAds( Auth::user()->id))
-        $repoUser->checkLevel( Auth::user()->id);
-
-
-
-});
-
-Route::get('helper/createpayment/{id}', function($id){
-
-    //$repo =  app::make('App\Repositories\PaymentRepository');
     $repo =  app::make('App\Repositories\UserRepository');
+    foreach (range($from, $to) as $index)
+    {
+        $payment = Payment::create([
+            'user_id'         => $index,
+            'payment_type'    => "M",
+            'amount'          => '15000',
+            'bank'            => 'Nacional',
+            'description'     => 'Generado desde la pestaña Pagos',
+            'transfer_number' => '123',
+            'transfer_date'   => Carbon::now()
+        ]);
 
-    $payment = Payment::create([
-        'user_id'         => $id,
-        'payment_type'    => "M",
-        'amount'          => '15000',
-        'bank'            => 'Nacional',
-        'description'     => 'Generado desde la pestaña Pagos',
-        'transfer_number' => '123',
-        'transfer_date'   => Carbon::now()
-    ]);
+        //Check level and payments for change level
+        $user = $repo->findById($index);
+        $repo->checkLevel($user->parent_id);
+    }
 
-    //Check level and payments for change level
-    $user = $repo->findById($id);
-    $repo->checkLevel($user->parent_id);
+
 
 });
 Route::get('helper/test/{id}', function($id){
@@ -417,11 +390,6 @@ Route::get('helper/test/{id}', function($id){
     dd($descendantsIds);
 
 });
-Route::get('helper/generatecut', function()
-{
-    $exitCode = Artisan::call('inspire');
 
-    //
-});
 
 

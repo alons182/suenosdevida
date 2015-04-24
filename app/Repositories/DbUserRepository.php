@@ -71,7 +71,6 @@ class DbUserRepository extends DbRepository implements UserRepository {
         $user->roles()->sync($roles);
 
 
-
         return $user;
     }
 
@@ -159,15 +158,15 @@ class DbUserRepository extends DbRepository implements UserRepository {
         foreach ($payments as $payment)
         {
             $paymentArray = array(
-                'id'                 => $payment->id,
-                'Usuario Registrado' => $payment->users->created_at->toDateTimeString(),
-                'Email'              => $payment->users->email,
-                'Nombre'             => $payment->users->profiles->present()->fullname,
-                'Cedula'             => $payment->users->profiles->ide,
-                'Cuenta'             => $payment->users->profiles->number_account,
-                'Monto pago'         => $payment->amount,
-                'Fecha del pago'       => $payment->created_at->toDateTimeString(),
-                'Fecha de la transferencia'       => $payment->transfer_date
+                'id'                        => $payment->id,
+                'Usuario Registrado'        => $payment->users->created_at->toDateTimeString(),
+                'Email'                     => $payment->users->email,
+                'Nombre'                    => $payment->users->profiles->present()->fullname,
+                'Cedula'                    => $payment->users->profiles->ide,
+                'Cuenta'                    => $payment->users->profiles->number_account,
+                'Monto pago'                => $payment->amount,
+                'Fecha del pago'            => $payment->created_at->toDateTimeString(),
+                'Fecha de la transferencia' => $payment->transfer_date
 
             );
 
@@ -196,9 +195,9 @@ class DbUserRepository extends DbRepository implements UserRepository {
         {
             //$usersOfRed = $user->children()->get()->lists('id');
 
-            $paymentsOfUser =Payment::where(function ($query) use ($user, $month, $year)
+            $paymentsOfUser = Payment::where(function ($query) use ($user, $month, $year)
             {
-                $query->where('user_id','=', $user->id)
+                $query->where('user_id', '=', $user->id)
                     ->where(\DB::raw('MONTH(created_at)'), '=', $month)
                     ->where(\DB::raw('YEAR(created_at)'), '=', $year);
             });
@@ -206,44 +205,16 @@ class DbUserRepository extends DbRepository implements UserRepository {
             $paymentOfUser = $paymentsOfUser->sum(\DB::raw('amount'));
 
 
-                $gainsOfUserLevel1 = Gain::where(function ($query) use ($user, $month, $year)
-                {
-                    $query->where('user_id', '=', $user->id)
-                        ->where('level', '=', 1)
-                        ->where('gain_type', '=', 'B')
-                        ->where('month', '=', $month)
-                        ->where('year', '=', $year);
-                })->sum('amount');
-            $gainsOfUserLevel2 = Gain::where(function ($query) use ($user, $month, $year)
-            {
-                $query->where('user_id', '=', $user->id)
-                    ->where('level', '=', 2)
-                    ->where('gain_type', '=', 'B')
-                    ->where('month', '=', $month)
-                    ->where('year', '=', $year);
-                })->sum('amount');
-            $gainsOfUserLevel3 = Gain::where(function ($query) use ($user, $month, $year)
-            {
-                $query->where('user_id', '=', $user->id)
-                    ->where('level', '=', 3)
-                    ->where('gain_type', '=', 'B')
-                    ->where('month', '=', $month)
-                    ->where('year', '=', $year);
-                })->sum('amount');
-
             $gainsOfUser = Gain::where(function ($query) use ($user, $month, $year)
             {
                 $query->where('user_id', '=', $user->id)
-                      ->where('gain_type', '=', 'C')
-                      ->where('month', '=', $month)
-                      ->where('year', '=', $year);
+                    ->where('gain_type', '=', 'B');
+                    //->where('month', '=', $month)
+                    //->where('year', '=', $year);
             })->sum('amount');
 
 
-
-
-            $membership_cost = Level::where('level','=',$user->level)->first()->payment;
-
+            //$membership_cost = Level::where('level', '=', $user->level)->first()->payment;
 
 
             $userArray = array(
@@ -255,10 +226,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
                 'Cuenta'             => $user->profiles->number_account,
                 '# Afiliados'        => $user->children()->get()->count(),
                 'Nivel'              => $user->level,
-                'Ganancia Actual'   => $gainsOfUser,
-                'Ganancia Corte Nivel 1'   => $gainsOfUserLevel1,
-                'Ganancia Corte Nivel 2'   => $gainsOfUserLevel2,
-                'Ganancia Corte Nivel 3'   => $gainsOfUserLevel3,
+                'Ganancia Por Corte' => $gainsOfUser,
                 'Pago membresia'     => $paymentOfUser,
                 'Mes'                => $month,
                 'Año'                => $year
@@ -267,7 +235,6 @@ class DbUserRepository extends DbRepository implements UserRepository {
             $usersArray[] = $userArray;
 
         }
-
 
 
         return $usersArray;
@@ -280,11 +247,11 @@ class DbUserRepository extends DbRepository implements UserRepository {
      */
     public function prepareData($data)
     {
-         if (! $data['parent_id'])
-         {
+        if (! $data['parent_id'])
+        {
             $data = array_except($data, array('parent_id'));
 
-         }
+        }
 
 
         return $data;
@@ -312,34 +279,41 @@ class DbUserRepository extends DbRepository implements UserRepository {
                     ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
             })->count();
 
-            /*if ($descendants->count() == 5 && $paymentsOfRedCount == 5 || $descendants->count() == 10 && $paymentsOfRedCount == 10)
-            {
-                 $this->generateCut($parent_user);
-            }*/
 
-            if ($descendants->count() == 10 && $paymentsOfRedCount == 10 && $this->completeAds($parent_user))
+            if ($descendants->count() == 5 && $paymentsOfRedCount == 5)
             {
                 if ($parent_user->level > 1)
                 {
 
-                    if ($parent_user->level == 2 && $descendants->sum('level') == 20 && $paymentsOfRedCount == 10)
+                    if ($parent_user->level == 2 && $descendants->sum('level') == 10 && $paymentsOfRedCount == 5)
                     {
-                        $parent_user->level = ($parent_user->level >= 3) ? 3 : $parent_user->level + 1;
+                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
                         $parent_user->save();
                         $this->generateCut($parent_user);
                     }
-                    if ($parent_user->level == 3 && $descendants->sum('level') == 30 && $paymentsOfRedCount == 10)
+                    if ($parent_user->level == 3 && $descendants->sum('level') == 15 && $paymentsOfRedCount == 5)
                     {
-                        $parent_user->level = ($parent_user->level >= 3) ? 3 : $parent_user->level + 1;
+                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
                         $parent_user->save();
                         $this->generateCut($parent_user);
                     }
-
+                    if ($parent_user->level == 4 && $descendants->sum('level') == 20 && $paymentsOfRedCount == 5)
+                    {
+                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
+                        $parent_user->save();
+                        $this->generateCut($parent_user);
+                    }
+                    if ($parent_user->level == 5 && $descendants->sum('level') == 25 && $paymentsOfRedCount == 5)
+                    {
+                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
+                        $parent_user->save();
+                        $this->generateCut($parent_user);
+                    }
 
 
                 } else
                 {
-                    $parent_user->level = ($parent_user->level >= 3) ? 3 : $parent_user->level + 1;
+                    $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
                     $parent_user->save();
                     $this->generateCut($parent_user);
 
@@ -349,7 +323,8 @@ class DbUserRepository extends DbRepository implements UserRepository {
 
         }
     }
-    public function completeAds($user)
+
+    /*public function completeAds($user)
     {
 
         $data['month'] = Carbon::now()->month;
@@ -365,11 +340,15 @@ class DbUserRepository extends DbRepository implements UserRepository {
 
         if(($possible_gain - $totalGainClick) == 0)
             return true;
-    }
+    }*/
     public function generateCut($userToGenerate)
     {
         $totalPaymentAuto = 0;
-        for ($i = 1; $i <= $userToGenerate->level; $i++)
+        $totalGain = 0;
+        $gainPerLevel = [];
+
+
+        for ($i = 1; $i <= $userToGenerate->level; $i ++)
         {
 
 
@@ -384,81 +363,46 @@ class DbUserRepository extends DbRepository implements UserRepository {
                 'transfer_date'   => Carbon::now()
             ]);
 
-            $totalPaymentAuto +=  Level::where('level', '=', $i)->first()->payment;
+            $totalPaymentAuto += Level::where('level', '=', $i)->first()->payment;
+
+            foreach ($userToGenerate->children()->get() as $user)
+            {
+                if ($user->level > 1)
+                {
+                    $gainPerLevel[ $user->level ] += Level::where('level', '=', $user->level)->first()->gain;
+                }
+            }
+            if ($i == 1)
+                $gainPerLevel[ $i ] = (Level::where('level', '=', $i)->first()->gain) * 5;
+
 
         }
-        $totalGainClick = Gain::where(function ($query) use ($userToGenerate)
+        for ($i = 1; $i <= count($gainPerLevel); $i ++)
         {
-            $query->where('user_id', '=', $userToGenerate->id)
-                 ->where('gain_type', '=', 'C');
-                //->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
-                //->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
-        })->sum('amount');
+            $totalGain += $gainPerLevel[ $i ];
+        }
+
 
         $gain = new Gain();
         $gain->user_id = $userToGenerate->id;
-        $gain->description = 'Ganancia generada por corte del nivel '.$userToGenerate->level-1;
-        $gain->amount = (($totalPaymentAuto - $totalPaymentAuto)< 0 ? 0 : ($totalGainClick - $totalPaymentAuto));
+        $gain->description = 'Ganancia generada por corte';
+        $gain->amount = (($totalGain - $totalPaymentAuto) < 0 ? 0 : ($totalGain - $totalPaymentAuto));
         $gain->gain_type = 'B';
-        $gain->month = Carbon::now()->month ;
+        $gain->month = Carbon::now()->month;
         $gain->year = Carbon::now()->year;
         $gain->save();
 
-        Gain::where(function ($query) use ($userToGenerate)
+        //$this->mailer->sendReportMembershipMessageTo($users->count(), $users_payments);
+
+        /*Gain::where(function ($query) use ($userToGenerate)
         {
             $query->where('user_id', '=', $userToGenerate->id)
                 ->where('gain_type', '=', 'C');
 
-        })->delete();
+        })->delete();*/
 
 
     }
-    /*public function checkLevel($parent_id)
-   {
-       if ($parent_id)
-       {
-           $parent_user = $this->model->findOrFail($parent_id);
-           $descendants = $parent_user->immediateDescendants();
-
-           $descendantsIds = $descendants->lists('id');
-
-           $paymentsOfRedCount = Payment::where(function ($query) use ($descendantsIds)
-           {
-               $query->whereIn('user_id', $descendantsIds)
-                   ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
-                   ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
-           })->count();
-
-           if ($descendants->count() == 5 && $paymentsOfRedCount == 5) //quinto afiliado
-           {
-                if($parent_user->level > 1)
-                {
-
-                    if($parent_user->level == 2 && $descendants->sum('level') == 10 && $paymentsOfRedCount == 5)
-                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
-                    if($parent_user->level == 3 && $descendants->sum('level') == 15 && $paymentsOfRedCount == 5)
-                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
-                    if($parent_user->level == 4 && $descendants->sum('level') == 20 && $paymentsOfRedCount == 5)
-                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
-                    if($parent_user->level == 5 && $descendants->sum('level') == 25 && $paymentsOfRedCount == 5)
-                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
-
-                    $parent_user->save();
-
-                }else{
-                    $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
-                    $parent_user->save();
-
-                }
-               $this->checkLevel($parent_user->parent_id);
-           }
-
-
-       }
-
-
-
-   }*/
 
 
     //List of patners user for the modal view of user.
@@ -466,15 +410,16 @@ class DbUserRepository extends DbRepository implements UserRepository {
     public function list_patners($value = null, $search = null)
     {
 
-        if ($search && $value!="")
+        if ($search && $value != "")
             $patners = ($value) ? $this->model->where('id', '<>', $value)->search($search)->paginate(8) : $this->model->paginate(8);
-        else if($value!="")
+        else if ($value != "")
             $patners = ($value) ? $this->model->where('id', '<>', $value)->paginate(8) : $this->model->paginate(8);
         else
-           $patners = $this->model->search($search)->paginate(8);
+            $patners = $this->model->search($search)->paginate(8);
 
         return $patners;
     }
+
     //Hits for an user
     public function getHits($user)
     {

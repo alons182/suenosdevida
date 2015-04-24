@@ -16,6 +16,7 @@
                     <th>#</th>
                     <th>Publicidad Vista</th>
                     <th>Fecha</th>
+                    <th><i class="glyphicon glyphicon-cog"></i></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -25,16 +26,63 @@
                         <td>{!! $hit->id !!}</td>
                         <td>{!! $hit->ad->name !!}</td>
                         <td> {!! $hit->hit_date !!}</td>
-
+                        <td>
+                            @if($currentUser->hasrole('administrator'))
+                                <button type="submit" class="btn btn-danger btn-sm" form="form-delete-hits" formaction="{!! URL::route("store.admin.hits.destroy", [$hit->id]) !!}">Eliminar</button>
+                            @endif
+                        </td>
                     </tr>
                 @empty
-                    <tr><td colspan="3" style="text-align: center;">No ha visto ningun anuncio todavia</td></tr>
+                    <tr><td colspan="4" style="text-align: center;">No ha visto ningun anuncio todavia</td></tr>
                 @endforelse
                 </tbody>
                 <tfoot>
 
                 @if ($hits)
-                    <td  colspan="3" class="pagination-container">{!!$hits->render()!!}</td>
+                    <td  colspan="4" class="pagination-container">{!!$hits->render()!!}</td>
+                @endif
+
+
+                </tfoot>
+            </table>
+
+
+        </div>
+        <div class="table-responsive gains-table">
+
+            <table class="table table-striped  ">
+                <thead>
+                <tr>
+
+                    <th>#</th>
+                    <th>Descripción</th>
+                    <th>Monto</th>
+                    <th>Fecha</th>
+                    <th><i class="glyphicon glyphicon-cog"></i></th>
+                </tr>
+                </thead>
+                <tbody>
+                @forelse ($gains as $gain)
+                    <tr>
+
+                        <td>{!! $gain->id !!}</td>
+                        <td>{!! $gain->description !!}</td>
+                        <td> {!! money($gain->amount,'₡') !!}</td>
+                        <td> {!! $gain->created_at !!}</td>
+                        <td>
+                            @if($currentUser->hasrole('administrator'))
+                                <button type="submit" class="btn btn-danger btn-sm" form="form-delete-gains" formaction="{!! URL::route("store.admin.gains.destroy", [$gain->id]) !!}">Eliminar</button>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr><td colspan="5" style="text-align: center;">No Ganancias por corte</td></tr>
+                @endforelse
+                </tbody>
+                <tfoot>
+
+                @if ($gains)
+                    <td  colspan="5" class="pagination-container">{!!$gains->render()!!}</td>
                 @endif
 
 
@@ -46,4 +94,6 @@
     </div>
 
 </div>
+{!! Form::open(['method' => 'delete', 'id' =>'form-delete-gains','data-confirm' => 'Estas seguro?']) !!}{!! Form::close() !!}
+{!! Form::open(['method' => 'delete', 'id' =>'form-delete-hits','data-confirm' => 'Estas seguro?']) !!}{!! Form::close() !!}
 @stop

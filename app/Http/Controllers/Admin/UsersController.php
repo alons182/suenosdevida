@@ -4,6 +4,7 @@
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserEditRequest;
 use App\Http\Requests\UserRequest;
+use App\Repositories\GainRepository;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\View;
@@ -21,20 +22,25 @@ class UsersController extends Controller {
 
 
     protected $userRepository;
-
+    /**
+     * @var GainRepository
+     */
+    private $gainRepository;
 
 
     /**
-     * @param UserForm $userForm
-     * @param UserEditForm $userEditForm
      * @param UserRepository $userRepository
+     * @param GainRepository $gainRepository
+     * @internal param UserForm $userForm
+     * @internal param UserEditForm $userEditForm
      * @internal param UserEditForm $
      */
 
-    function __construct(UserRepository $userRepository)
+    function __construct(UserRepository $userRepository, GainRepository $gainRepository)
     {
 
         $this->userRepository = $userRepository;
+        $this->gainRepository = $gainRepository;
 
 
         View::share('roles', Role::lists('name', 'id'));
@@ -107,7 +113,8 @@ class UsersController extends Controller {
     {
         $user = $this->userRepository->findById($id);
         $hits = $this->userRepository->getHits($user);
-        return View::make('admin.users.edit')->with(compact('user','hits'));
+        $gains = $this->gainRepository->getGainsById($id);
+        return View::make('admin.users.edit')->with(compact('user','hits','gains'));
     }
 
     /**

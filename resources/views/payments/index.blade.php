@@ -19,8 +19,8 @@
             <div class="gains">
                 <h2>Nivel Actual: {!! $currentUser->level !!}</h2>
                 <h2>Posible: <span class="amount">{!! money($possible_gains,'₡') !!}</span></h2>
-                <h2>Ganada Por ver publicidad: <span class="amount">{!! money($gainsPerClick,'₡') !!}</span></h2>
-                <h2>Ganancia Acumulada: <span class="amount">{!! money($accumulatedGains,'₡') !!}</span></h2>
+                
+                <h2>Ganancia por corte: <span class="amount">{!! money($accumulatedGains,'₡') !!}</span></h2>
             </div>
 
         </div>
