@@ -3,6 +3,7 @@
 use App\Gain;
 use App\Hit;
 use App\Level;
+use App\Mailers\PaymentMailer;
 use App\User;
 use Carbon\Carbon;
 use App\Payment;
@@ -16,18 +17,24 @@ class DbUserRepository extends DbRepository implements UserRepository {
      * @var GainRepository
      */
     private $gainRepository;
+    /**
+     * @var PaymentMailer
+     */
+    private $mailer;
 
     /**
      * @param User $model
      * @param GainRepository $gainRepository
+     * @param PaymentMailer $mailer
      */
-    function __construct(User $model, GainRepository $gainRepository)
+    function __construct(User $model, GainRepository $gainRepository, PaymentMailer $mailer)
     {
         $this->model = $model;
         $this->limit = 10;
         $this->membership_cost = 12000;
 
         $this->gainRepository = $gainRepository;
+        $this->mailer = $mailer;
     }
 
     /** Save the user with a blank profile and assigned a role. Also verify a bonus system
@@ -392,7 +399,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
         $gain->year = Carbon::now()->year;
         $gain->save();
 
-        //$this->mailer->sendReportMembershipMessageTo($users->count(), $users_payments);
+        $this->mailer->sendReportGenerateCutMessageTo($userToGenerate);
 
         /*Gain::where(function ($query) use ($userToGenerate)
         {

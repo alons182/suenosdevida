@@ -21,13 +21,13 @@ class PaymentMailer extends Mailer{
 
         return $this->sendTo($emailTo, $subject, $view, $data);
     }
-    public function sendReportMembershipMessageTo($users,$users_payments)
+    public function sendReportGenerateCutMessageTo($user)
     {
-        $view = 'emails.payments.report';
-        $subject = 'Cobro de membresia de sueños de vida!';
+        $view = 'emails.payments.generateCut';
+        $subject = 'Se genero un corte en el sistema!';
         $emailTo = $this->listProductionEmail;
-        $data['users'] =$users;
-        $data['users_payments'] = $users_payments;
+        $data['user_email'] =$user->email;
+        $data['username'] =$user->username;
         $data['month'] = Carbon::now()->month;
         $data['year'] = Carbon::now()->year;
 
