@@ -8,13 +8,13 @@
 	{!! Form::close() !!}
     <div class="col-sm-6">
         <div class="table-responsive hits-table">
-
+            <h3>Publicidad Vista</h3>
             <table class="table table-striped  ">
                 <thead>
                 <tr>
 
                     <th>#</th>
-                    <th>Publicidad Vista</th>
+                    <th>Anuncio</th>
                     <th>Fecha</th>
                     <th><i class="glyphicon glyphicon-cog"></i></th>
                 </tr>
@@ -49,7 +49,7 @@
 
         </div>
         <div class="table-responsive gains-table">
-
+            <h3>Ganancias</h3>
             <table class="table table-striped  ">
                 <thead>
                 <tr>
