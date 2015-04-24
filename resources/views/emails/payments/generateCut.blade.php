@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<p> Se genero un corte al usuario con el email <b>{{ $user_email }}</b>  y username <b>{{ $username }}</b> para el mes {{ $month }} del {{ $year }}</p>
+<p> Se generó un corte al usuario con el email <b>{{ $user_email }}</b>  y username <b>{{ $username }}</b> para el mes {{ $month }} del {{ $year }}</p>
 
 
 </body>
