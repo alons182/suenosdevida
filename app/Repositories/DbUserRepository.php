@@ -304,7 +304,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
                         $parent_user->save();
                         $this->generateCut($parent_user);
                     }
-                    if ($parent_user->level == 4 && $descendants->sum('level') == 20 && $paymentsOfRedCount == 5)
+                    /*if ($parent_user->level == 4 && $descendants->sum('level') == 20 && $paymentsOfRedCount == 5)
                     {
                         $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
                         $parent_user->save();
@@ -315,7 +315,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
                         $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
                         $parent_user->save();
                         $this->generateCut($parent_user);
-                    }
+                    }*/
 
 
                 } else

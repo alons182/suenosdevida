@@ -19,15 +19,15 @@ class LevelsTableSeeder extends Seeder {
         ]);
         Level::create([
             'level' => 2,
-            'payment' => 25000,
-            'gain' => 25000
+            'payment' => 40000,
+            'gain' => 40000
         ]);
         Level::create([
             'level' => 3,
-            'payment' => 50000,
-            'gain' => 50000
+            'payment' => 100000,
+            'gain' => 100000
         ]);
-        Level::create([
+        /*Level::create([
             'level' => 4,
             'payment' => 75000,
             'gain' => 75000
@@ -36,7 +36,7 @@ class LevelsTableSeeder extends Seeder {
             'level' => 5,
             'payment' => 100000,
             'gain' => 100000
-        ]);
+        ]);*/
 
 
 
