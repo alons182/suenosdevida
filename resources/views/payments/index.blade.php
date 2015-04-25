@@ -66,7 +66,7 @@
                 <tfoot>
 
                 @if ($paymentsOfUserRed)
-                    <td  colspan="8" class="pagination-container">{!!$paymentsOfUserRed->appends(['month' => $selectedMonth])->render()!!}</td>
+                    <td  colspan="8" class="pagination-container">{!!$paymentsOfUserRed->render()!!}</td>
                 @endif
 
 
@@ -109,7 +109,7 @@
                 <tfoot>
 
                 @if ($paymentsOfUser)
-                    <td  colspan="6" class="pagination-container">{!! $paymentsOfUser->appends(['month' => $selectedMonth])->render()!!}</td>
+                    <td  colspan="6" class="pagination-container">{!! $paymentsOfUser->render()!!}</td>
                 @endif
 
 

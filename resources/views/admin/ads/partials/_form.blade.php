@@ -47,7 +47,6 @@
     </div>
 
 
-
     <div class="form-group">
         {!! Form::label('published','Publicado:')!!}
         {!! Form::select('published', ['1' => 'Si', '0' => 'No'], null,['class'=>'form-control','required'=>'required'])
@@ -80,6 +79,12 @@
         {!! Form::text('video', null,['class'=>'form-control','required'=>'required']) !!}
         {!! errors_for('video',$errors) !!}
 
+    </div>
+    <!-- Email Form Input -->
+    <div class="form-group">
+        {!! Form::label('email', 'Email:') !!}
+        {!! Form::text('email', null, ['class' => 'form-control']) !!}
+        {!! errors_for('email',$errors) !!}
     </div>
 
 

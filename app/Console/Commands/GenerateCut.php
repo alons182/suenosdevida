@@ -48,7 +48,11 @@ class GenerateCut extends Command {
 
         foreach ($users as $user)
         {
-            $this->userRepository->checkLevel($user->id);
+            $descendants = $user->immediateDescendants();
+            if($descendants->count() == 5 && $user->level == 3 && $descendants->sum('level') == 15 )
+            {
+                $this->userRepository->generateCut($user);
+            }
         }
 
         $this->info('Membership paid done!!');

@@ -18,7 +18,7 @@ class ContactMailer extends Mailer{
     {
         $view = 'emails.contact.comment';
         $subject = 'Información desde formulario de publicidad de Sueños de vida';
-        $emailTo = 'alonso@avotz.com';
+        $emailTo = $data['ad_email'];
 
         return $this->sendTo($emailTo, $subject, $view, $data);
     }

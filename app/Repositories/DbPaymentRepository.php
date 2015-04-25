@@ -33,7 +33,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
     function __construct(Payment $model, PaymentMailer $mailer, UserRepository $userRepository)
     {
         $this->model = $model;
-        $this->limit = 20;
+        $this->limit = 10;
         $this->membership_cost = 15000;
         $this->mailer = $mailer;
         $this->userRepository = $userRepository;
@@ -56,6 +56,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
         $payment = $this->model->create($data);
         //Check level and payments for change level
         $user = $this->userRepository->findById($data['user_id']);
+
         $this->userRepository->checkLevel($user->parent_id);
 
         return $payment;
@@ -118,7 +119,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
             $query->where('user_id', '=', $user_logged->id);
                 //->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
                 //->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
-        })->paginate($this->limit);
+        })->orderBy('created_at','desc')->paginate($this->limit);
 
         return $paymentsOfUser;
     }
@@ -137,7 +138,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
             $query->whereIn('user_id', $usersOfRed);
                 //->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
                 //->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
-        })->paginate($this->limit);
+        })->orderBy('created_at','desc')->paginate($this->limit);
 
 
 

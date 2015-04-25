@@ -62,6 +62,7 @@ class AdsController extends Controller {
         $data['name'] = Auth::user()->profiles->first_name;
         $data['email'] = Auth::user()->email;
         $data['ad'] = $ad->name;
+        $data['ad_email'] = $ad->email;
 
         $this->mailer->comment($data);
 

@@ -8,7 +8,7 @@ class Ad extends Model {
     protected $table = 'ads';
 
     protected $fillable = [
-        'name', 'slug', 'description', 'image', 'video', 'province', 'canton', 'published', 'featured','publish_date'
+        'name', 'slug', 'description', 'image', 'video', 'province', 'canton','email', 'published', 'featured','publish_date'
     ];
 
     public function scopeSearch($query, $search)

@@ -68,7 +68,7 @@ class DbGainRepository extends DbRepository implements GainRepository {
 
         foreach($usersOfRed as $user)
         {
-            if($user_logged->level == 1)
+            if($user_logged->level == 1 && $user->level == 1)
             {
                 for ($i = 1; $i <= $user->level; $i++)
                 {
@@ -84,9 +84,19 @@ class DbGainRepository extends DbRepository implements GainRepository {
                         $gainPerLevel +=  Level::where('level','=',$i)->first()->gain;
                 }
             }
-            if($user_logged->level > 1 && $user->level > 1)
+            if($user_logged->level == 2 && $user->level == 2)
             {
-                $gainPerLevel +=  Level::where('level','=',$user->level)->first()->gain;
+                for ($j = 1; $j <= $user->level; $j++)
+                {
+                    $gainPerLevel += Level::where('level', '=', $j)->first()->gain;
+                }
+            }
+            if($user_logged->level == 3 && $user->level == 3)
+            {
+                for ($j = 1; $j <= $user->level; $j++)
+                {
+                    $gainPerLevel += Level::where('level', '=', $j)->first()->gain;
+                }
             }
 
 

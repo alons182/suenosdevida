@@ -286,47 +286,39 @@ class DbUserRepository extends DbRepository implements UserRepository {
                     //->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
             })->count();
 
-
-            if ($descendants->count() == 5 && $paymentsOfRedCount == 5)
+                //dd('id:'.$parent_user->id.' nivel:' .$parent_user->level. 'pagos:'.$paymentsOfRedCount. 'descen:'.$descendants->count(). 'sumdesc:'.$descendants->sum('level'));
+            if ($descendants->count() == 5 && $paymentsOfRedCount >= 5)
             {
-                if ($parent_user->level > 1)
-                {
 
-                    if ($parent_user->level == 2 && $descendants->sum('level') == 10 && $paymentsOfRedCount == 5)
+                    if ($parent_user->level == 1 && $descendants->sum('level') == 5 && $paymentsOfRedCount >= 5)
                     {
-                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
+                        $parent_user->level = ($parent_user->level >= 3) ? 3 : $parent_user->level + 1;
                         $parent_user->save();
                         $this->generateCut($parent_user);
+
+
                     }
-                    if ($parent_user->level == 3 && $descendants->sum('level') == 15 && $paymentsOfRedCount == 5)
+                    if ($parent_user->level == 2 && $descendants->sum('level') == 10 && $paymentsOfRedCount >= 5)
                     {
-                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
+                        $parent_user->level = ($parent_user->level >= 3) ? 3 : $parent_user->level + 1;
                         $parent_user->save();
                         $this->generateCut($parent_user);
+
+
                     }
-                    /*if ($parent_user->level == 4 && $descendants->sum('level') == 20 && $paymentsOfRedCount == 5)
+                    if ($parent_user->level == 3 && $descendants->sum('level') == 15 && $paymentsOfRedCount >= 5)
                     {
-                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
+                        $parent_user->level = ($parent_user->level >= 3) ? 3 : $parent_user->level + 1;
                         $parent_user->save();
                         $this->generateCut($parent_user);
+
+
                     }
-                    if ($parent_user->level == 5 && $descendants->sum('level') == 25 && $paymentsOfRedCount == 5)
-                    {
-                        $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
-                        $parent_user->save();
-                        $this->generateCut($parent_user);
-                    }*/
 
-
-                } else
-                {
-                    $parent_user->level = ($parent_user->level >= 5) ? 5 : $parent_user->level + 1;
-                    $parent_user->save();
-                    $this->generateCut($parent_user);
-
-                }
                 $this->checkLevel($parent_user->parent_id);
+
             }
+
 
         }
     }
@@ -352,13 +344,9 @@ class DbUserRepository extends DbRepository implements UserRepository {
     {
         $totalPaymentAuto = 0;
         $totalGain = 0;
-        $gainPerLevel = [];
-
 
         for ($i = 1; $i <= $userToGenerate->level; $i ++)
         {
-
-
             $payment = Payment::create([
                 'user_id'         => $userToGenerate->id,
                 'payment_type'    => "MA",
@@ -372,23 +360,15 @@ class DbUserRepository extends DbRepository implements UserRepository {
 
             $totalPaymentAuto += Level::where('level', '=', $i)->first()->payment;
 
-            foreach ($userToGenerate->children()->get() as $user)
-            {
-                if ($user->level > 1)
-                {
-                    $gainPerLevel[ $user->level ] += Level::where('level', '=', $user->level)->first()->gain;
-                }
-            }
-            if ($i == 1)
-                $gainPerLevel[ $i ] = (Level::where('level', '=', $i)->first()->gain) * 5;
-
-
         }
-        for ($i = 1; $i <= count($gainPerLevel); $i ++)
+        foreach ($userToGenerate->children()->get() as $user)
         {
-            $totalGain += $gainPerLevel[ $i ];
-        }
+            for ($j = 1; $j <= $user->level; $j++)
+            {
+                $totalGain += Level::where('level', '=',$j)->first()->gain;
+            }
 
+        }
 
         $gain = new Gain();
         $gain->user_id = $userToGenerate->id;
@@ -401,12 +381,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
 
         $this->mailer->sendReportGenerateCutMessageTo($userToGenerate);
 
-        /*Gain::where(function ($query) use ($userToGenerate)
-        {
-            $query->where('user_id', '=', $userToGenerate->id)
-                ->where('gain_type', '=', 'C');
-
-        })->delete();*/
+        return $userToGenerate;
 
 
     }

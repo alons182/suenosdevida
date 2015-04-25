@@ -22,14 +22,15 @@ class AdsTableSeeder extends Seeder {
 
             $name_ad = $faker->word;
             Ad::create([
-                'name'        => $name_ad,
-                'slug'        => Str::slug($name_ad),
-                'description' => $faker->text(),
-                'province'    => 'Guanacaste',
-                'canton'      => 'Liberia',
-                'published'   => 1,
-                'featured'    => 0,
-                'publish_date'    => Carbon::now()
+                'name'         => $name_ad,
+                'slug'         => Str::slug($name_ad),
+                'description'  => $faker->text(),
+                'province'     => 'Guanacaste',
+                'canton'       => 'Liberia',
+                'email'        => $faker->email,
+                'published'    => 1,
+                'featured'     => 0,
+                'publish_date' => Carbon::now()
 
             ]);
         }

@@ -355,8 +355,31 @@ Route::get('helper/createuser/{parent_id}', function($parent_id){
     }
 
 });
+Route::get('helper/onepayment/{$id}', function($id){
 
-Route::get('helper/createpayment/{from}/{to}', function($from,$to){
+
+    $repo =  app::make('App\Repositories\UserRepository');
+
+      $payment = Payment::create([
+          'user_id'         => $id,
+          'payment_type'    => "M",
+          'amount'          => '15000',
+          'bank'            => 'Nacional',
+          'description'     => 'Generado desde la pestaña Pagos',
+          'transfer_number' => '123',
+          'transfer_date'   => Carbon::now()
+      ]);
+
+      //Check level and payments for change level
+      $user = $repo->findById($id);
+      dd($user);
+      $repo->checkLevel($user->parent_id);
+
+
+
+
+});
+Route::get('helper/createpayments/{from}/{to}', function($from,$to){
 
 
     $repo =  app::make('App\Repositories\UserRepository');
@@ -374,12 +397,14 @@ Route::get('helper/createpayment/{from}/{to}', function($from,$to){
 
         //Check level and payments for change level
         $user = $repo->findById($index);
+
         $repo->checkLevel($user->parent_id);
     }
 
 
 
 });
+
 Route::get('helper/test/{id}', function($id){
 
     $repo =  app::make('App\Repositories\UserRepository');
