@@ -304,6 +304,16 @@ Route::group(['prefix' => 'store/admin', 'middleware' => 'authByRole'], function
     ]);
     Route::resource('ads', 'Admin\AdsController');
 
+    #Test controller
+    Route::post('tests/store_users', [
+        'as'   => 'store_users',
+        'uses' => 'Admin\TestController@storeUsers'
+    ]);
+    Route::post('tests/store_payments', [
+        'as'   => 'store_payments',
+        'uses' => 'Admin\TestController@storePayments'
+    ]);
+    Route::resource('tests', 'Admin\TestController');
 });
 Route::group(['prefix' => 'store'], function ()
 {
@@ -336,85 +346,7 @@ Route::controllers([
 	'password' => 'Auth\PasswordController',
 ]);
 
-// helper routes for test
-use Faker\Factory as Faker;
-Route::get('helper/createuser/{parent_id}', function($parent_id){
-    $faker = Faker::create();
-    $repo =  app::make('App\Repositories\UserRepository');
-    foreach (range(1, 5) as $index)
-    {
-        $data = [
-            'username' => $faker->word . $index,
-            'email' => $faker->email. $index,
-            'password' => "123",
-            'parent_id' => $parent_id
 
-        ];
-        $repo->store($data);
-
-    }
-
-});
-Route::get('helper/onepayment/{$id}', function($id){
-
-
-    $repo =  app::make('App\Repositories\UserRepository');
-
-      $payment = Payment::create([
-          'user_id'         => $id,
-          'payment_type'    => "M",
-          'amount'          => '15000',
-          'bank'            => 'Nacional',
-          'description'     => 'Generado desde la pestaña Pagos',
-          'transfer_number' => '123',
-          'transfer_date'   => Carbon::now()
-      ]);
-
-      //Check level and payments for change level
-      $user = $repo->findById($id);
-      dd($user);
-      $repo->checkLevel($user->parent_id);
-
-
-
-
-});
-Route::get('helper/createpayments/{from}/{to}', function($from,$to){
-
-
-    $repo =  app::make('App\Repositories\UserRepository');
-    foreach (range($from, $to) as $index)
-    {
-        $payment = Payment::create([
-            'user_id'         => $index,
-            'payment_type'    => "M",
-            'amount'          => '15000',
-            'bank'            => 'Nacional',
-            'description'     => 'Generado desde la pestaña Pagos',
-            'transfer_number' => '123',
-            'transfer_date'   => Carbon::now()
-        ]);
-
-        //Check level and payments for change level
-        $user = $repo->findById($index);
-
-        $repo->checkLevel($user->parent_id);
-    }
-
-
-
-});
-
-Route::get('helper/test/{id}', function($id){
-
-    $repo =  app::make('App\Repositories\UserRepository');
-    $parent_user = $repo->findById($id);
-    $descendants = $parent_user->immediateDescendants();
-
-    $descendantsIds = $descendants->lists('id');
-    dd($descendantsIds);
-
-});
 
 
 
