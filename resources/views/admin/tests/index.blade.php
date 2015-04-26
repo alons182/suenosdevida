@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="starter-template">
-        <div class="col-xs-12 col-md-8">
+        <div class="col-xs-12 col-sm-6">
             <h1>Creación de usuarios</h1>
             {!! Form::open(['route'=>'store_users']) !!}
 
@@ -19,7 +19,8 @@
 
 
             {!! Form::close() !!}
-
+        </div>
+        <div class=" col-sm-6">
 
             <h1>Creación de pagos</h1>
             {!! Form::open(['route'=>'store_payments']) !!}
@@ -38,5 +39,69 @@
             {!! Form::close() !!}
         </div>
     </div>
+    <div class="filtros">
 
+
+        {!! Form::open(['route' => 'store.admin.tests.index','method' => 'get']) !!}
+        <div class="form-group">
+            <div class="controls">
+                {!! Form::label('q', 'Buscar') !!}
+                {!! Form::text('q',$search, ['class'=>'form-control'] ) !!}
+            </div>
+            <div class="controls">
+                {!! Form::label('active', 'Estado') !!}
+                {!! Form::select('active', ['' => '-- Seleccionar --','0' => 'Inactivo','1' => 'Activo'], $selectedStatus, ['class'=>'form-control'] ) !!}
+            </div>
+
+        </div>
+        {!! Form::close() !!}
+
+    </div>
+    <div class="table-responsive">
+
+        <table class="table table-striped  ">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Patrocinador</th>
+                <th>Nivel</th>
+                <th>Creado</th>
+                <th><i class="icon-cog"></i></th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach ($users as $user)
+                <tr>
+                    <td>{!! $user->id !!}</td>
+                    <td>{!! link_to_route('store.admin.users.edit', $user->username, $user->id) !!}
+                    <td>{!! $user->email !!}</td>
+                    <td>{!! ($user->parent) ? $user->parent->username : 'No tiene patrocinador' !!}</td>
+                    <td>{!! $user->level !!}</td>
+                    <td>{!! $user->created_at !!}</td>
+                    <td>
+
+                        {!! Form::open(['route' => ['store.admin.tests.destroy', $user->id ], 'method' => 'delete', 'data-confirm' => 'Estas seguro?']) !!}
+                        <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                    {!! Form::close() !!}
+
+
+
+                    </td>
+
+                </tr>
+            @endforeach
+            </tbody>
+            <tfoot>
+
+            @if ($users)
+                <td  colspan="10" class="pagination-container">{!!$users->appends(['q' => $search])->render()!!}</td>
+            @endif
+
+            </tfoot>
+        </table>
+    </div>
+
+    {!! Form::open(['method' => 'delete', 'id' =>'form-delete','data-confirm' => 'Estas seguro?']) !!}{!! Form::close() !!}
 @stop

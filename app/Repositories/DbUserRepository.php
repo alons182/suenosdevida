@@ -114,9 +114,11 @@ class DbUserRepository extends DbRepository implements UserRepository {
         {
             $users = $users->where('active', '=', $search['active']);
         }
+        $order =  (isset($search['orderBy'])) ? $search['orderBy'] : 'created_at';
 
 
-        return $users->with('parent')->with('roles')->with('profiles')->orderBy('users.created_at', 'desc')->paginate($this->limit);
+
+        return $users->with('parent')->with('roles')->with('profiles')->orderBy('users.'.$order, 'desc')->paginate($this->limit);
 
     }
 

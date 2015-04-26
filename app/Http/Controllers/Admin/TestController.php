@@ -33,9 +33,22 @@ class TestController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index(Request $request)
 	{
-		return view('admin.tests.index');
+        $search = $request->all();
+        if (! count($search) > 0)
+        {
+            $search['q'] = "";
+        }
+        $search['active'] = (isset($search['active'])) ? $search['active'] : '';
+        $search['orderBy'] = 'id';
+        $users = $this->userRepository->findAll($search);
+
+		return view('admin.tests.index')->with([
+            'users' => $users,
+            'search' => $search['q'],
+            'selectedStatus' => $search['active']
+        ]);
 	}
 
 
@@ -114,7 +127,12 @@ class TestController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+        $this->userRepository->destroy($id);
+
+        Flash::message('User Deleted');
+
+
+        return Redirect()->route('tests');
 	}
 
 }
