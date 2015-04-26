@@ -176,10 +176,10 @@ class UsersController extends Controller {
     {
         $this->userRepository->destroy($id);
 
-        return Redirect::route('users')->with([
-            'flash_message' => 'User Delete',
-            'flash_type'    => 'alert-success'
-        ]);;
+        Flash::message('User Deleted');
+
+
+        return Redirect::route('users');
     }
 
     /**
