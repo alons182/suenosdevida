@@ -42,21 +42,21 @@
                     <td>
                             
                             @if ($product->published) 
-                                <button type="submit"  class="btn btn-default btn-xs" form="form-pub-unpub" formaction="{!! URL::route("products.unpub", [$product->id]) !!}"><i class="glyphicon glyphicon-ok"></i></button>
+                                <button type="submit"  class="btn btn-default btn-xs" form="form-pub-unpub" formaction="{!! URL::route('products.unpub', [$product->id]) !!}"><i class="glyphicon glyphicon-ok"></i></button>
                             @else 
-                                <button type="submit"  class="btn btn-default btn-xs "form="form-pub-unpub" formaction="{!! URL::route("products.pub", [$product->id]) !!}" ><i class="glyphicon glyphicon-remove"></i></button>
+                                <button type="submit"  class="btn btn-default btn-xs "form="form-pub-unpub" formaction="{!! URL::route('products.pub', [$product->id]) !!}" ><i class="glyphicon glyphicon-remove"></i></button>
                             @endif
 
                              @if ($product->featured)
-                                <button type="submit"  class="btn btn-default btn-xs" form="form-feat-unfeat" formaction="{!! URL::route("products.unfeat", [$product->id]) !!}" ><i class="glyphicon glyphicon-star"></i></button>
+                                <button type="submit"  class="btn btn-default btn-xs" form="form-feat-unfeat" formaction="{!! URL::route('products.unfeat', [$product->id]) !!}" ><i class="glyphicon glyphicon-star"></i></button>
                             @else
-                                <button type="submit"  class="btn btn-default btn-xs " form="form-feat-unfeat" formaction="{!! URL::route("products.feat", [$product->id]) !!}"><i class="glyphicon glyphicon-star-empty"></i></button>
+                                <button type="submit"  class="btn btn-default btn-xs " form="form-feat-unfeat" formaction="{!! URL::route('products.feat', [$product->id]) !!}"><i class="glyphicon glyphicon-star-empty"></i></button>
                             @endif
 
                     </td>
                     <td>
                      @if($currentUser->hasrole('administrator'))
-                       <button type="submit" class="btn btn-danger btn-sm" form="form-delete" formaction="{!! URL::route("store.admin.products.destroy", [$product->id]) !!}">Eliminar</button>
+                       <button type="submit" class="btn btn-danger btn-sm" form="form-delete" formaction="{!! URL::route('store.admin.products.destroy', [$product->id]) !!}">Eliminar</button>
                       @endif
                     </td>
                     

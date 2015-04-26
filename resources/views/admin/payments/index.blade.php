@@ -31,7 +31,7 @@
                 <td>{!! $payment->users->profiles->present()->fullname !!}</td>
                 <td>
                 @if($currentUser->hasrole('administrator'))
-                    <a href="#" class="x-edit" data-type="text" data-name="amount" data-pk="{!! $payment->id !!}" data-url="{!! URL::route("store.admin.payments.update", [$payment->id]) !!}" data-title="Enter Monto">{!! money($payment->amount,'₡') !!}</a>
+                    <a href="#" class="x-edit" data-type="text" data-name="amount" data-pk="{!! $payment->id !!}" data-url="{!! URL::route('store.admin.payments.update', [$payment->id]) !!}" data-title="Enter Monto">{!! money($payment->amount,'₡') !!}</a>
                 @else
                     {!! money($payment->amount,'₡') !!}
                 @endif
@@ -45,7 +45,7 @@
                 <td> {!! $payment->created_at !!}</td>
                 <td>
                      @if($currentUser->hasrole('administrator'))
-                       <button type="submit" class="btn btn-danger btn-sm" form="form-delete" formaction="{!! URL::route("store.admin.payments.destroy", [$payment->id]) !!}">Eliminar</button>
+                       <button type="submit" class="btn btn-danger btn-sm" form="form-delete" formaction="{!! URL::route('store.admin.payments.destroy', [$payment->id]) !!}">Eliminar</button>
                       @endif
                 </td>
             </tr>

@@ -33,9 +33,9 @@
                     <td>
                      @if($currentUser->hasrole('administrator'))
                          @if ($user->active)
-                            <button type="submit"  class="btn btn-success btn-xs" form="form-active-inactive" formaction="{!! URL::route("users.inactive", [$user->id]) !!}">Activo <i class="glyphicon glyphicon-ok"></i></button>
+                            <button type="submit"  class="btn btn-success btn-xs" form="form-active-inactive" formaction="{!! URL::route('users.inactive', [$user->id]) !!}">Activo <i class="glyphicon glyphicon-ok"></i></button>
                         @else
-                            <button type="submit"  class="btn btn-danger btn-xs "form="form-active-inactive" formaction="{!! URL::route("users.active", [$user->id]) !!}" > Inactivo <i class="glyphicon glyphicon-remove"></i></button>
+                            <button type="submit"  class="btn btn-danger btn-xs "form="form-active-inactive" formaction="{!! URL::route('users.active', [$user->id]) !!}" > Inactivo <i class="glyphicon glyphicon-remove"></i></button>
                         @endif
                      @endif
                     <!--{!! Form::open(['route' => ['store.admin.users.destroy', $user->id ], 'method' => 'delete', 'data-confirm' => 'Estas seguro?']) !!}

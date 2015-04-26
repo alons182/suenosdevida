@@ -6,7 +6,7 @@
           <h2>Últimas Categorias </h2>
          <div class="list-group">
 		   @foreach ($categories as $category)
-		       <a href="{!! URL::route('store.admin.categories.edit', $category->id) !!}" class="list-group-item">{!! $category->name !!} <span class="badge">{!! $category->products_count !!}</a>
+		       <a href="{!! URL::route('store.admin.categories.edit', $category->id) !!}" class="list-group-item">{!! $category->name !!} <span class="badge">{!! $category->products_count !!}</span></a>
 		   @endforeach
 		 
 		</div>
@@ -20,7 +20,7 @@
 		   @endforeach
 		 
 		 </div>
-          <p><a class="btn btn-primary" href="/store/admin/products" role="button">Ver todos &raquo; <span class="badge">{!! $tp !!}</a></p>
+          <p><a class="btn btn-primary" href="/store/admin/products" role="button">Ver todos &raquo; <span class="badge">{!! $tp !!}</span></a></p>
        </div>
        <div class="col-md-4">
          <h2>Últimas Ordenes</h2>
@@ -30,7 +30,7 @@
            @endforeach
 
          </div>
-         <p><a class="btn btn-primary" href="/store/admin/orders" role="button">Ver todas &raquo; <span class="badge">{!! $to !!}</a></p>
+         <p><a class="btn btn-primary" href="/store/admin/orders" role="button">Ver todas &raquo; <span class="badge">{!! $to !!}</span></a></p>
       </div>
         <div class="col-md-4">
           <h2>Últimos Usuarios</h2>
@@ -40,7 +40,7 @@
 		   @endforeach
 		 
 		 </div>
-          <p><a class="btn btn-primary" href="/store/admin/users" role="button">Ver todos &raquo; <span class="badge">{!! $tu !!}</a></p>
+          <p><a class="btn btn-primary" href="/store/admin/users" role="button">Ver todos &raquo; <span class="badge">{!! $tu !!}</span></a></p>
         </div>
    </div>
 @stop
