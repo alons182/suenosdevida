@@ -79,7 +79,7 @@ class TestController extends Controller {
         }
         Flash::message('Se crearon '.$cant_users.' usuario(s) correctamente' );
 
-        return redirect()->back();
+        return redirect()->route('store.admin.tests.index');
 	}
 
     /**
@@ -116,7 +116,7 @@ class TestController extends Controller {
 
 
         }
-        return redirect()->back();
+        return redirect()->route('store.admin.tests.index');
     }
 
 	/**
@@ -132,7 +132,7 @@ class TestController extends Controller {
         Flash::message('User Deleted');
 
 
-        return Redirect()->route('tests');
+        return redirect()->route('store.admin.tests.index');
 	}
 
 }
