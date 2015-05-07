@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration {
 			$table->string('password', 60);
             $table->boolean('active')->default(1);
             $table->tinyInteger('level')->default(1);
+            $table->tinyInteger('complete_levels')->default(0);
             $table->integer('parent_id')->nullable()->index();
             $table->integer('lft')->nullable()->index();
             $table->integer('rgt')->nullable()->index();
