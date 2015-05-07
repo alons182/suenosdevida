@@ -3,60 +3,82 @@
 @section('content')
 
     <div class="starter-template">
-        <div class="col-xs-12 col-sm-6">
-            <h1>Creación de usuarios</h1>
-            {!! Form::open(['route'=>'store_users']) !!}
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <h1>Creación de usuarios</h1>
+                    {!! Form::open(['route'=>'store_users']) !!}
 
-            <div class="form-group">
-                {!! Form::label('cant_users', 'Cantidad de usuarios a crear:') !!}
-                {!! Form::text('cant_users', 5, ['class' => 'form-control']) !!}
+                    <div class="form-group">
+                        {!! Form::label('cant_users', 'Cantidad de usuarios a crear:') !!}
+                        {!! Form::text('cant_users', 5, ['class' => 'form-control']) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('user_id', 'Id del usuario padre:') !!} </label>
+                        {!! Form::text('user_id', null, ['class' => 'form-control']) !!}
+                    </div>
+                    {!! Form::submit('Crear Usuarios',['class'=>'btn btn-primary'])!!}
+
+
+                    {!! Form::close() !!}
+                </div>
+                <div class=" col-sm-6">
+
+                    <h1>Creación de pagos</h1>
+                    {!! Form::open(['route'=>'store_payments']) !!}
+
+                    <div class="form-group">
+                        {!! Form::label('cant_users', 'Del usuario:') !!}
+                        {!! Form::text('to', null, ['class' => 'form-control']) !!}
+                    </div>
+                    <div class="form-group">
+                        {!! Form::label('user_id', 'Al usuario:') !!} </label>
+                        {!! Form::text('from', null, ['class' => 'form-control']) !!}
+                    </div>
+                    {!! Form::submit('Crear Pagos',['class'=>'btn btn-primary'])!!}
+
+
+                    {!! Form::close() !!}
+                </div>
             </div>
-            <div class="form-group">
-                {!! Form::label('user_id', 'Id del usuario padre:') !!} </label>
-                {!! Form::text('user_id', null, ['class' => 'form-control']) !!}
-            </div>
-            {!! Form::submit('Crear Usuarios',['class'=>'btn btn-primary'])!!}
+            <hr>
+
+           <div class="row">
+               <div class="well filtros">
 
 
-            {!! Form::close() !!}
-        </div>
-        <div class=" col-sm-6">
+                   {!! Form::open(['route' => 'store.admin.tests.index','method' => 'get']) !!}
+                   <div class="form-group">
+                       <div class="controls">
+                           {!! Form::label('q', 'Buscar Usuario') !!}
+                           {!! Form::text('q',$search, ['class'=>'form-control'] ) !!}
+                       </div>
+                       <div class="controls">
+                           {!! Form::label('active', 'Estado') !!}
+                           {!! Form::select('active', ['' => '-- Seleccionar --','0' => 'Inactivo','1' => 'Activo'],
+                           $selectedStatus, ['class'=>'form-control'] ) !!}
+                       </div>
+                       <div class="controls">
+                           {!! Form::label('parent', 'Buscar por id del patrocinador') !!}
+                           {!! Form::text('parent',$parent, ['class'=>'form-control'] ) !!}
+                       </div>
+                       <div class="controls">
+                           <button type="submit" class="btn btn-default ">Buscar</button>
+                       </div>
+                   </div>
+                   {!! Form::close() !!}
 
-            <h1>Creación de pagos</h1>
-            {!! Form::open(['route'=>'store_payments']) !!}
 
-            <div class="form-group">
-                {!! Form::label('cant_users', 'Del usuario:') !!}
-                {!! Form::text('to', null, ['class' => 'form-control']) !!}
-            </div>
-            <div class="form-group">
-                {!! Form::label('user_id', 'Al usuario:') !!} </label>
-                {!! Form::text('from', null, ['class' => 'form-control']) !!}
-            </div>
-            {!! Form::submit('Crear Pagos',['class'=>'btn btn-primary'])!!}
+               </div>
+           </div>
 
-
-            {!! Form::close() !!}
         </div>
     </div>
-    <div class="filtros">
 
 
-        {!! Form::open(['route' => 'store.admin.tests.index','method' => 'get']) !!}
-        <div class="form-group">
-            <div class="controls">
-                {!! Form::label('q', 'Buscar') !!}
-                {!! Form::text('q',$search, ['class'=>'form-control'] ) !!}
-            </div>
-            <div class="controls">
-                {!! Form::label('active', 'Estado') !!}
-                {!! Form::select('active', ['' => '-- Seleccionar --','0' => 'Inactivo','1' => 'Activo'], $selectedStatus, ['class'=>'form-control'] ) !!}
-            </div>
 
-        </div>
-        {!! Form::close() !!}
 
-    </div>
+
     <div class="table-responsive">
 
         <table class="table table-striped  ">
@@ -77,15 +99,17 @@
                     <td>{!! $user->id !!}</td>
                     <td>{!! link_to_route('store.admin.users.edit', $user->username, $user->id) !!}
                     <td>{!! $user->email !!}</td>
-                    <td>{!! ($user->parent) ? $user->parent->username : 'No tiene patrocinador' !!}</td>
+                    <td>{!! ($user->parent) ? $user->parent->username : 'No tiene patrocinador' !!} - id: {!!
+                        $user->parent_id !!}
+                    </td>
                     <td>{!! $user->level !!}</td>
                     <td>{!! $user->created_at !!}</td>
                     <td>
 
-                        {!! Form::open(['route' => ['store.admin.tests.destroy', $user->id ], 'method' => 'delete', 'data-confirm' => 'Estas seguro?']) !!}
+                        {!! Form::open(['route' => ['store.admin.tests.destroy', $user->id ], 'method' => 'delete',
+                        'data-confirm' => 'Estas seguro?']) !!}
                         <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
-                    {!! Form::close() !!}
-
+                        {!! Form::close() !!}
 
 
                     </td>
@@ -96,7 +120,7 @@
             <tfoot>
 
             @if ($users)
-                <td  colspan="10" class="pagination-container">{!!$users->appends(['q' => $search])->render()!!}</td>
+                <td colspan="10" class="pagination-container">{!!$users->appends(['q' => $search])->render()!!}</td>
             @endif
 
             </tfoot>

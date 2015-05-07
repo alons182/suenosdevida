@@ -36,17 +36,21 @@ class TestController extends Controller {
 	public function index(Request $request)
 	{
         $search = $request->all();
+        //dd(count($search));
         if (! count($search) > 0)
         {
             $search['q'] = "";
         }
         $search['active'] = (isset($search['active'])) ? $search['active'] : '';
+        $search['parent'] = (isset($search['parent'])) ? $search['parent'] : '';
         $search['orderBy'] = 'id';
+        //dd($search);
         $users = $this->userRepository->findAll($search);
 
 		return view('admin.tests.index')->with([
             'users' => $users,
             'search' => $search['q'],
+            'parent' => $search['parent'],
             'selectedStatus' => $search['active']
         ]);
 	}
