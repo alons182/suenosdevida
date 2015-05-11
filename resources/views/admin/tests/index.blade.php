@@ -39,6 +39,15 @@
 
 
                     {!! Form::close() !!}
+
+                    <h1>Corte mensual</h1>
+                    {!! Form::open(['route'=>'generate_cut']) !!}
+
+
+                        {!! Form::submit('Generar corte',['class'=>'btn btn-primary'])!!}
+
+
+                    {!! Form::close() !!}
                 </div>
             </div>
             <hr>

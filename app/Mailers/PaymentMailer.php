@@ -9,12 +9,12 @@ class PaymentMailer extends Mailer{
     protected $listLocalEmail = ['alonso@avotz.com'];
     protected $listProductionEmail = ['johnny100782@hotmail.com'];
 
-    public function sendPaymentsMembershipMessageTo(User $user)
+    public function sendReportGenerateCutMonthlyMessageTo($count)
     {
-        $view = 'emails.payments.confirm';
-        $subject = 'Cobro de membresia de sueños de vida!';
-        $emailTo = $user->email;
-        $data = $user->toArray();
+        $view = 'emails.payments.generateCutGeneral';
+        $subject = 'Se genero un corte en el sistema!';
+        $emailTo = $this->listProductionEmail;
+        $data['usersCount'] = $count;
         $data['month'] = Carbon::now()->month;
         $data['year'] = Carbon::now()->year;
 

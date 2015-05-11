@@ -1,5 +1,6 @@
 <?php namespace App\Console\Commands;
 
+use App\Mailers\PaymentMailer;
 use App\Repositories\UserRepository;
 use App\User;
 use Illuminate\Console\Command;
@@ -25,16 +26,22 @@ class GenerateCut extends Command {
      * @var UserRepository
      */
     private $userRepository;
+    /**
+     * @var PaymentMailer
+     */
+    private $mailer;
 
     /**
      * Create a new command instance.
      *
      * @param UserRepository $userRepository
+     * @param PaymentMailer $mailer
      */
-	public function __construct(UserRepository $userRepository)
+	public function __construct(UserRepository $userRepository, PaymentMailer $mailer)
 	{
 		parent::__construct();
         $this->userRepository = $userRepository;
+        $this->mailer = $mailer;
     }
 
 	/**
@@ -45,16 +52,21 @@ class GenerateCut extends Command {
 	public function fire()
 	{
         $users = User::all();
-
+        $count = 0;
         foreach ($users as $user)
         {
             $descendants = $user->immediateDescendants();
             if($descendants->count() == 5 && $user->level == 3 && $descendants->sum('level') == 15 )
             {
-                $this->userRepository->generateCut($user);
+                $this->userRepository->generateCut($user, false);
+                $count++;
+            }else
+            {
+                $count += $this->userRepository->generateCutMonthly($user);
+
             }
         }
-
+        $this->mailer->sendReportGenerateCutMonthlyMessageTo($count);
         $this->info('Membership paid done!!');
 	}
 

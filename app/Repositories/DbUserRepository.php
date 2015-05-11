@@ -204,18 +204,22 @@ class DbUserRepository extends DbRepository implements UserRepository {
         $users = $this->model->with('profiles')->get();
 
         $usersArray = [];
+       
         foreach ($users as $user)
         {
-            //$usersOfRed = $user->children()->get()->lists('id');
+            $paymentsOfMembership = 0;
 
-            $paymentsOfUser = Payment::where(function ($query) use ($user, $month, $year)
+            for ($i = 1; $i <= 3; $i ++)
             {
-                $query->where('user_id', '=', $user->id)
-                    ->where(\DB::raw('MONTH(created_at)'), '=', $month)
-                    ->where(\DB::raw('YEAR(created_at)'), '=', $year);
-            });
+                $paymentLevel = Payment::where(function ($query) use ($user, $i)
+                {
+                    $query->where('user_id', '=', $user->id)
+                        ->where('payment_type', '=', ($user->level == 1) ? 'M' : 'MA' )
+                        ->where('level', '=', $i);
+                })->get()->last();
 
-            $paymentOfUser = $paymentsOfUser->sum(\DB::raw('amount'));
+                $paymentsOfMembership += ($paymentLevel) ? $paymentLevel->amount : 0;
+            }
 
 
             $gainsOfUser = Gain::where(function ($query) use ($user, $month, $year)
@@ -240,7 +244,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
                 '# Afiliados'        => $user->children()->get()->count(),
                 'Nivel'              => $user->level,
                 'Ganancia Por Corte' => $gainsOfUser,
-                'Pago membresia'     => $paymentOfUser,
+                'Pago membresia'     => $paymentsOfMembership,
                 'Mes'                => $month,
                 'Año'                => $year
             );
@@ -300,7 +304,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
                     {
                         $parent_user->level = ($parent_user->level >= 3) ? 3 : $parent_user->level + 1;
                         $parent_user->save();
-                        $this->generateCut($parent_user);
+                        $this->generateCut($parent_user,true);
 
 
                     }
@@ -308,7 +312,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
                     {
                         $parent_user->level = ($parent_user->level >= 3) ? 3 : $parent_user->level + 1;
                         $parent_user->save();
-                        $this->generateCut($parent_user);
+                        $this->generateCut($parent_user,true);
 
 
                     }
@@ -317,7 +321,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
                         $parent_user->level = ($parent_user->level >= 3) ? 3 : $parent_user->level + 1;
                         $parent_user->complete_levels = 1;
                         $parent_user->save();
-                        $this->generateCut($parent_user);
+                        $this->generateCut($parent_user,true);
 
 
                     }
@@ -347,7 +351,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
         if(($possible_gain - $totalGainClick) == 0)
             return true;
     }*/
-    public function generateCut($userToGenerate)
+    public function generateCut($userToGenerate, $sendEmail)
     {
         $totalPaymentAuto = 0;
         $totalGain = 0;
@@ -386,9 +390,55 @@ class DbUserRepository extends DbRepository implements UserRepository {
         $gain->year = Carbon::now()->year;
         $gain->save();
 
-        $this->mailer->sendReportGenerateCutMessageTo($userToGenerate);
+
+
+        if($sendEmail)
+            $this->mailer->sendReportGenerateCutMessageTo($userToGenerate);
 
         return $userToGenerate;
+
+
+    }
+    public function generateCutMonthly($userToGenerate)
+    {
+        $totalPaymentAuto = 0;
+        $totalGain = 0;
+        $usersGenerated = 0;
+
+        if($userToGenerate->level > 1)
+        {
+            for ($i = 1; $i <= $userToGenerate->level-1; $i ++)
+            {
+                $payment = Payment::create([
+                    'user_id'         => $userToGenerate->id,
+                    'payment_type'    => "MA",
+                    'level'           => $i,
+                    'amount'          => Level::where('level', '=', $i)->first()->payment,
+                    'description'     => 'Cobro de membresia del nivel ' . $i,
+                    'bank'            => '--',
+                    'transfer_number' => '--',
+                    'transfer_date'   => Carbon::now()
+                ]);
+
+                $totalPaymentAuto += Level::where('level', '=', $i)->first()->payment;
+                $totalGain += Level::where('level', '=',$i)->first()->gain * 5;
+            }
+
+            $gain = new Gain();
+            $gain->user_id = $userToGenerate->id;
+            $gain->description = 'Ganancia generada por corte';
+            $gain->amount = (($totalGain - $totalPaymentAuto) < 0 ? 0 : ($totalGain - $totalPaymentAuto));
+            $gain->gain_type = 'B';
+            $gain->month = Carbon::now()->month;
+            $gain->year = Carbon::now()->year;
+            $gain->save();
+
+            $usersGenerated++;
+
+        }
+
+
+        return $usersGenerated;
 
 
     }

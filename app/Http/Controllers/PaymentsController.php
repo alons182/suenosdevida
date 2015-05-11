@@ -53,7 +53,7 @@ class PaymentsController extends Controller {
 
         $paymentsOfUser = $this->paymentRepository->getPaymentsOfUser($data);
         $paymentsOfUserRed = $this->paymentRepository->getPaymentsOfUserRed($data);
-
+        $paymentsOfMembership = $this->paymentRepository->getPaymentsOfMembership($data);
         $canton = Auth::user()->profiles->canton;
 
         $ads = $this->adRepository->getAds($canton, Auth::user()->id);
@@ -72,6 +72,7 @@ class PaymentsController extends Controller {
         return View::make('payments.index')->with([
             'paymentsOfUser'    => $paymentsOfUser,
             'paymentsOfUserRed' => $paymentsOfUserRed,
+            'paymentsOfMembership' => $paymentsOfMembership,
             'ads'               => $ads,
             'hits_per_week'     => $hits_per_week,
             'week'              => $week,

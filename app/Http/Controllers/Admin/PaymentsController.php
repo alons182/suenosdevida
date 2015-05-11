@@ -116,14 +116,14 @@ class PaymentsController extends Controller {
     public function update($id)
     {
 
-       if(Request::get('name') == 'amount')
+       if(Request::input('name') == 'amount')
        {
-           $data['amount'] = Request::get('value');
+           $data['amount'] = Request::input('value');
        }else
        {
-          $data['gain'] = Request::get('value');
+          $data['gain'] = Request::input('value');
        }
-
+        
         $this->paymentRepository->update($id, $data);
 
         return 'ok';

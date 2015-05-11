@@ -8,6 +8,7 @@ use App\Repositories\UserRepository;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Laracasts\Flash\Flash;
 use Faker\Factory as Faker;
 
@@ -120,6 +121,17 @@ class TestController extends Controller {
 
 
         }
+        return redirect()->route('store.admin.tests.index');
+    }
+    public function callGenerateCut()
+    {
+
+        $exitCode = Artisan::call('suenos:generatecut');
+
+        Flash::message('Se genero el corte mensual correctamente' );
+
+
+
         return redirect()->route('store.admin.tests.index');
     }
 

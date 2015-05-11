@@ -24,8 +24,15 @@ $(function () {
             return false;
         }
     });
-    /*$.fn.editable.defaults.ajaxOptions = {type: "PUT",data: { _token: $('input[name=_token]').val() } };
-    $('.x-edit').editable();*/
+
+    $.fn.editable.defaults.ajaxOptions = {type: "PUT"};
+    $('.x-edit').editable({
+        params: function(params) {
+            //originally params contain pk, name and value
+            params._token = $('input[name=_token]').val()
+            return params;
+        }
+    });
     
     setTimeout(function(){
         $('.flash-message').fadeOut();

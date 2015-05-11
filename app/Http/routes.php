@@ -313,6 +313,10 @@ Route::group(['prefix' => 'store/admin', 'middleware' => 'authByRole'], function
         'as'   => 'store_payments',
         'uses' => 'Admin\TestController@storePayments'
     ]);
+    Route::post('tests/generatecut', [
+        'as'   => 'generate_cut',
+        'uses' => 'Admin\TestController@callGenerateCut'
+    ]);
     Route::resource('tests', 'Admin\TestController');
 });
 Route::group(['prefix' => 'store'], function ()

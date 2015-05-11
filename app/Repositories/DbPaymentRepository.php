@@ -144,6 +144,30 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
 
         return $paymentsOfRed;
     }
+    /**
+     * Get payments of membership
+     * @param null $data
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getPaymentsOfMembership($data = null)
+    {
+        $user_logged = Auth::user();
+        $paymentsOfMembership = 0;
+
+        for ($i = 1; $i <= 3; $i ++)
+        {
+            $paymentLevel = $this->model->where(function ($query) use ($data, $user_logged, $i)
+            {
+                $query->where('user_id', '=', $user_logged->id)
+                    ->where('payment_type', '=', ($user_logged->level == 1) ? 'M' : 'MA' )
+                    ->where('level', '=', $i);
+            })->get()->last();
+
+            $paymentsOfMembership += ($paymentLevel) ? $paymentLevel->amount : 0;
+        }
+
+        return $paymentsOfMembership;
+    }
 
     /**
      * Get payments of user for the admin section
