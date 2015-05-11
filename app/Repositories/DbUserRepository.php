@@ -204,7 +204,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
         $users = $this->model->with('profiles')->get();
 
         $usersArray = [];
-       
+
         foreach ($users as $user)
         {
             $paymentsOfMembership = 0;

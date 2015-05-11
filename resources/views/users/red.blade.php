@@ -26,7 +26,7 @@
                         <p> <b>Telefono :</b>  {!! $user->profiles->telephone !!}</p>
                         <p><b>Afiliados :</b>  {!! $user->children->count() !!}</p>
                          <p><span class="level-{!! $user->level !!}"><b>Nivel :</b>  {!! $user->level !!}</span></p>
-                       <p> <b>Pago membresia :</b>  {!! ($user->payments->count() > 0) ? money($user->payments->first()->amount, '₡') : '₡0'!!}</p>
+                       <p> <b>Pago membresia :</b>  {!! ($user->payments->count() > 0) ? 'Si' : 'NO'!!}</p>
 
                     </div>
                 </div>
