@@ -25,7 +25,7 @@ class DbCategoryRepository extends DbRepository implements CategoryRepository {
     public function store($data)
     {
         $data = $this->prepareData($data);
-        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'categories', 200, null) : '';
+        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'categories', null, null, 640, null) : '';
 
         return $this->model->create($data);
     }
@@ -40,7 +40,7 @@ class DbCategoryRepository extends DbRepository implements CategoryRepository {
     {
         $category = $this->model->findOrFail($id);
         $data = $this->prepareData($data);
-        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'categories', 200, null) : $category->image;
+        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'categories', null, null, 640, null) : $category->image;
 
         $category->fill($data);
         $category->save();

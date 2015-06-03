@@ -21,6 +21,7 @@ class CreateUsersTable extends Migration {
             $table->boolean('active')->default(1);
             $table->tinyInteger('level')->default(1);
             $table->tinyInteger('complete_levels')->default(0);
+            $table->tinyInteger('first_time_gain_in_level')->default(0);
             $table->integer('parent_id')->nullable()->index();
             $table->integer('lft')->nullable()->index();
             $table->integer('rgt')->nullable()->index();

@@ -1,11 +1,15 @@
 <?php namespace App\Http\Controllers\Admin;
 
+use App\Gain;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Level;
 use App\Payment;
+use App\Repositories\PaymentRepository;
 use App\Repositories\UserRepository;
 
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
@@ -19,13 +23,19 @@ class TestController extends Controller {
      * @var UserRepository
      */
     private $userRepository;
+    /**
+     * @var PaymentRepository
+     */
+    private $paymentRepository;
 
     /**
      * @param UserRepository $userRepository
+     * @param PaymentRepository $paymentRepository
      */
-    function __construct(UserRepository $userRepository)
+    function __construct(UserRepository $userRepository, PaymentRepository $paymentRepository)
     {
         $this->userRepository = $userRepository;
+        $this->paymentRepository = $paymentRepository;
     }
 
 
@@ -101,20 +111,51 @@ class TestController extends Controller {
         {
             foreach (range($from, $to) as $index)
             {
-                $payment = Payment::create([
+                $data['user_id'] = $index;
+                $data['payment_type'] = "M";
+                $data['bank'] = 'Nacional';
+                $data['description'] = 'Generado desde la pestaña Pagos';
+                $data['transfer_number'] = '123';
+                $data['transfer_date'] = Carbon::now();
+
+
+                $this->paymentRepository->store($data);
+
+
+               /* $payment = Payment::create([
                     'user_id'         => $index,
                     'payment_type'    => "M",
-                    'amount'          => '15000',
+                    'amount'          => '3000',
                     'bank'            => 'Nacional',
                     'description'     => 'Generado desde la pestaña Pagos',
                     'transfer_number' => '123',
                     'transfer_date'   => Carbon::now()
-                ]);
+                ]);*/
 
                 //Check level and payments for change level
-                $user = $this->userRepository->findById($index);
+                //$user = $this->userRepository->findById($index);
+                // generate gain
+                //$this->paymentRepository->generateGain($user->parent_id);
+                /*if($user->parent_id)
+                {
+                    $parent_user = User::findOrFail($user->parent_id);
+                    for($i = 1; $i <= $parent_user->level; $i++ )
+                    {
 
-                $this->userRepository->checkLevel($user->parent_id);
+                        $gain = new Gain();
+                        $gain->user_id = $user->parent_id;
+                        $gain->description = 'Ganancia generada por pago de un hijo en nivel '. $i;
+                        $gain->amount = Level::where('level', '=', $i)->first()->payment;
+                        $gain->gain_type = 'P';
+                        $gain->month = Carbon::now()->month;
+                        $gain->year = Carbon::now()->year;
+                        $gain->save();
+                    }
+
+                    $this->paymentRepository->generateGain($parent_user->parent_id);
+                }*/
+
+               // $this->userRepository->checkLevel($user->parent_id);
             }
 
             Flash::message('Se crearon los pagos correctamente' );
@@ -125,7 +166,20 @@ class TestController extends Controller {
     }
     public function callGenerateCut()
     {
+        $gains = Gain::all();
+        $payments = Payment::all();
+       foreach($gains as $gain)
+        {
+            $gain->month -= 1;
+           // $gain->created_at = $gain->created_at->subMonth();
+            $gain->save();
+        }
+        foreach($payments as $payment)
+        {
 
+            $payment->created_at = $payment->created_at->subMonth();
+            $payment->save();
+        }
         $exitCode = Artisan::call('suenos:generatecut');
 
         Flash::message('Se genero el corte mensual correctamente' );

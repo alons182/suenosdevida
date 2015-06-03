@@ -317,6 +317,31 @@ Route::group(['prefix' => 'store/admin', 'middleware' => 'authByRole'], function
         'as'   => 'generate_cut',
         'uses' => 'Admin\TestController@callGenerateCut'
     ]);
+
+    Route::get('tests/paymentscount', function(){
+
+        $parent_user = User::findOrFail(2);
+        $descendants = $parent_user->immediateDescendants();
+
+        $descendantsIds = $descendants->lists('id');
+
+       /* $paymentsOfRedCount = Payment::where(function ($query) use ($descendantsIds)
+        {
+            $query->whereIn('user_id', $descendantsIds)
+                ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
+                ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+        })->count();*/
+        $paymentsOfRedCount = Gain::where(function ($query) use ($descendantsIds)
+        {
+            $query->whereIn('user_id', $descendantsIds)
+                ->where('month', '=', Carbon::now()->month)
+                ->where('year' , '=', Carbon::now()->year);
+            /*->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
+            ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);*/
+        })->count();
+        dd($paymentsOfRedCount);
+    });
+
     Route::resource('tests', 'Admin\TestController');
 });
 Route::group(['prefix' => 'store'], function ()
@@ -343,6 +368,7 @@ Route::group(['prefix' => 'store'], function ()
 
 
 });
+
 
 
 Route::controllers([

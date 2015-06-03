@@ -17,7 +17,7 @@
             </div>-->
             <small>Ganancias</small>
             <div class="gains">
-                <h2>Pago de membresia : <span class="amount {{ ($paymentsOfMembership < 15000) ? 'red' : '' }}">{{ money($paymentsOfMembership,'₡') }}</span></h2>
+                <h2>Pago de membresia : <span class="amount {{ ($paymentsOfMembership < 3000) ? 'red' : '' }}">{{ money($paymentsOfMembership,'₡') }}</span></h2>
                 <h2>Nivel Actual: {!! $currentUser->level !!}</h2>
                 <h2>Posible: <span class="amount">{!! money($possible_gains,'₡') !!}</span></h2>
                 

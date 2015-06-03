@@ -1,6 +1,7 @@
 <?php namespace App\Repositories;
 
 
+use App\Gain;
 use App\Level;
 use App\Payment;
 use Carbon\Carbon;
@@ -54,9 +55,10 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
 
 
         $payment = $this->model->create($data);
+
         //Check level and payments for change level
         $user = $this->userRepository->findById($data['user_id']);
-
+        $this->generateGain($user->parent_id);
         $this->userRepository->checkLevel($user->parent_id);
 
         return $payment;
@@ -221,13 +223,13 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
             $data = array_add($data, 'description', 'Generado por medio de la pestaña pagos');
         }
         if($data['payment_type'] == "M1" || $data['payment_type'] == "M")
-            $data = array_add($data, 'amount', 15000);
+            $data = array_add($data, 'amount', 3000);
         if($data['payment_type'] == "M2")
-            $data = array_add($data, 'amount', 25000);
+            $data = array_add($data, 'amount', 10000);
         if($data['payment_type'] == "M3")
-            $data = array_add($data, 'amount', 50000);
+            $data = array_add($data, 'amount', 25000);
         if($data['payment_type'] == "M4")
-            $data = array_add($data, 'amount', 75000);
+            $data = array_add($data, 'amount', 50000);
         if($data['payment_type'] == "M5")
             $data = array_add($data, 'amount', 100000);
 
@@ -286,6 +288,109 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
 
 
         return $payment;
+    }
+    /*public function generateGain($parent_id)
+    {
+        if($parent_id)
+        {
+            $parent_user = User::findOrFail($parent_id);
+
+            if($parent_user->level == 1)
+            {
+                $gain = new Gain();
+                $gain->user_id = $parent_id;
+                $gain->description = 'Ganancia generada por pago de un hijo en nivel 1';
+                $gain->amount = Level::where('level', '=', 1)->first()->payment;
+                $gain->gain_type = 'P';
+                $gain->month = Carbon::now()->month;
+                $gain->year = Carbon::now()->year;
+                $gain->save();
+            }
+            if($parent_user->level == 2)
+            {
+
+            }
+
+            $this->generateGain($parent_user->parent_id);
+        }
+    }*/
+    public function generateGain($parent_id)
+    {
+        if($parent_id)
+        {
+            $parent_user = User::findOrFail($parent_id);
+            $firstTime = $parent_user->first_time_gain_in_level;
+            $descendants = $parent_user->immediateDescendants();
+
+            $descendantsIds = $descendants->lists('id');
+
+
+            $paymentsOfRedCount = Gain::where(function ($query) use ($descendantsIds)
+            {
+                $query->whereIn('user_id', $descendantsIds)
+                    ->where('gain_type', '=', 'P')
+                    ->where('month', '=', Carbon::now()->month)
+                    ->where('year' , '=', Carbon::now()->year);
+
+            })->count();
+
+            if($parent_user->level > 1)
+            {
+
+                if($firstTime)
+                {
+                    for($i = 1; $i <= $parent_user->level; $i++ )
+                    {
+
+                        $gain = new Gain();
+                        $gain->user_id = $parent_id;
+                        $gain->description = 'Ganancia generada por pago de un hijo en nivel '. $i;
+                        $gain->amount = Level::where('level', '=', $i)->first()->payment;
+                        $gain->gain_type = 'P';
+                        $gain->month = Carbon::now()->month;
+                        $gain->year = Carbon::now()->year;
+                        $gain->save();
+                    }
+                }else
+                {
+                    if ($paymentsOfRedCount >= 5)
+                    {
+                        for ($i = 1; $i <= $parent_user->level; $i ++)
+                        {
+
+                            $gain = new Gain();
+                            $gain->user_id = $parent_id;
+                            $gain->description = 'Ganancia generada por pago de un hijo en nivel ' . $i;
+                            $gain->amount = Level::where('level', '=', $i)->first()->payment;
+                            $gain->gain_type = 'P';
+                            $gain->month = Carbon::now()->month;
+                            $gain->year = Carbon::now()->year;
+                            $gain->save();
+                        }
+
+                        $parent_user->first_time_gain_in_level  += 1;
+                        $parent_user->save();
+
+                    }
+                }
+
+
+            }else{
+
+
+                    $gain = new Gain();
+                    $gain->user_id = $parent_id;
+                    $gain->description = 'Ganancia generada por pago de un hijo en nivel '. 1;
+                    $gain->amount = Level::where('level', '=', 1)->first()->payment;
+                    $gain->gain_type = 'P';
+                    $gain->month = Carbon::now()->month;
+                    $gain->year = Carbon::now()->year;
+                    $gain->save();
+
+            }
+
+            $this->generateGain($parent_user->parent_id);
+        }
     }
 
 

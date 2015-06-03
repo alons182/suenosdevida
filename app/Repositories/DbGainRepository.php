@@ -65,19 +65,32 @@ class DbGainRepository extends DbRepository implements GainRepository {
         $usersOfRed = $user_logged->children()->get();
         $gainPerLevel = 0;
 
+       /* if($user_logged->level > 1)
+        {
+
+        }*/
+        $gainPerLevel = $this->model->where(function ($query) use ($data,$user_logged)
+        {
+            $query->where('user_id', '=', $user_logged->id)
+                ->where('from_level_change', '=', ($user_logged->level > 1) ? 0 : 0)
+                ->where('gain_type', '=', 'P')
+                ->where('month', '=', $data['month'])
+                ->where('year', '=', Carbon::now()->year);
+        })->sum('amount');
 
         foreach($usersOfRed as $user)
         {
-            if($user_logged->level == 1 && $user->level == 1)
+
+           /* if($user_logged->level == 1 && $user->level == 1)
             {
                 for ($i = 1; $i <= $user->level; $i++)
                 {
 
                     $paymentsOfUser = Payment::where(function ($query) use ($data, $user)
                     {
-                        $query->where('user_id', '=', $user->id);
-                            //->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
-                            //->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+                        $query->where('user_id', '=', $user->id)
+                            ->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
+                            ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
                     })->count();
 
                     if($paymentsOfUser > 0)
@@ -98,6 +111,20 @@ class DbGainRepository extends DbRepository implements GainRepository {
                     $gainPerLevel += Level::where('level', '=', $j)->first()->gain;
                 }
             }
+            if($user_logged->level == 4 && $user->level == 4)
+            {
+                for ($j = 1; $j <= $user->level; $j++)
+                {
+                    $gainPerLevel += Level::where('level', '=', $j)->first()->gain;
+                }
+            }
+            if($user_logged->level == 5 && $user->level == 5)
+            {
+                for ($j = 1; $j <= $user->level; $j++)
+                {
+                    $gainPerLevel += Level::where('level', '=', $j)->first()->gain;
+                }
+            }*/
 
 
         }

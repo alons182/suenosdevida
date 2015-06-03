@@ -1,6 +1,7 @@
 <?php namespace App\Console\Commands;
 
 use App\Mailers\PaymentMailer;
+use App\Payment;
 use App\Repositories\UserRepository;
 use App\User;
 use Illuminate\Console\Command;
@@ -55,7 +56,17 @@ class GenerateCut extends Command {
         $count = 0;
         foreach ($users as $user)
         {
-            $descendants = $user->immediateDescendants();
+            $count += $this->userRepository->generateCut($user, false);
+            /*$descendants = $user->immediateDescendants();
+            $descendantsIds = $descendants->lists('id');
+
+            $paymentsOfRedCount = Payment::where(function ($query) use ($descendantsIds)
+            {
+                $query->whereIn('user_id', $descendantsIds)
+                    ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
+                    ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+            })->count();
+
             if($descendants->count() == 5 && $user->level == 3 && $descendants->sum('level') == 15 )
             {
                 $this->userRepository->generateCut($user, false);
@@ -64,7 +75,7 @@ class GenerateCut extends Command {
             {
                 $count += $this->userRepository->generateCutMonthly($user);
 
-            }
+            }*/
         }
         $this->mailer->sendReportGenerateCutMonthlyMessageTo($count);
         $this->info('Membership paid done!!');

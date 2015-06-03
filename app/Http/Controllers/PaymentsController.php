@@ -98,6 +98,7 @@ class PaymentsController extends Controller {
      * Store a newly created resource in storage.
      * POST /balances
      *
+     * @param PaymentRequest $request
      * @return Response
      */
     public function store(PaymentRequest $request)
