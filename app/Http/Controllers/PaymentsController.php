@@ -2,6 +2,7 @@
 
 use App\Http\Requests\AdRequest;
 use App\Http\Requests\PaymentRequest;
+use App\Mailers\ContactMailer;
 use App\Repositories\AdRepository;
 use App\Repositories\GainRepository;
 use Carbon\Carbon;
@@ -25,8 +26,20 @@ class PaymentsController extends Controller {
      * @var GainRepository
      */
     private $gainRepository;
+    /**
+     * @var ContactMailer
+     */
+    private $mailer;
 
-    function __construct(UserRepository $userRepository, PaymentRepository $paymentRepository, AdRepository $adRepository, GainRepository $gainRepository)
+    /**
+     * @param UserRepository $userRepository
+     * @param PaymentRepository $paymentRepository
+     * @param AdRepository $adRepository
+     * @param GainRepository $gainRepository
+     * @param ContactMailer $mailer
+     */
+    function __construct(UserRepository $userRepository, PaymentRepository $paymentRepository,
+                         AdRepository $adRepository, GainRepository $gainRepository, ContactMailer $mailer)
     {
         $this->userRepository = $userRepository;
         $this->paymentRepository = $paymentRepository;
@@ -35,6 +48,7 @@ class PaymentsController extends Controller {
         $this->gainRepository = $gainRepository;
 
         $this->middleware('auth');
+        $this->mailer = $mailer;
     }
 
     /**
@@ -64,7 +78,9 @@ class PaymentsController extends Controller {
 
         $accumulatedGains = $this->gainRepository->getAccumulatedGains($data);
 
-        $membership_cost = $this->paymentRepository->getMembershipCost();
+        //$membership_cost = $this->paymentRepository->getMembershipCost();
+
+       // $annualCharge = $this->paymentRepository->getAnnualCharge();
 
         $week = Carbon::now()->weekOfMonth;
 
@@ -73,12 +89,13 @@ class PaymentsController extends Controller {
             'paymentsOfUser'    => $paymentsOfUser,
             'paymentsOfUserRed' => $paymentsOfUserRed,
             'paymentsOfMembership' => $paymentsOfMembership,
+            //'annualCharge' => $annualCharge,
             'ads'               => $ads,
             'hits_per_week'     => $hits_per_week,
             'week'              => $week,
             'possible_gains'    => $possibleGains,
             'accumulatedGains'  => $accumulatedGains,
-            'membership_cost'   => $membership_cost,
+            //'membership_cost'   => $membership_cost,
             'selectedMonth'     => $data['month']
         ]);
     }
@@ -125,6 +142,21 @@ class PaymentsController extends Controller {
     {
         return View::make('users.red')->withMonth(Carbon::now()->month)->withYear(Carbon::now()->year);
     }
+
+    /**
+     * Cashing of gains for email.
+     * GET /cashing
+     *
+     * @return Response
+     */
+    public function postCashing()
+    {
+        $data = Auth::user()->toArray();
+        $this->mailer->cashing($data);
+        Flash::message('Se envio un correo al administrador solicitado tu retiro de ganancias');
+        return Redirect::route('payments.index');
+    }
+
 
 
 }

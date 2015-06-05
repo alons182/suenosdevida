@@ -122,40 +122,7 @@ class TestController extends Controller {
                 $this->paymentRepository->store($data);
 
 
-               /* $payment = Payment::create([
-                    'user_id'         => $index,
-                    'payment_type'    => "M",
-                    'amount'          => '3000',
-                    'bank'            => 'Nacional',
-                    'description'     => 'Generado desde la pestaña Pagos',
-                    'transfer_number' => '123',
-                    'transfer_date'   => Carbon::now()
-                ]);*/
 
-                //Check level and payments for change level
-                //$user = $this->userRepository->findById($index);
-                // generate gain
-                //$this->paymentRepository->generateGain($user->parent_id);
-                /*if($user->parent_id)
-                {
-                    $parent_user = User::findOrFail($user->parent_id);
-                    for($i = 1; $i <= $parent_user->level; $i++ )
-                    {
-
-                        $gain = new Gain();
-                        $gain->user_id = $user->parent_id;
-                        $gain->description = 'Ganancia generada por pago de un hijo en nivel '. $i;
-                        $gain->amount = Level::where('level', '=', $i)->first()->payment;
-                        $gain->gain_type = 'P';
-                        $gain->month = Carbon::now()->month;
-                        $gain->year = Carbon::now()->year;
-                        $gain->save();
-                    }
-
-                    $this->paymentRepository->generateGain($parent_user->parent_id);
-                }*/
-
-               // $this->userRepository->checkLevel($user->parent_id);
             }
 
             Flash::message('Se crearon los pagos correctamente' );
@@ -189,7 +156,37 @@ class TestController extends Controller {
         return redirect()->route('store.admin.tests.index');
     }
 
-	/**
+    public function callGenerateCharge()
+    {
+        /*$gains = Gain::all();
+        $payments = Payment::all();
+        foreach($gains as $gain)
+        {
+            $gain->month -= 1;
+            // $gain->created_at = $gain->created_at->subMonth();
+            $gain->save();
+        }
+        foreach($payments as $payment)
+        {
+
+            $payment->created_at = $payment->created_at->subMonth();
+            $payment->save();
+        }*/
+        //$exitCode = Artisan::call('suenos:generatecharge');
+        $users = User::all();
+        foreach ($users as $user)
+        {
+            $this->userRepository->generateAnnualCharge($user);
+        }
+
+        Flash::message('Se genero el corte anual correctamente' );
+
+
+
+        return redirect()->route('store.admin.tests.index');
+    }
+
+    /**
 	 * Remove the specified resource from storage.
 	 *
 	 * @param  int  $id

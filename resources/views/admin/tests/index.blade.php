@@ -48,6 +48,14 @@
 
 
                     {!! Form::close() !!}
+                    <h1>Cobro Anual</h1>
+                    {!! Form::open(['route'=>'generate_charge']) !!}
+
+
+                    {!! Form::submit('Generar cobro Anual',['class'=>'btn btn-primary'])!!}
+
+
+                    {!! Form::close() !!}
                 </div>
             </div>
             <hr>
@@ -97,7 +105,6 @@
                 <th>Username</th>
                 <th>Email</th>
                 <th>Patrocinador</th>
-                <th>Nivel</th>
                 <th>Creado</th>
                 <th><i class="icon-cog"></i></th>
             </tr>
@@ -111,7 +118,7 @@
                     <td>{!! ($user->parent) ? $user->parent->username : 'No tiene patrocinador' !!} - id: {!!
                         $user->parent_id !!}
                     </td>
-                    <td>{!! $user->level !!}</td>
+
                     <td>{!! $user->created_at !!}</td>
                     <td>
 

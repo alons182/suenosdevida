@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 class DatabaseSeeder extends Seeder {
 
     private $tables = [
-        'users','profiles', 'roles','role_user','payments','categories','products','category_product','orders','ads','hits','levels'
+        'users','profiles', 'roles','role_user','payments','categories','products','category_product','orders','ads','hits'
     ];
     private $seeders = [
         'UsersTableSeeder','RolesTableSeeder','ProfilesTableSeeder',
-        'UsersRolesTableSeeder','CategoriesTableSeeder','AdsTableSeeder','LevelsTableSeeder'//,'ProductsTableSeeder'//,'CategoriesProductsTableSeeder'
+        'UsersRolesTableSeeder','CategoriesTableSeeder','AdsTableSeeder'//,'ProductsTableSeeder'//,'CategoriesProductsTableSeeder'
     ];
 
     /**

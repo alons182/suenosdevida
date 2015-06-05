@@ -2,7 +2,6 @@
 
 
 use App\Gain;
-use App\Level;
 use App\Payment;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -62,13 +61,25 @@ class DbGainRepository extends DbRepository implements GainRepository {
     public function getPossibleGainsPerAffiliates($data = null, $user = null)
     {
         $user_logged =  ($user) ? $user : Auth::user();
+        $gain = 0;
+        $gain = $this->model->where(function ($query) use ($data,$user_logged)
+        {
+            $query->where('user_id', '=', $user_logged->id)
+                ->where('gain_type', '=', 'P')
+                ->where('month', '=', $data['month'])
+                ->where('year', '=', Carbon::now()->year);
+        })->sum('amount');
+
+        return $gain;
+
+    }
+   /* public function getPossibleGainsPerAffiliates($data = null, $user = null)
+    {
+        $user_logged =  ($user) ? $user : Auth::user();
         $usersOfRed = $user_logged->children()->get();
         $gainPerLevel = 0;
 
-       /* if($user_logged->level > 1)
-        {
 
-        }*/
         $gainPerLevel = $this->model->where(function ($query) use ($data,$user_logged)
         {
             $query->where('user_id', '=', $user_logged->id)
@@ -124,16 +135,21 @@ class DbGainRepository extends DbRepository implements GainRepository {
                 {
                     $gainPerLevel += Level::where('level', '=', $j)->first()->gain;
                 }
-            }*/
+            }
 
 
         }
 
         return $gainPerLevel;
 
-    }
+    }*/
     public function getGainsById($id)
     {
-        return $this->model->where('user_id','=',$id)->paginate($this->limit);
+        return $this->model->where(function ($query) use ($id)
+        {
+            $query->where('user_id', '=', $id)
+                ->where('gain_type', '=', 'B');
+
+        })->paginate($this->limit);
     }
 }

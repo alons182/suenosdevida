@@ -1,19 +1,19 @@
 @extends('layouts.layout')
 
 @section('content')
-<h1>{!! $currentUser->username !!} | <small>{!! $currentUser->profiles->present()->fullname !!}</small> <small class="level-{!! $currentUser->level !!}"> Nivel: {!! $currentUser->level !!}</small> </h1>
+<h1>{!! $currentUser->username !!} | <small>{!! $currentUser->profiles->present()->fullname !!}</small> </h1>
 
 <h2>Tu red de usuarios</h2>
 
-@for($i = 1; $i<=$currentUser->level; $i++)
+
     @forelse ($currentUser->immediateDescendants()->with(array('payments' => function($query) use ($month, $year)
                                                          {
                                                               $query->where(\DB::raw('MONTH(created_at)'), '=', $month)
                                                                 ->where(\DB::raw('YEAR(created_at)'), '=', $year);
 
-                                                      }))->with('profiles','children')->get()->chunk(10) as $userSet)
+                                                      }))->with('profiles','children')->get()->chunk(15) as $userSet)
 
-        <div class="row users level-{!! $i !!}">
+        <div class="row users level-1">
             @foreach ($userSet as $user)
                 <div class="col-md-3 user-block">
 
@@ -25,7 +25,6 @@
                         <p> <b>Correo :</b>  <a href="mailto:{!! $user->email !!}">{!! $user->email !!}</a></p>
                         <p> <b>Telefono :</b>  {!! $user->profiles->telephone !!}</p>
                         <p><b>Afiliados :</b>  {!! $user->children->count() !!}</p>
-                         <p><span class="level-{!! $user->level !!}"><b>Nivel :</b>  {!! $user->level !!}</span></p>
                        <p> <b>Pago membresia :</b>  {!! ($user->payments->count() > 0) ? 'Si' : 'NO'!!}</p>
 
                     </div>
@@ -35,7 +34,7 @@
     @empty
         <p>No tiene usuarios en tu red</p>
     @endforelse
-@endfor
+
 
 
 

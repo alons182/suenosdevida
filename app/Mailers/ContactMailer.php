@@ -22,4 +22,12 @@ class ContactMailer extends Mailer{
 
         return $this->sendTo($emailTo, $subject, $view, $data);
     }
+    public function cashing($data)
+    {
+        $view = 'emails.contact.cashing';
+        $subject = 'Retiro de ganancias';
+        $emailTo = $this->listProductionEmail;
+
+        return $this->sendTo($emailTo, $subject, $view, $data);
+    }
 } 

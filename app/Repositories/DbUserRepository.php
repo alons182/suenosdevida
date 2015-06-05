@@ -2,7 +2,6 @@
 
 use App\Gain;
 use App\Hit;
-use App\Level;
 use App\Mailers\PaymentMailer;
 use App\User;
 use Carbon\Carbon;
@@ -34,7 +33,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
         $this->model = $model;
         $this->limit = 10;
         $this->membership_cost = 12000;
-
+        $this->annualCharge = 5000;
         $this->gainRepository = $gainRepository;
         $this->mailer = $mailer;
 
@@ -55,8 +54,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
         $user->createProfile();
         $user->assignRole($role);
 
-        $this->checkLevel($parent_id);
-
+        $this->bonus($user, $parent_id);
 
         return $user;
     }
@@ -121,11 +119,10 @@ class DbUserRepository extends DbRepository implements UserRepository {
         {
             $users = $users->where('parent_id', '=', $search['parent']);
         }
-        $order =  (isset($search['orderBy'])) ? $search['orderBy'] : 'created_at';
+        $order = (isset($search['orderBy'])) ? $search['orderBy'] : 'created_at';
 
 
-
-        return $users->with('parent')->with('roles')->with('profiles')->orderBy('users.'.$order, 'desc')->paginate($this->limit);
+        return $users->with('parent')->with('roles')->with('profiles')->orderBy('users.' . $order, 'desc')->paginate($this->limit);
 
     }
 
@@ -165,7 +162,8 @@ class DbUserRepository extends DbRepository implements UserRepository {
         $payments = Payment::with('users.profiles')->where(function ($query) use ($today)
         {
             $query->whereBetween('created_at', $today)
-                ->where('payment_type', '<>', 'MA');
+                ->where('payment_type', '=', 'M');
+
         })->get();
 
 
@@ -210,27 +208,26 @@ class DbUserRepository extends DbRepository implements UserRepository {
 
         foreach ($users as $user)
         {
-            $paymentsOfMembership = 0;
 
-            for ($i = 1; $i <= 3; $i ++)
+
+            $payment = Payment::where(function ($query) use ($user, $month, $year)
             {
-                $paymentLevel = Payment::where(function ($query) use ($user, $i)
-                {
-                    $query->where('user_id', '=', $user->id)
-                        ->where('payment_type', '=', ($user->level == 1) ? 'M' : 'MA' )
-                        ->where('level', '=', $i);
-                })->get()->last();
+                $query->where('user_id', '=', $user->id)
+                    ->where('payment_type', '<>', 'A')
+                    ->where(\DB::raw('MONTH(created_at)'), '=', $month)
+                    ->where(\DB::raw('YEAR(created_at)'), '=',$year);
+            })->get()->last();
 
-                $paymentsOfMembership += ($paymentLevel) ? $paymentLevel->amount : 0;
-            }
+            $paymentsOfMembership = ($payment) ? $payment->amount : 0;
+
 
 
             $gainsOfUser = Gain::where(function ($query) use ($user, $month, $year)
             {
                 $query->where('user_id', '=', $user->id)
                     ->where('gain_type', '=', 'B');
-                    //->where('month', '=', $month)
-                    //->where('year', '=', $year);
+                //->where('month', '=', $month)
+                //->where('year', '=', $year);
             })->sum('amount');
 
 
@@ -245,7 +242,6 @@ class DbUserRepository extends DbRepository implements UserRepository {
                 'Cedula'             => $user->profiles->ide,
                 'Cuenta'             => $user->profiles->number_account,
                 '# Afiliados'        => $user->children()->get()->count(),
-                'Nivel'              => $user->level,
                 'Ganancia Por Corte' => $gainsOfUser,
                 'Pago membresia'     => $paymentsOfMembership,
                 'Mes'                => $month,
@@ -267,23 +263,72 @@ class DbUserRepository extends DbRepository implements UserRepository {
      */
     public function prepareData($data)
     {
-        if (! $data['parent_id'])
-        {
-            $data = array_except($data, array('parent_id'));
+        //if (! $data['parent_id'])
+        // {
+        $data = array_except($data, array('parent_id'));
 
-        }
+        // }
 
 
         return $data;
     }
 
+
     /**
-     * Verify the Nivel system
+     * Verify the bonus system
+     * @param $user
      * @param $parent_id
      * @internal param $data
      * @return mixed
      */
-    public function checkLevel($parent_id)
+    public function bonus($user, $parent_id)
+    {
+        if ($parent_id)
+        {
+            $parent_user = $this->model->findOrFail($parent_id);
+
+            if ($parent_user->depth != 0)
+            {
+
+                if ($parent_user->immediateDescendants()->count() == 4 && $parent_user->bonus != 1) //quinto afiliado
+                {
+                    $parent_user->bonus = 1;
+                    $parent_user->save();
+                    $this->bonus($user, $parent_user->parent_id);
+                } /*else if ($parent_user->immediateDescendants()->count() == 9 && $parent_user->bonus != 2) //decimo afiliado
+                {
+                    $parent_user->bonus = 2;
+                    $parent_user->save();
+                    $this->bonus($user, $parent_user->parent_id);
+                } */
+                else
+                {
+                    $user->parent_id = $parent_user->id;
+                    $user->save();
+                }
+            } else
+            {
+                $user->parent_id = $parent_user->id;
+                $parent_user->bonus = 1;
+                $parent_user->save();
+                $user->save();
+
+
+            }
+
+
+        }
+
+        return $user;
+    }
+    /**
+     * Verify the Nivel system
+     * @param $userToGenerate
+     * @return mixed
+     * @internal param $parent_id
+     * @internal param $data
+     */
+    /*public function checkLevel($parent_id)
     {
         if ($parent_id)
         {
@@ -357,46 +402,121 @@ class DbUserRepository extends DbRepository implements UserRepository {
 
 
         }
-    }
-    public function generateGainToParent($parent_id)
+    }*/
+
+
+    /**
+     * @param $userToGenerate
+     */
+    public function generateAnnualCharge($userToGenerate)
     {
-        if($parent_id)
+        $payment = Payment::create([
+            'user_id'         => $userToGenerate->id,
+            'payment_type'    => "A",
+            'amount'          => $this->annualCharge,
+            'description'     => 'Cobro de Anual',
+            'bank'            => '--',
+            'transfer_number' => '--',
+            'transfer_date'   => Carbon::now()
+        ]);
+
+        $totalGain = Gain::where(function ($query) use ($userToGenerate)
         {
-            $parent_user = User::findOrFail($parent_id);
-            for($i = 1; $i <= $parent_user->level; $i++ )
+            $query->where('user_id', '=', $userToGenerate->id)
+                ->where('gain_type', '=', 'B')
+                ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
+                ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+
+        })->get()->last();
+
+        if ($totalGain)
+        {
+            $totalGain->amount = ($totalGain->amount - $this->annualCharge) > 0 ? $totalGain->amount - $this->annualCharge : 0;
+            $totalGain->save();
+
+        }
+
+
+    }
+
+    public function generateCut($userToGenerate, $sendEmail)
+    {
+        $data['month'] = Carbon::now()->subMonth()->month;
+        $usersGenerated = 0;
+        $charge = 0;
+
+        $possibleGain = $this->gainRepository->getPossibleGainsPerAffiliates($data, $userToGenerate);
+
+        $descendants = $userToGenerate->immediateDescendants();
+
+        $descendantsIds = $descendants->lists('id');
+        $paymentsOfRedCount = Payment::where(function ($query) use ($descendantsIds)
+        {
+            $query->whereIn('user_id', $descendantsIds)
+                ->where('payment_type', '<>', 'A')
+                ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->subMonth()->month)
+                ->where(\DB::raw('YEAR(created_at)'), '=', (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year);
+
+        })->count();
+
+        if ($paymentsOfRedCount <= 5)
+            $charge = 3000;
+        if ($paymentsOfRedCount > 5 && $paymentsOfRedCount <= 10)
+            $charge = 5000;
+        if ($paymentsOfRedCount > 10 && $paymentsOfRedCount <= 15)
+            $charge = 15000;
+        if ($paymentsOfRedCount > 15 && $paymentsOfRedCount <= 20)
+            $charge = 25000;
+        if ($paymentsOfRedCount > 20)
+            $charge = 50000;
+
+        if (($possibleGain - $charge) >= 0)
+        {
+            $payment = Payment::create([
+                'user_id'         => $userToGenerate->id,
+                'payment_type'    => "MA",
+                'amount'          => $charge,
+                'description'     => 'Cobro de membresia por corte',
+                'bank'            => '--',
+                'transfer_number' => '--',
+                'transfer_date'   => Carbon::now()
+            ]);
+            if ($userToGenerate->parent_id)
             {
                 $gain = new Gain();
-                $gain->user_id = $parent_id;
-                $gain->description = 'Ganancia generada por pago de un hijo';
-                $gain->amount = Level::where('level', '=', $i)->first()->payment;
+                $gain->user_id = $userToGenerate->parent_id;
+                $gain->description = 'Ganancia generada por cobro automatico de un hijo';
+                $gain->amount = $charge;
                 $gain->gain_type = 'P';
-                $gain->level = $parent_user->level;
                 $gain->month = Carbon::now()->month;
                 $gain->year = Carbon::now()->year;
                 $gain->save();
             }
-            //$this->generateGainToParent($parent_user->parent_id);
+            if (($possibleGain - $charge) > 0)
+            {
+                $gain = new Gain();
+                $gain->user_id = $userToGenerate->id;
+                $gain->description = 'Ganancia total generada por corte';
+                $gain->amount = (($possibleGain - $charge) < 0 ? 0 : ($possibleGain - $charge));
+                $gain->gain_type = 'B';
+                $gain->month = Carbon::now()->month;
+                $gain->year = Carbon::now()->year;
+                $gain->save();
+            }
+
+            $usersGenerated ++;
+
+
         }
+        if ($sendEmail)
+            $this->mailer->sendReportGenerateCutMessageTo($userToGenerate);
+
+
+        return $usersGenerated;
+
+
     }
-
-    /*public function completeAds($user)
-    {
-
-        $data['month'] = Carbon::now()->month;
-        $possible_gain = $this->gainRepository->getPossibleGainsPerAffiliates($data,$user);
-
-        $totalGainClick = Gain::where(function ($query) use ($user)
-        {
-            $query->where('user_id', '=', $user->id)
-                ->where('gain_type', '=', 'C');
-            //->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
-            //->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
-        })->sum('amount');
-
-        if(($possible_gain - $totalGainClick) == 0)
-            return true;
-    }*/
-    public function generateCut($userToGenerate, $sendEmail)
+    /*public function generateCut($userToGenerate, $sendEmail)
     {
         $data['month'] = Carbon::now()->subMonth()->month;
         $usersGenerated =0;
@@ -415,7 +535,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
                         ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->subMonth()->month)
                         ->where(\DB::raw('YEAR(created_at)'), '=', (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year);
                         /*->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
-                        ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);*/
+                        ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
                 })->sum('amount');
             }else
                 $totalGain = $possibleGain;
@@ -478,10 +598,10 @@ class DbUserRepository extends DbRepository implements UserRepository {
             $query->whereIn('user_id', $descendantsIds)
                 ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
                 ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
-        })->count();*/
+        })->count();
 
 
-    }
+    }*/
     /*public function generateCut($userToGenerate, $sendEmail)
     {
         $totalPaymentAuto = 0;

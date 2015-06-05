@@ -105,6 +105,10 @@ Route::resource('ads', 'AdsController');
 /**
  * Payments user
  */
+Route::post('payments/cashing', [
+    'as'   => 'payments.cashing',
+    'uses' => 'PaymentsController@postCashing'
+]);
 Route::resource('payments', 'PaymentsController');
 
 /**
@@ -316,6 +320,10 @@ Route::group(['prefix' => 'store/admin', 'middleware' => 'authByRole'], function
     Route::post('tests/generatecut', [
         'as'   => 'generate_cut',
         'uses' => 'Admin\TestController@callGenerateCut'
+    ]);
+    Route::post('tests/generatecharge', [
+        'as'   => 'generate_charge',
+        'uses' => 'Admin\TestController@callGenerateCharge'
     ]);
 
     Route::get('tests/paymentscount', function(){

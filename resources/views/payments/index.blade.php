@@ -3,7 +3,11 @@
 @section('content')
     <section class="main payments">
         <h1>Balance | <small>Movimientos en tu red de afiliados</small></h1> {!! link_to_route('payments.create', 'Realizar Pago',null,['class'=>'btn btn-primary']) !!}
+        {!! Form::open(['route' => 'payments.cashing', 'method' => 'post']) !!}
 
+            {!! Form::submit('Retirar Ganancias', ['class' => 'btn btn-primary']) !!}
+
+        {!! Form::close() !!}
 
         <div class="gains-container">
             <!--<div class="months">
@@ -18,7 +22,6 @@
             <small>Ganancias</small>
             <div class="gains">
                 <h2>Pago de membresia : <span class="amount {{ ($paymentsOfMembership < 3000) ? 'red' : '' }}">{{ money($paymentsOfMembership,'₡') }}</span></h2>
-                <h2>Nivel Actual: {!! $currentUser->level !!}</h2>
                 <h2>Posible: <span class="amount">{!! money($possible_gains,'₡') !!}</span></h2>
                 
                 <h2>Ganancia por corte: <span class="amount">{!! money($accumulatedGains,'₡') !!}</span></h2>
