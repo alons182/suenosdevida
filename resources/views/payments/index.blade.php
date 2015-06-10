@@ -3,7 +3,7 @@
 @section('content')
     <section class="main payments">
         <h1>Balance | <small>Movimientos en tu red de afiliados</small></h1> {!! link_to_route('payments.create', 'Realizar Pago',null,['class'=>'btn btn-primary']) !!}
-        {!! Form::open(['route' => 'payments.cashing', 'method' => 'post']) !!}
+        {!! Form::open(['route' => 'payments.cashing', 'method' => 'post','style'=>'display:inline-block;']) !!}
 
             {!! Form::submit('Retirar Ganancias', ['class' => 'btn btn-primary']) !!}
 
