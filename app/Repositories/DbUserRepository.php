@@ -3,6 +3,7 @@
 use App\Gain;
 use App\Hit;
 use App\Mailers\PaymentMailer;
+use App\Task;
 use App\User;
 use Carbon\Carbon;
 use App\Payment;
@@ -423,9 +424,9 @@ class DbUserRepository extends DbRepository implements UserRepository {
         $totalGain = Gain::where(function ($query) use ($userToGenerate)
         {
             $query->where('user_id', '=', $userToGenerate->id)
-                ->where('gain_type', '=', 'B')
-                ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
-                ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+                ->where('gain_type', '=', 'B');
+                //->where(\DB::raw('MONTH(created_at)'), '=', 12)
+                //->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->subyear()->year);
 
         })->get()->last();
 
@@ -711,9 +712,13 @@ class DbUserRepository extends DbRepository implements UserRepository {
     }
 
     //Hits for an user
+    /**
+     * @param $user
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     public function getHits($user)
     {
-        $hits = Hit::with('ad')->where('user_id', '=', $user->id)->paginate($this->limit);
+        $hits = Task::with('ad')->where('user_id', '=', $user->id)->paginate(5);
 
         return $hits;
     }

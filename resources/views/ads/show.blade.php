@@ -16,12 +16,12 @@
 
         <div class="form-group">
             {!! Form::label('comment','Deja tu comentario:') !!}
-            {!! Form::textarea('comment',null,['class'=>'form-control','disabled' => 'disabled', 'id' => 'comment']) !!}
+            {!! Form::textarea('comment',null,['class'=>'form-control', 'id' => 'comment', 'disabled'=>'disabled']) !!}
             {!! errors_for('comment',$errors) !!}
         </div>
         <div class="form-group">
 
-            {!! Form::submit('Enviar',['class'=>'btn btn-primary','disabled' => 'disabled'])!!}
+            {!! Form::submit('Enviar',['class'=>'btn btn-primary', 'disabled'=>'disabled'])!!}
             {!! link_to_route('payments.index','Regresar')!!}
         </div>
 

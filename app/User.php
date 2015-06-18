@@ -55,7 +55,10 @@ class User extends Node implements AuthenticatableContract, CanResetPasswordCont
             $this->attributes['password'] = Hash::make($password);
 
     }
-
+    public function tasks()
+    {
+        return $this->hasMany('App\Task');
+    }
     public function orders()
     {
         return $this->hasMany('App\Order')->latest();

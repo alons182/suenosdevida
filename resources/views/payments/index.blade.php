@@ -5,12 +5,12 @@
         <h1>Balance | <small>Movimientos en tu red de afiliados</small></h1> {!! link_to_route('payments.create', 'Realizar Pago',null,['class'=>'btn btn-primary']) !!}
         {!! Form::open(['route' => 'payments.cashing', 'method' => 'post','style'=>'display:inline-block;']) !!}
 
-            {!! Form::submit('Retirar Ganancias', ['class' => 'btn btn-primary']) !!}
+            {!! Form::submit('Retirar Ganancias', ['class' => 'btn btn-orange', 'title'=>'Se envia un correo al administrador solicitando el retiro de tus fondos']) !!}
 
         {!! Form::close() !!}
 
         <div class="gains-container">
-            <!--<div class="months">
+            <div class="months">
                 {!! Form::open(['route' => 'payments.index', 'method' => 'get']) !!}
 
                 <div class="form-group">
@@ -18,7 +18,7 @@
 
                 </div>
                 {!! Form::close() !!}
-            </div>-->
+            </div>
             <small>Ganancias</small>
             <div class="gains">
                 <h2>Pago de membresia : <span class="amount {{ ($paymentsOfMembership < 3000) ? 'red' : '' }}">{{ money($paymentsOfMembership,'₡') }}</span></h2>
@@ -79,7 +79,7 @@
 
 
         </div>
-        <h1><small>Tus Movimientos de pago</small></h1>
+        <h1>Tus Movimientos de pago</h1>
         <div class="table-responsive payments-table">
 
             <table class="table table-striped  ">
@@ -123,26 +123,29 @@
 
         </div>
         <div class="payments-ads">
-            <h1>Publicidad | <small>Semana {{ $week }} (Puedes ver 5 anuncios por mes)</small></h1>
+            <h1>Publicidad | <small>Semana {{ $week }} (Puedes ver 5 anuncios por dia)</small></h1>
+
             <div class="payments-ads-not-seen">
 
 
                 @forelse ($ads as $ad)
 
                     <div class="payments-ad">
-                        @if($hits_per_week != 5 && $possible_gains > 0)
+                        @if($hits_per_day != 5)
 
                             @if($ad->hits->count() == 0)
                                 <a href="{!! URL::route('ads.show', $ad->id) !!}" class="payments-ad-link">
+                                    <span class="ad_id">{!! $ad->id !!}</span>
                                     @if($ad->image)
                                         <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="190"  height="190"/>
                                     @else
                                         <img src="holder.js/190x190/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
                                     @endif
                                 </a>
-                             @else
+                            @else
                                 @if($ad->hits->last()->check == 0)
                                     <a href="{!! URL::route('ads.show', $ad->id) !!}" class="payments-ad-link">
+                                        <span class="ad_id">{!! $ad->id !!}</span>
                                         @if($ad->image)
                                             <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="190"  height="190"/>
                                         @else
@@ -153,10 +156,12 @@
                                 @else
                                     @if($ad->image)
                                         <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($ad->hits->last()) ? $ad->hits->last()->hit_date : '' !!}">
+                                            <span class="ad_id">{!! $ad->id !!}</span>
                                             <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="190"  height="190" />
                                         </span>
                                     @else
                                         <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($ad->hits->last()) ? $ad->hits->last()->hit_date : '' !!}">
+                                            <span class="ad_id">{!! $ad->id !!}</span>
                                             <img src="holder.js/190x190/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
                                         </span>
                                     @endif
@@ -164,13 +169,14 @@
                                 @endif
                             @endif
 
+
                         @else
                             @if($ad->image)
-                                <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($possible_gains > 0) ? 'Solo 5 por mes' : 'Aun no tienes una posible ganacia' !!}">
+                                <span class="payments-ad-link payments-ad-link--hit" data-msg="Solo 5 por dia">
                                     <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="190"  height="190" />
                                 </span>
                             @else
-                                <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($possible_gains > 0) ? 'Solo 5 por mes' : 'Aun no tienes posible ganacia' !!}">
+                                <span class="payments-ad-link payments-ad-link--hit" data-msg="Solo 5 por dia">
                                     <img src="holder.js/190x190/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
                                 </span>
                             @endif

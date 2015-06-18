@@ -2,15 +2,13 @@
 
 
 use App\Ad;
-use App\Gain;
 use App\Hit;
-use App\Payment;
+use App\Task;
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use PhpSpec\Wrapper\Collaborator;
+
 
 class DbAdRepository extends DbRepository implements AdRepository {
 
@@ -57,35 +55,71 @@ class DbAdRepository extends DbRepository implements AdRepository {
         $hit->check = 1;
         $hit->user_id = $user_id;
         $ad->hits()->save($hit);
-        //$this->generateGainForClick($ad);
-        //if ($this->userRepository->completeAds($user_id))
-       //     $this->userRepository->checkLevel($user_id);
+
+        $task = new Task();
+        $task->user_id = $user_id;
+        $task->ad_id = $ad->id;
+        $task->save();
+
+        $this->checkCompleteAllAds($user_id);
 
         return $ad;
     }
 
-    /*public function generateGainForClick($ad = null, $user = null)
+    public function checkCompleteAllAds($user_id)
     {
-        $user = ($user) ? $user : Auth::user();
-        $data['month'] = Carbon::now()->month;
+        $zone = Auth::user()->profiles->canton;
 
-        $possible_gain = $this->gainRepository->getPossibleGainsPerAffiliates($data, $user);
-        $daysForMonth = Carbon::now()->daysInMonth;
-        $countAdsForView = $daysForMonth * 5;
+        $adsWithHitsIds = $this->model->whereHas('hits', function ($q) use ($user_id)
+        {
+            $q->where('user_id', '=', $user_id);
 
-        $gain_click = $possible_gain / $countAdsForView;
+        })->where(function ($query) use ($zone)
+        {
+            $query->where('canton', '=', $zone)
+                ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+        })->get()->lists('id');
 
-        $gain = new Gain();
-        $gain->user_id = $user->id;
-        $gain->description = 'Generado por ver la publicidad ' . $ad->name;
-        $gain->amount = $gain_click;
-        $gain->gain_type = 'C';
-        $gain->month = Carbon::now()->month;
-        $gain->year = Carbon::now()->year;
-        $gain->save();
+        $adsWithoutHits = $this->model->with(['hits' => function ($query) use ($user_id) {
+            $query->where('user_id', '=', $user_id);
 
-        return $gain;
-    }*/
+        }])->where(function ($query) use ($zone, $adsWithHitsIds)
+        {
+            $query->whereNotIn('id', $adsWithHitsIds)
+                ->where('canton', '=', $zone)
+                ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+        })->get();
+
+        $ads = $this->model->with(['hits' => function ($query) use ($user_id) {
+            $query->where('user_id', '=', $user_id)
+                  ->where(\DB::raw('DAY(hit_date)'), '<>', Carbon::now()->day );
+        }])->where(function ($query) use ($zone)
+        {
+            $query->where('canton', '=', $zone)
+                ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+        })->get();
+
+        if($adsWithoutHits->count() == 0)
+        {
+
+            foreach($ads as $ad)
+            {
+                if($ad->hits->count() > 0)
+                {
+                   foreach($ad->hits as $hit)
+                    {
+                        if($hit->user_id == $user_id)
+                            $hit->delete();
+                    }
+                }
+
+
+            }
+        }
+    }
 
     /**
      * Find a Ad by ID
@@ -107,14 +141,14 @@ class DbAdRepository extends DbRepository implements AdRepository {
         return $this->model->SearchSlug($slug)->first();
     }
 
-    public function hits_per_week($user_id)
+    public function hits_per_day($user_id)
     {
-        $hits_per_week = Hit::where(function ($query) use ($user_id)
+        $hits_per_week = Task::where(function ($query) use ($user_id)
         {
             $query->where('user_id', '=', $user_id)
-                ->where('week_of_month', '=', Carbon::now()->weekOfMonth)
-                ->where(\DB::raw('MONTH(hit_date)'), '=', Carbon::now()->month)
-                ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
+                ->where(\DB::raw('DAY(created_at)'), '=', Carbon::now()->day)
+                ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
+                ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
         })->count();
 
 
@@ -124,40 +158,21 @@ class DbAdRepository extends DbRepository implements AdRepository {
     public function getAds($zone, $user_id)
     {
 
-        $ads = $this->model->with('hits')->where(function ($query) use ($zone)
+        $ads = $this->model->with(['hits' => function ($query) use ($user_id) {
+            $query->where('user_id', '=', $user_id);
+
+        }])->where(function ($query) use ($zone)
         {
             $query->where('canton', '=', $zone)
                 ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
                 ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
         })->get();
 
-        $adsWithHits = $this->model->whereHas('hits', function ($q) use ($user_id)
-        {
-            $q->where('user_id', '=', $user_id);
-
-        })->where(function ($query) use ($zone)
-        {
-            $query->where('canton', '=', $zone)
-                ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
-                ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
-        })->get();
-
-
-        $totalAdsCount = $ads->count() - $adsWithHits->count();
-
-        if ($ads->count() > 5)
-        {
-            for ($i = 1; $i <= (5 - $totalAdsCount); $i ++)
-            {
-                $ad = $this->model->findOrFail($i);
-
-                $ad->hits->last()->check = 0;
-                $ad->hits->last()->save();
-            }
-        }
 
         return $ads;
     }
+
+
 
     public function getAll($search)
     {

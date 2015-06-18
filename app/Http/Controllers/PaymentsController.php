@@ -72,7 +72,7 @@ class PaymentsController extends Controller {
 
         $ads = $this->adRepository->getAds($canton, Auth::user()->id);
 
-        $hits_per_week = $this->adRepository->hits_per_week(Auth::user()->id);
+        $hits_per_day = $this->adRepository->hits_per_day(Auth::user()->id);
 
         $possibleGains = $this->gainRepository->getPossibleGainsPerAffiliates($data);
 
@@ -91,7 +91,7 @@ class PaymentsController extends Controller {
             'paymentsOfMembership' => $paymentsOfMembership,
             //'annualCharge' => $annualCharge,
             'ads'               => $ads,
-            'hits_per_week'     => $hits_per_week,
+            'hits_per_day'     => $hits_per_day,
             'week'              => $week,
             'possible_gains'    => $possibleGains,
             'accumulatedGains'  => $accumulatedGains,

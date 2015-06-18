@@ -17,7 +17,7 @@ class AdsTableSeeder extends Seeder {
     {
         $faker = Faker::create();
 
-        foreach (range(1, 5) as $index)
+        foreach (range(1, 10) as $index)
         {
 
             $name_ad = $faker->word;
@@ -25,8 +25,8 @@ class AdsTableSeeder extends Seeder {
                 'name'         => $name_ad,
                 'slug'         => Str::slug($name_ad),
                 'description'  => $faker->text(),
-                'province'     => 'Guanacaste',
-                'canton'       => 'Liberia',
+                'province'     => 'guanacaste',
+                'canton'       => 'liberia',
                 'email'        => $faker->email,
                 'published'    => 1,
                 'featured'     => 0,

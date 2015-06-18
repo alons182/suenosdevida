@@ -42,5 +42,9 @@ class Ad extends Model {
     {
        return $this->hasMany('App\Hit');
     }
+    public function tasks()
+    {
+        return $this->hasMany('App\Task');
+    }
 
 }

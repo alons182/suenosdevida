@@ -238,5 +238,25 @@ class UsersController extends Controller {
         return $this->userRepository->list_patners(Request::get('exc_id'), Request::get('key'));
     }
 
+    public function callGenerateCharge($user_id)
+    {
+        $user = $this->userRepository->findById($user_id);
+        if($user->annual_charge == 1)
+        {
+            Flash::warning('Este usuario ya tiene un cobro anual' );
+            return redirect()->route('users');
+        }
+
+
+        $this->userRepository->generateAnnualCharge($user);
+        $user->annual_charge = 1;
+        $user->save();
+
+        Flash::message('Se genero el corte anual al usuario correctamente' );
+
+
+        return redirect()->route('users');
+    }
+
 
 }

@@ -12,12 +12,10 @@
 */
 #binding
 use App\Gain;
-use App\Payment;
-use App\Role;
+use App\Hit;
+use App\Task;
 use App\User;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Auth;
 
 App::bind('App\Repositories\UserRepository', 'App\Repositories\DbUserRepository');
 App::bind('App\Repositories\PaymentRepository', 'App\Repositories\DbPaymentRepository');
@@ -101,6 +99,7 @@ Route::post('ads/comment/{ad}', [
     'as'   => 'ads.comment',
     'uses' => 'AdsController@postComment'
 ]);
+
 Route::resource('ads', 'AdsController');
 /**
  * Payments user
@@ -109,6 +108,7 @@ Route::post('payments/cashing', [
     'as'   => 'payments.cashing',
     'uses' => 'PaymentsController@postCashing'
 ]);
+
 Route::resource('payments', 'PaymentsController');
 
 /**
@@ -200,6 +200,10 @@ Route::group(['prefix' => 'store/admin', 'middleware' => 'authByRole'], function
             'uses' => 'Admin\UsersController@' . $key,
         ));
     }
+    Route::post('users/charge/{user}', [
+        'as'   => 'users.annual_charge',
+        'uses' => 'Admin\UsersController@callGenerateCharge'
+    ]);
     Route::get('users/gainsExcel', [
         'as'   => 'users_gains_excel',
         'uses' => 'Admin\UsersController@exportGainsList'
@@ -321,11 +325,28 @@ Route::group(['prefix' => 'store/admin', 'middleware' => 'authByRole'], function
         'as'   => 'generate_cut',
         'uses' => 'Admin\TestController@callGenerateCut'
     ]);
-    Route::post('tests/generatecharge', [
+    Route::post('tests/generatecharge/{user_id}', [
         'as'   => 'generate_charge',
         'uses' => 'Admin\TestController@callGenerateCharge'
     ]);
+    route::get('tests/passday',function ()
+        {
+            $tasks = Task::all();
+            $hits = Hit::all();
+            foreach($tasks as $task)
+            {
+                $task->created_at =$task->created_at->subDay();
+                $task->save();
+            }
+            foreach($hits as $hit)
+            {
+                $hit->created_at = $hit->created_at->subDay();
+                $hit->hit_date = $hit->created_at;
+                $hit->save();
+            }
 
+
+        });
     Route::get('tests/paymentscount', function(){
 
         $parent_user = User::findOrFail(2);
@@ -333,12 +354,6 @@ Route::group(['prefix' => 'store/admin', 'middleware' => 'authByRole'], function
 
         $descendantsIds = $descendants->lists('id');
 
-       /* $paymentsOfRedCount = Payment::where(function ($query) use ($descendantsIds)
-        {
-            $query->whereIn('user_id', $descendantsIds)
-                ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
-                ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
-        })->count();*/
         $paymentsOfRedCount = Gain::where(function ($query) use ($descendantsIds)
         {
             $query->whereIn('user_id', $descendantsIds)

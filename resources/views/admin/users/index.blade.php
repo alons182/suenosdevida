@@ -42,9 +42,10 @@
                         <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                     {!! Form::close() !!}-->
 
-
+                                <button type="submit"  class="btn btn-danger btn-xs" form="form-annual-charge" formaction="{!! URL::route('users.annual_charge', [$user->id]) !!}">Cobro Annual</button>
                         
                     </td>
+
                     
                 </tr>
             @endforeach
@@ -60,4 +61,7 @@
     </div>  
 
 {!! Form::open(array('method' => 'post', 'id' => 'form-active-inactive')) !!}{!! Form::close() !!}
+{!! Form::open(array('method' => 'post', 'id' => 'form-annual-charge')) !!}{!! Form::close() !!}
+
+
 @stop

@@ -25,10 +25,10 @@
 
                         <td>{!! $hit->id !!}</td>
                         <td>{!! $hit->ad->name !!}</td>
-                        <td> {!! $hit->hit_date !!}</td>
+                        <td> {!! $hit->created_at !!}</td>
                         <td>
                             @if($currentUser->hasrole('administrator'))
-                                <button type="submit" class="btn btn-danger btn-sm" form="form-delete-hits" formaction="{!! URL::route("store.admin.hits.destroy", [$hit->id]) !!}">Eliminar</button>
+                                <button type="submit" class="btn btn-danger btn-sm" form="form-delete-hits" formaction="{!! URL::route('store.admin.hits.destroy', [$hit->id]) !!}">Eliminar</button>
                             @endif
                         </td>
                     </tr>
@@ -89,11 +89,12 @@
                 </tfoot>
             </table>
 
-
+            <button type="submit" class="btn btn-danger btn-sm" form="form-annual-charge" formaction="{!! URL::route('users.annual_charge', [$user->id]) !!}">Cobro Anual</button>
         </div>
     </div>
 
 </div>
 {!! Form::open(['method' => 'delete', 'id' =>'form-delete-gains','data-confirm' => 'Estas seguro?']) !!}{!! Form::close() !!}
 {!! Form::open(['method' => 'delete', 'id' =>'form-delete-hits','data-confirm' => 'Estas seguro?']) !!}{!! Form::close() !!}
+{!! Form::open(array('method' => 'post', 'id' => 'form-annual-charge')) !!}{!! Form::close() !!}
 @stop

@@ -156,30 +156,27 @@ class TestController extends Controller {
         return redirect()->route('store.admin.tests.index');
     }
 
-    public function callGenerateCharge()
+    public function callGenerateCharge($user_id)
     {
-        /*$gains = Gain::all();
-        $payments = Payment::all();
-        foreach($gains as $gain)
-        {
-            $gain->month -= 1;
-            // $gain->created_at = $gain->created_at->subMonth();
-            $gain->save();
-        }
-        foreach($payments as $payment)
-        {
 
-            $payment->created_at = $payment->created_at->subMonth();
-            $payment->save();
-        }*/
         //$exitCode = Artisan::call('suenos:generatecharge');
-        $users = User::all();
-        foreach ($users as $user)
+        $user = User::findOrFail($user_id);
+        if($user->annual_charge == 1)
         {
-            $this->userRepository->generateAnnualCharge($user);
+            Flash::warning('Este usuario ya tiene un cobro anual' );
+            return redirect()->route('store.admin.tests.index');
         }
+
+
+        $this->userRepository->generateAnnualCharge($user);
+        $user->annual_charge = 1;
+        $user->save();
 
         Flash::message('Se genero el corte anual correctamente' );
+
+
+
+
 
 
 

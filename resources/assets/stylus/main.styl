@@ -8,6 +8,7 @@ morado = #372f4a
 gris = #787878
 gris2 = #eae8e7
 rojo = #d53c21
+azul = #123D8F
 body
 	font-family 'Open Sans', sans-serif
 	font-size 16px
@@ -233,9 +234,9 @@ footer
 small
 	font-weight 400
 	font-size 16px
-	color #FFF
+	color morado
 	padding .3em
-	background morado
+	background gris2
 .featured-products
 
 	h1
@@ -460,6 +461,8 @@ small
 	&:hover
 		background verde
 		color #FFF
+.btn-orange
+	background orangered
 
 .form-group
 	margin-bottom 10px
@@ -544,7 +547,7 @@ small
 .payments-table
 .orders-table
 	font-size 13px
-	margin-top 70px
+	margin-top 30px
 .payments-ad
 	display inline-block
 	&-link
@@ -562,6 +565,16 @@ small
 				color #FFF
 			img
 				filter grayscale(100%)
+		.ad_id
+			position absolute
+			top 0
+			right 0
+			background-color morado
+			padding .5rem
+			display block
+			line-height 0
+			color white
+			z-index 2
 
 .countdown
 	span
@@ -590,9 +603,12 @@ small
 	position: absolute
 	right 0
 	top 0
+	min-width 215px
 
 	small
 		display: block
+		background-color morado
+		color white
 
 .gains
 	background verde

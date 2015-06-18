@@ -48,14 +48,7 @@
 
 
                     {!! Form::close() !!}
-                    <h1>Cobro Anual</h1>
-                    {!! Form::open(['route'=>'generate_charge']) !!}
 
-
-                    {!! Form::submit('Generar cobro Anual',['class'=>'btn btn-primary'])!!}
-
-
-                    {!! Form::close() !!}
                 </div>
             </div>
             <hr>
@@ -144,4 +137,5 @@
     </div>
 
     {!! Form::open(['method' => 'delete', 'id' =>'form-delete','data-confirm' => 'Estas seguro?']) !!}{!! Form::close() !!}
+
 @stop

@@ -45,17 +45,24 @@ class GenerateAnnualCharge extends Command {
 	 */
 	public function fire()
 	{
-        $existAnnualCharge = Payment::where('payment_type', '=', 'A')->count();
 
-        if($existAnnualCharge > 0)
-        {
             $users = User::all();
             foreach ($users as $user)
             {
-                $this->userRepository->generateAnnualCharge($user);
+                $existAnnualCharge = Payment::where(function ($query) use ($user)
+                {
+                    $query->where('user_id', '=', $user->id)
+                        ->where('gain_type', '=', 'A')
+                        ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+
+                })->count();
+
+                if($existAnnualCharge <= 0 && $user->annual_charge == 1)
+                    $this->userRepository->generateAnnualCharge($user);
+
             }
             $this->info('Annual charge done!!');
-        }
+
 
 
 	}

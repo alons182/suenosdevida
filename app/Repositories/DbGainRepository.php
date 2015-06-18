@@ -150,6 +150,6 @@ class DbGainRepository extends DbRepository implements GainRepository {
             $query->where('user_id', '=', $id)
                 ->where('gain_type', '=', 'B');
 
-        })->paginate($this->limit);
+        })->orderBy('created_at','DESC')->paginate($this->limit);
     }
 }
