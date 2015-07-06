@@ -6,6 +6,7 @@ use App\Hit;
 use App\Task;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
@@ -143,7 +144,7 @@ class DbAdRepository extends DbRepository implements AdRepository {
 
     public function hits_per_day($user_id)
     {
-        $hits_per_week = Task::where(function ($query) use ($user_id)
+        $hits_per_day = Task::where(function ($query) use ($user_id)
         {
             $query->where('user_id', '=', $user_id)
                 ->where(\DB::raw('DAY(created_at)'), '=', Carbon::now()->day)
@@ -152,7 +153,30 @@ class DbAdRepository extends DbRepository implements AdRepository {
         })->count();
 
 
-        return $hits_per_week;
+        return $hits_per_day;
+    }
+    public function hits_per_week($user_id)
+    {
+        $hits_per_week = [];
+
+        $tasks = Task::where(function ($query) use ($user_id)
+        {
+            $query->where('user_id', '=', $user_id)
+                 ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
+                ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+        })->get();
+
+        foreach($tasks as $task)
+        {
+            if($task->created_at->weekOfMonth == Carbon::now()->weekOfMonth) $hits_per_week[] = $task;
+        }
+       /* $tasksOfWeek = array_filter($tasks->toArray(),function($task){
+
+            return $task->created_at == Carbon::now()->weekOfMonth;
+        });*/
+
+        //dd(count($hits_per_week));
+        return count($hits_per_week);
     }
 
     public function getAds($zone, $user_id)

@@ -131,7 +131,7 @@
                 @forelse ($ads as $ad)
 
                     <div class="payments-ad">
-                        @if($hits_per_day != 5)
+                        @if($hits_per_day != 5 && $hits_per_week != 25)
 
                             @if($ad->hits->count() == 0)
                                 <a href="{!! URL::route('ads.show', $ad->id) !!}" class="payments-ad-link">
@@ -172,11 +172,11 @@
 
                         @else
                             @if($ad->image)
-                                <span class="payments-ad-link payments-ad-link--hit" data-msg="Solo 5 por dia">
+                                <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($hits_per_week == 25) ? 'Has completado tus 5 dias por semana' : 'Solo 5 por dia' !!}">
                                     <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="190"  height="190" />
                                 </span>
                             @else
-                                <span class="payments-ad-link payments-ad-link--hit" data-msg="Solo 5 por dia">
+                                <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($hits_per_week == 25) ? 'Has completado tus 5 dias por semana' : 'Solo 5 por dia' !!}">
                                     <img src="holder.js/190x190/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
                                 </span>
                             @endif
