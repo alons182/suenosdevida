@@ -113,7 +113,7 @@
                 <tfoot>
 
                 @if ($paymentsOfUser)
-                    <td  colspan="6" class="pagination-container">{!! $paymentsOfUser->render()!!}</td>
+                    <td  colspan="6" class="pagination-container">{!! $paymentsOfUser->render() !!}</td>
                 @endif
 
 

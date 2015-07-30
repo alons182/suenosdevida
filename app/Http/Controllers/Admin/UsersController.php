@@ -43,7 +43,7 @@ class UsersController extends Controller {
         $this->gainRepository = $gainRepository;
 
 
-        View::share('roles', Role::lists('name', 'id'));
+        View::share('roles', Role::lists('name', 'id')->all());
         $this->middleware('authByRoleAdmins');
     }
 

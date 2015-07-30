@@ -140,7 +140,7 @@ class DbCategoryRepository extends DbRepository implements CategoryRepository {
     {
 
         $category = $this->model->whereSlug($category)->first();
-        $subcategories = $category->descendants()->lists('name', 'slug');
+        $subcategories = $category->descendants()->lists('name', 'slug')->all();
 
         return $subcategories;
     }

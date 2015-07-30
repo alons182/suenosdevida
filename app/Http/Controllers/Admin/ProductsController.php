@@ -96,7 +96,7 @@ class ProductsController extends Controller {
     {
         $product = $this->productRepository->findById($id);
         $categories = $this->categoryRepository->getParents();
-        $selectedCategories = $product->categories()->select('categories.id AS id')->lists('id');
+        $selectedCategories = $product->categories()->select('categories.id AS id')->lists('id')->all();
 
         return View::make('admin.products.edit')->withProduct($product)->withCategories($categories)->withSelected($selectedCategories);//->withRelateds($relateds);
     }

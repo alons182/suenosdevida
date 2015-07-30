@@ -42,7 +42,7 @@
                         <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                     {!! Form::close() !!}-->
 
-                                <button type="submit"  class="btn btn-danger btn-xs" form="form-annual-charge" formaction="{!! URL::route('users.annual_charge', [$user->id]) !!}">Cobro Annual</button>
+                                <button type="submit"  class="btn  btn-xs {!! ($user->annual_charge) ? 'btn-success' : 'btn-danger' !!}" form="form-annual-charge" formaction="{!! URL::route('users.annual_charge', [$user->id]) !!}">Cobro Annual</button>
                         
                     </td>
 

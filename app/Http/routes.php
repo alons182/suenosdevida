@@ -352,7 +352,7 @@ Route::group(['prefix' => 'store/admin', 'middleware' => 'authByRole'], function
         $parent_user = User::findOrFail(2);
         $descendants = $parent_user->immediateDescendants();
 
-        $descendantsIds = $descendants->lists('id');
+        $descendantsIds = $descendants->lists('id')->all();
 
         $paymentsOfRedCount = Gain::where(function ($query) use ($descendantsIds)
         {

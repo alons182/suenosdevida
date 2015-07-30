@@ -135,7 +135,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
     public function getPaymentsOfUserRed($data = null)
     {
         $user_logged = Auth::user();
-        $usersOfRed = $user_logged->children()->get()->lists('id');
+        $usersOfRed = $user_logged->children()->get()->lists('id')->all();
 
         $paymentsOfRed = $this->model->with('users', 'users.profiles')->where(function ($query) use ($usersOfRed, $data)
         {
@@ -182,7 +182,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
         if (isset($data['q']) && ! empty($data['q']))
         {
 
-            $usersIds = User::Search($data['q'])->get()->lists('id');
+            $usersIds = User::Search($data['q'])->get()->lists('id')->all();
 
             $payments = $this->model->with('users', 'users.profiles')->where(function ($query) use ($usersIds, $data)
             {

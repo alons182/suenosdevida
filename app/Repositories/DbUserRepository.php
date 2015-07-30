@@ -232,7 +232,13 @@ class DbUserRepository extends DbRepository implements UserRepository {
             })->sum('amount');
 
 
-            //$membership_cost = Level::where('level', '=', $user->level)->first()->payment;
+            $paymentsAnnual = Payment::where(function ($query) use ($user, $month, $year)
+            {
+                $query->where('user_id', '=', $user->id)
+                    ->where('payment_type', '=', 'A')
+                    ->where(\DB::raw('MONTH(created_at)'), '=', $month)
+                    ->where(\DB::raw('YEAR(created_at)'), '=',$year);
+            })->sum('amount');
 
 
             $userArray = array(
@@ -245,6 +251,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
                 '# Afiliados'        => $user->children()->get()->count(),
                 'Ganancia Por Corte' => $gainsOfUser,
                 'Pago membresia'     => $paymentsOfMembership,
+                'Cobros Realizados'  => $paymentsAnnual,
                 'Mes'                => $month,
                 'Año'                => $year
             );
@@ -450,7 +457,7 @@ class DbUserRepository extends DbRepository implements UserRepository {
 
         $descendants = $userToGenerate->immediateDescendants();
 
-        $descendantsIds = $descendants->lists('id');
+        $descendantsIds = $descendants->lists('id')->all();
         $paymentsOfRedCount = Payment::where(function ($query) use ($descendantsIds)
         {
             $query->whereIn('user_id', $descendantsIds)
