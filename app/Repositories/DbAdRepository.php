@@ -187,7 +187,8 @@ class DbAdRepository extends DbRepository implements AdRepository {
 
         }])->where(function ($query) use ($zone)
         {
-            $query->where('canton', '=', $zone)
+            $query->where('all_country', '=', 1)
+                ->orWhere('canton', '=', $zone)
                 ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
                 ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
         })->get();

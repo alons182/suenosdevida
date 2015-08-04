@@ -1,8 +1,10 @@
 <?php namespace App\Console\Commands;
 
+
 use App\Payment;
 use App\Repositories\UserRepository;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
@@ -52,15 +54,25 @@ class GenerateAnnualCharge extends Command {
                 $existAnnualCharge = Payment::where(function ($query) use ($user)
                 {
                     $query->where('user_id', '=', $user->id)
-                        ->where('gain_type', '=', 'A')
+                        ->where('payment_type', '=', 'A')
                         ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
 
                 })->count();
 
-                if($existAnnualCharge <= 0 && $user->annual_charge == 1)
-                    $this->userRepository->generateAnnualCharge($user);
+				$dateInOneYear = $user->created_at->addYear();
 
-            }
+				//dd($dateInOneYear->month == Carbon::now()->addYear()->subMonths(1)->month && $dateInOneYear->year == Carbon::now()->addYear()->subMonths(1)->year);
+
+				if($dateInOneYear->month == Carbon::now()->month && $dateInOneYear->year == Carbon::now()->year)
+				{
+
+					// si no existe un cargo en el año actual y ya se le aplico un cargo de forma manual entonces generar el cargo
+					if($existAnnualCharge <= 0 && $user->annual_charge == 1)
+						$this->userRepository->generateAnnualCharge($user);
+				}
+
+
+			}
             $this->info('Annual charge done!!');
 
 

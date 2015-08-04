@@ -29,14 +29,20 @@
     </div>
 
     <div class="form-group">
+        {!! Form::label('all_country','Lugares de visualizacion del anuncio:') !!} <br />
+        {!! Form::radio('all_country', '1', true) !!} Para Todo el País <br />
+        {!! Form::radio('all_country', '0') !!} Para una zona
+        {!! errors_for('all_country',$errors) !!}
+    </div>
+    <div class="form-group">
         {!! Form::label('province', 'Provincia:') !!}
-        {!! Form::select('province', ['' => ''], null,['class'=>'form-control']) !!}
+        {!! Form::select('province', ['' => ''], null,['class'=>'form-control', (isset($ad)) ? ($ad->all_country) ? 'disabled' : '' : '' ]) !!}
         {!! errors_for('province',$errors) !!}
     </div>
     <!-- District Form Input -->
     <div class="form-group">
         {!! Form::label('canton', 'Canton:') !!}
-        {!! Form::select('canton', ['' => ''], null, ['class' => 'form-control']) !!}
+        {!! Form::select('canton', ['' => ''], null, ['class' => 'form-control',(isset($ad)) ? ($ad->all_country) ? 'disabled' : '' : '' ]) !!}
         {!! errors_for('canton',$errors) !!}
     </div>
 

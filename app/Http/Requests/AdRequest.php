@@ -24,8 +24,7 @@ class AdRequest extends Request {
 		return [
             'name' => 'required',
             'description' => 'required',
-            'province' => 'required',
-            'canton' => 'required',
+            'all_country' => 'required',
             'email' => 'email|required',
             'publish_date' => 'required'
 		];

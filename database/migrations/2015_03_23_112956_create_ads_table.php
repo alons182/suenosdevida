@@ -23,6 +23,7 @@ class CreateAdsTable extends Migration {
             $table->string('video')->nullable();
             $table->string('image')->nullable();
             $table->string('email');
+            $table->boolean('all_country')->default(0);
             $table->boolean('published')->default(1);
             $table->boolean('featured')->default(0);
             $table->dateTime('publish_date')->nullable();

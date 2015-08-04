@@ -18,7 +18,19 @@ $(function () {
         colorfield =  $('.colorfield'),
         patners;
 
+    /*for ads visualizacion de anuncios entodo el pais o una zona*/
 
+    $("input[name='all_country']").on('click', function () {
+
+        if ($(this).attr('value') == 1) {
+            $("select[name='province']").attr('disabled', true);
+            $("select[name='canton']").attr('disabled', true);
+
+        } else {
+            $("select[name='province']").attr('disabled', false);
+            $("select[name='canton']").attr('disabled', false);
+        }
+    });
     $("form[data-confirm]").submit(function() {
         if ( ! confirm($(this).attr("data-confirm"))) {
             return false;
