@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\View;
 use Laracasts\Flash\Flash;
 
-class PaymentsController extends Controller {
+class PaymentsController extends Controller
+{
 
     protected $userRepository;
     /**
@@ -60,8 +61,7 @@ class PaymentsController extends Controller {
     public function index()
     {
         $data = Request::all();
-        if (! isset($data['month']))
-        {
+        if (!isset($data['month'])) {
             $data = array_add($data, 'month', Carbon::now()->month);
         }
 
@@ -81,24 +81,34 @@ class PaymentsController extends Controller {
 
         //$membership_cost = $this->paymentRepository->getMembershipCost();
 
-       // $annualCharge = $this->paymentRepository->getAnnualCharge();
+        // $annualCharge = $this->paymentRepository->getAnnualCharge();
 
+        // para mostrar de que dia empieza y termina la semana
         $week = Carbon::now()->weekOfMonth;
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $startOfWeekDefault = Carbon::now()->startOfWeek();
+        $endOfWeekDefault = Carbon::now()->endOfWeek();
+
+        $differenceDays = ($startOfMonth->diffInDays($startOfWeekDefault));
+        $startOfWeek = $startOfWeekDefault->subDays($differenceDays);
+        $endOfWeek = $endOfWeekDefault->subDays($differenceDays);
 
 
         return View::make('payments.index')->with([
-            'paymentsOfUser'    => $paymentsOfUser,
+            'paymentsOfUser' => $paymentsOfUser,
             'paymentsOfUserRed' => $paymentsOfUserRed,
             'paymentsOfMembership' => $paymentsOfMembership,
             //'annualCharge' => $annualCharge,
-            'ads'               => $ads,
-            'hits_per_day'     => $hits_per_day,
-            'hits_per_week'     => $hits_per_week,
-            'week'              => $week,
-            'possible_gains'    => $possibleGains,
-            'accumulatedGains'  => $accumulatedGains,
+            'ads' => $ads,
+            'hits_per_day' => $hits_per_day,
+            'hits_per_week' => $hits_per_week,
+            'week' => $week,
+            'possible_gains' => $possibleGains,
+            'accumulatedGains' => $accumulatedGains,
             //'membership_cost'   => $membership_cost,
-            'selectedMonth'     => $data['month']
+            'selectedMonth' => $data['month'],
+            'startOfWeek' => $startOfWeek->toDateString(),
+            'endOfWeek' => $endOfWeek->toDateString()
         ]);
     }
 
@@ -126,7 +136,7 @@ class PaymentsController extends Controller {
         $data['transfer_date'] = $data['transfer_date_submit'];
 
 
-        if (! $this->paymentRepository->store($data))
+        if (!$this->paymentRepository->store($data))
             Flash::error('Ya existe un pago para este mes.');
         else
             Flash::message('Pago agregado correctamente');
@@ -158,7 +168,6 @@ class PaymentsController extends Controller {
         Flash::message('Se envio un correo al administrador solicitado tu retiro de ganancias');
         return Redirect::route('payments.index');
     }
-
 
 
 }
