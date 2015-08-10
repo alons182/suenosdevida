@@ -123,7 +123,7 @@
 
         </div>
         <div class="payments-ads">
-            <h1>Publicidad | <small>Semana {{ $week }} ( <b>{{ $startOfWeek  }}</b> al <b>{{ $endOfWeek  }}</b> ) (Puedes ver 5 anuncios por dia)</small></h1>
+            <h1>Publicidad | <small>Semana {{ $week }}  (Puedes ver 5 anuncios por dia)</small></h1>
 
             <div class="payments-ads-not-seen">
 
