@@ -49,31 +49,44 @@ class GenerateAnnualCharge extends Command {
 	{
 
             $users = User::all();
+			$count = 0;
             foreach ($users as $user)
             {
-                $existAnnualCharge = Payment::where(function ($query) use ($user)
+                /*$existAnnualCharge = Payment::where(function ($query) use ($user)
                 {
                     $query->where('user_id', '=', $user->id)
                         ->where('payment_type', '=', 'A')
                         ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
 
-                })->count();
-
-				$dateInOneYear = $user->created_at->addYear();
-
-				//dd($dateInOneYear->month == Carbon::now()->addYear()->subMonths(1)->month && $dateInOneYear->year == Carbon::now()->addYear()->subMonths(1)->year);
-
-				if($dateInOneYear->month == Carbon::now()->month && $dateInOneYear->year == Carbon::now()->year)
+                })->count();*/
+				$lastAnnualCharge = Payment::where(function ($query) use ($user)
 				{
+					$query->where('user_id', '=', $user->id)
+						->where('payment_type', '=', 'A');
+						//->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
 
-					// si no existe un cargo en el año actual y ya se le aplico un cargo de forma manual entonces generar el cargo
-					if($existAnnualCharge <= 0 && $user->annual_charge == 1)
-						$this->userRepository->generateAnnualCharge($user);
+				})->get()->last();
+
+				if($lastAnnualCharge)
+				{
+					$dateInOneYear = $lastAnnualCharge->created_at->addYear();
+
+					if($dateInOneYear->month == Carbon::now()->month && $dateInOneYear->year == Carbon::now()->year)
+					{
+
+						//ya se le aplico un cargo de forma manual entonces generar el cargo
+						if($user->annual_charge == 1)
+						{
+							$this->userRepository->generateAnnualCharge($user);
+							$count++;
+						}
+					}
+
 				}
 
 
 			}
-            $this->info('Annual charge done!!');
+            $this->info('Annual charge done to '. $count. ' users !!');
 
 
 

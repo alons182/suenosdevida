@@ -85,14 +85,18 @@ class PaymentsController extends Controller
 
         // para mostrar de que dia empieza y termina la semana
         $week = Carbon::now()->weekOfMonth;
+
+
         $startOfMonth = Carbon::now()->startOfMonth();
         $startOfWeekDefault = Carbon::now()->startOfWeek();
         $endOfWeekDefault = Carbon::now()->endOfWeek();
 
+
         $differenceDays = ($startOfMonth->diffInDays($startOfWeekDefault));
+
         $startOfWeek = $startOfWeekDefault->subDays($differenceDays);
         $endOfWeek = $endOfWeekDefault->subDays($differenceDays);
-
+        $dayOfWeek = Carbon::now()->dayOfWeek;
 
         return View::make('payments.index')->with([
             'paymentsOfUser' => $paymentsOfUser,
@@ -108,7 +112,8 @@ class PaymentsController extends Controller
             //'membership_cost'   => $membership_cost,
             'selectedMonth' => $data['month'],
             'startOfWeek' => $startOfWeek->toDateString(),
-            'endOfWeek' => $endOfWeek->toDateString()
+            'endOfWeek' => $endOfWeek->toDateString(),
+            'dayOfWeek' => $dayOfWeek
         ]);
     }
 
