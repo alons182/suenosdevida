@@ -49,7 +49,7 @@
 
                     {!! Form::close() !!}
 
-                    <h1>Corte Anual Automático</h1>
+                    <h1>Corte Anual Automático (simulación)</h1>
                     {!! Form::open(['route'=>'generate_charge']) !!}
 
 
