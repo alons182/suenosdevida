@@ -137,8 +137,13 @@ class TestController extends Controller {
         $payments = Payment::all();
        foreach($gains as $gain)
         {
-            $gain->month -= 1;
-           // $gain->created_at = $gain->created_at->subMonth();
+            if($gain->month == 1)
+            {
+                $gain->month = 12;
+                $gain->year -= 1;
+            }else
+                $gain->month -= 1;
+            $gain->created_at = $gain->created_at->subMonth();
             $gain->save();
         }
         foreach($payments as $payment)

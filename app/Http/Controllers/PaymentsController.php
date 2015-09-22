@@ -97,7 +97,8 @@ class PaymentsController extends Controller
         //$startOfWeek = $startOfWeekDefault->subDays($differenceDays);
         //$endOfWeek = $endOfWeekDefault->subDays($differenceDays);
         $dayOfWeek = (Carbon::now()->dayOfWeek == Carbon::SUNDAY ) ? 7 : Carbon::now()->dayOfWeek;
-        //$dt = Carbon::create(2015, 9, 19, 12, 0, 0);
+        $dt = Carbon::create(2015, 9, 22, 12, 0, 0);
+        //dd($dt->weekOfMonth. '-'.$dt->dayOfWeek);
         //dd($dt->dayOfWeek /*== Carbon::MONDAY*/);
         //dd($dayOfWeek);
         return View::make('payments.index')->with([
