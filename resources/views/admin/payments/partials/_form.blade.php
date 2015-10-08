@@ -15,12 +15,12 @@
 			{!! Form::hidden('payment_id',  $payment->id) !!}
 		@endif
 		 {!! Form::hidden('user_id_payment',null, ['class' => 'form-control']) !!}
-
+        {!! Form::hidden('payment_type', "M", ['class' => 'form-control']) !!}
         <!-- Tipo de pago Form Input -->
         <div class="form-group">
-            {!! Form::label('payment_type', 'Tipo de pago:') !!}
-            {!! Form::select('payment_type', ['M1' => 'Membrecia Nivel 1 (₡15,000)', 'M2' => 'Membrecia Nivel 2 (₡25,000)', 'M3' => 'Membrecia Nivel 1 (₡50,000)','M4' => 'Membrecia Nivel 1 (₡75,000)','M5' => 'Membrecia Nivel 1 (₡100,000)'], null,['class'=>'form-control']) !!}
-            {!! errors_for('payment_type',$errors) !!}
+            {!! Form::label('amountAdmin', 'Monto:') !!}
+            {!! Form::text('amountAdmin', null, ['class' => 'form-control']) !!}
+            {!! errors_for('amountAdmin',$errors) !!}
         </div>
         <!-- Banco Form Input -->
         <div class="form-group">

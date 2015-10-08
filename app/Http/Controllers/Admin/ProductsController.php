@@ -81,7 +81,7 @@ class ProductsController extends Controller {
 
         Flash::message('Product Created');
 
-        return Redirect::route('products');
+        return Redirect::route('store.admin.products.index');
     }
 
 
@@ -118,7 +118,7 @@ class ProductsController extends Controller {
 
         Flash::message('Updated Product');
 
-        return Redirect::route('products');
+        return Redirect::route('store.admin.products.index');
     }
 
     /**
@@ -132,7 +132,7 @@ class ProductsController extends Controller {
     {
         $this->productRepository->update_state($id, 1);
 
-        return Redirect::route('products');
+        return Redirect::route('store.admin.products.index');
     }
 
     /**
@@ -146,7 +146,7 @@ class ProductsController extends Controller {
     {
         $this->productRepository->update_state($id, 0);
 
-        return Redirect::route('products');
+        return Redirect::route('store.admin.products.index');
     }
 
     /**
@@ -160,7 +160,7 @@ class ProductsController extends Controller {
     {
         $this->productRepository->update_feat($id, 1);
 
-        return Redirect::route('products');
+        return Redirect::route('store.admin.products.index');
     }
 
     /**
@@ -174,7 +174,7 @@ class ProductsController extends Controller {
     {
         $this->productRepository->update_feat($id, 0);
 
-        return Redirect::route('products');
+        return Redirect::route('store.admin.products.index');
     }
 
     /**
@@ -190,7 +190,7 @@ class ProductsController extends Controller {
 
         Flash::message('Product Deleted');
 
-        return Redirect::route('products');
+        return Redirect::route('store.admin.products.index');
     }
 
     /**
@@ -211,7 +211,7 @@ class ProductsController extends Controller {
 
         Flash::message('Products Deleted');
 
-        return Redirect::route('products');
+        return Redirect::route('store.admin.products.index');
 
     }
 

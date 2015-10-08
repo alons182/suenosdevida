@@ -3,7 +3,7 @@
             <div class="filtros">
                
                
-                {!! Form::open(['route' => 'categories','method' => 'get']) !!}
+                {!! Form::open(['route' => 'store.admin.categories.index','method' => 'get']) !!}
                    <div class="form-group">
                         <div class="controls">
                             {!! Form::label('q', 'Buscar') !!}

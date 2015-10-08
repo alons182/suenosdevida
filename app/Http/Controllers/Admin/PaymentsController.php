@@ -1,7 +1,7 @@
 <?php namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PaymentRequest;
+use App\Http\Requests\PaymentAdminRequest;
 use Carbon\Carbon;
 
 use Illuminate\Support\Facades\Input;
@@ -77,7 +77,7 @@ class PaymentsController extends Controller {
      * @param PaymentRequest $request
      * @return Response
      */
-    public function store(PaymentRequest $request)
+    public function store(PaymentAdminRequest $request)
     {
         $data = $request->all();
         $data['user_id'] =  $data['user_id_payment'];

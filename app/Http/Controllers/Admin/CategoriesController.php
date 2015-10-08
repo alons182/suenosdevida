@@ -78,7 +78,7 @@ class CategoriesController extends Controller {
 
         Flash::message('Category created');
 
-        return Redirect::route('categories');
+        return Redirect::route('store.admin.categories.index');
     }
 
     /**
@@ -112,7 +112,7 @@ class CategoriesController extends Controller {
 
         Flash::message('Category updated');
 
-        return Redirect::route('categories');
+        return Redirect::route('store.admin.categories.index');
     }
 
 
@@ -129,7 +129,7 @@ class CategoriesController extends Controller {
 
         Flash::message('Category Deleted');
 
-        return Redirect::route('categories');
+        return Redirect::route('store.admin.categories.index');
     }
 
 
@@ -144,7 +144,7 @@ class CategoriesController extends Controller {
     {
         $this->categoryRepository->update_feat($id, 1);
 
-        return Redirect::route('categories');
+        return Redirect::route('store.admin.categories.index');
     }
 
     /**
@@ -158,7 +158,7 @@ class CategoriesController extends Controller {
     {
         $this->categoryRepository->update_feat($id, 0);
 
-        return Redirect::route('categories');
+        return Redirect::route('store.admin.categories.index');
     }
 
 
@@ -173,7 +173,7 @@ class CategoriesController extends Controller {
     {
         $this->categoryRepository->update_state($id, 1);
 
-        return Redirect::route('categories');
+        return Redirect::route('store.admin.categories.index');
     }
 
     /**
@@ -187,7 +187,7 @@ class CategoriesController extends Controller {
     {
         $this->categoryRepository->update_state($id, 0);
 
-        return Redirect::route('categories');
+        return Redirect::route('store.admin.categories.index');
     }
 
 
@@ -226,7 +226,7 @@ class CategoriesController extends Controller {
     protected function move($id, $dir)
     {
         $category = $this->categoryRepository->findById($id);
-        $response = Redirect::route('categories');
+        $response = Redirect::route('store.admin.categories.index');
 
         if (! $category->isRoot())
         {

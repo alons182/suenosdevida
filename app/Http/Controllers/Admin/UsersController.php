@@ -98,7 +98,7 @@ class UsersController extends Controller {
 
         Flash::message('User created');
 
-        return Redirect::route('users');
+        return Redirect::route('store.admin.users.index');
     }
 
 
@@ -134,7 +134,7 @@ class UsersController extends Controller {
 
         Flash::message('User updated');
 
-        return Redirect::route('users');
+        return Redirect::route('store.admin.users.index');
     }
 
     /**
@@ -148,7 +148,7 @@ class UsersController extends Controller {
     {
         $this->userRepository->update_active($id, 1);
 
-        return Redirect::route('users');
+        return Redirect::route('store.admin.users.index');
     }
 
     /**
@@ -162,7 +162,7 @@ class UsersController extends Controller {
     {
         $this->userRepository->update_active($id, 0);
 
-        return Redirect::route('users');
+        return Redirect::route('store.admin.users.index');
     }
 
     /**
@@ -179,7 +179,7 @@ class UsersController extends Controller {
         Flash::message('User Deleted');
 
 
-        return Redirect::route('users');
+        return Redirect::route('store.admin.users.index');
     }
 
     /**
@@ -244,7 +244,7 @@ class UsersController extends Controller {
         if($user->annual_charge == 1)
         {
             Flash::warning('Este usuario ya tiene un cobro anual' );
-            return redirect()->route('users');
+            return redirect()->route('store.admin.users.index');
         }
 
 
@@ -255,7 +255,7 @@ class UsersController extends Controller {
         Flash::message('Se genero el corte anual al usuario correctamente' );
 
 
-        return redirect()->route('users');
+        return redirect()->route('store.admin.users.index');
     }
 
 

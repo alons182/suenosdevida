@@ -141,6 +141,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
         {
             $query->whereIn('user_id', $usersOfRed)
                 ->where('payment_type', '<>', 'A')
+                ->where('payment_type', '<>', 'CO')
                 ->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
                 ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
         })->orderBy('created_at', 'desc')->paginate($this->limit);
@@ -162,6 +163,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
         {
             $query->where('user_id', '=', $user_logged->id)
                 ->where('payment_type', '<>', 'A')
+                ->where('payment_type', '<>', 'CO')
                 ->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
                 ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
         })->get()->last();
@@ -170,6 +172,29 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
 
 
         return $paymentsOfMembership;
+    }
+
+    /**
+     * Get last commission
+     * @param null $data
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getCommissionOfGain($data = null)
+    {
+        $user_logged = Auth::user();
+
+        $payment = $this->model->where(function ($query) use ($data, $user_logged)
+        {
+            $query->where('user_id', '=', $user_logged->id)
+                ->where('payment_type', '=', 'CO')
+                ->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
+                ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+        })->get()->last();
+
+        $commissionOfGain = ($payment) ? $payment->amount : 0;
+
+
+        return $commissionOfGain;
     }
 
     /**
@@ -234,6 +259,9 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
             $data = array_add($data, 'amount', 100000);
 
         $data['payment_type'] = "M";
+
+        if(isset($data['amountAdmin']))
+            $data['amount'] = $data['amountAdmin'];
 
 
         return $data;

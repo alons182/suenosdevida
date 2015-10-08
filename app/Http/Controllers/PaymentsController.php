@@ -68,6 +68,7 @@ class PaymentsController extends Controller
         $paymentsOfUser = $this->paymentRepository->getPaymentsOfUser($data);
         $paymentsOfUserRed = $this->paymentRepository->getPaymentsOfUserRed($data);
         $paymentsOfMembership = $this->paymentRepository->getPaymentsOfMembership($data);
+        $commissionOfGain = $this->paymentRepository->getCommissionOfGain($data);
         $canton = Auth::user()->profiles->canton;
 
         $ads = $this->adRepository->getAds($canton, Auth::user()->id);
@@ -105,7 +106,7 @@ class PaymentsController extends Controller
             'paymentsOfUser' => $paymentsOfUser,
             'paymentsOfUserRed' => $paymentsOfUserRed,
             'paymentsOfMembership' => $paymentsOfMembership,
-            //'annualCharge' => $annualCharge,
+            'commission' => $commissionOfGain,
             'ads' => $ads,
             'hits_per_day' => $hits_per_day,
             'hits_per_week' => $hits_per_week,

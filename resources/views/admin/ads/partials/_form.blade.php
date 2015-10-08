@@ -7,7 +7,7 @@
         {!! Form::submit('Crear Anuncio',['class'=>'btn btn-primary'])!!}
     @endif
 
-    {!! link_to_route('ads', ($currentUser->hasrole('administrator') ? 'Cancelar' : 'Regresar'), null, ['class'=>'btn
+    {!! link_to_route('store.admin.ads.index', ($currentUser->hasrole('administrator') ? 'Cancelar' : 'Regresar'), null, ['class'=>'btn
     btn-default'])!!}
 
 </div>

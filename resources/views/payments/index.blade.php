@@ -24,7 +24,8 @@
                 <h2>Pago de membresia : <span class="amount {{ ($paymentsOfMembership < 3000) ? 'red' : '' }}">{{ money($paymentsOfMembership,'₡') }}</span></h2>
                 <h2>Posible: <span class="amount">{!! money($possible_gains,'₡') !!}</span></h2>
                 
-                <h2>Ganancia por corte: <span class="amount">{!! money($accumulatedGains,'₡') !!}</span></h2>
+                <h2>Ganancia por corte : <span class="amount">{!! money($accumulatedGains,'₡') !!}</span></h2>
+                <h2>Comisión : <span class="amount">{!! money($commission,'₡') !!}</span></h2>
             </div>
 
         </div>

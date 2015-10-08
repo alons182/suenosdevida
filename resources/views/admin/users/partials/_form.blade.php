@@ -9,7 +9,7 @@
         {!! Form::submit('Crear Usuario',['class'=>'btn btn-primary'])!!}
     @endif
 
-	{!! link_to_route('users', ($currentUser->hasrole('administrator') ? 'Cancelar' : 'Regresar'), null, ['class'=>'btn btn-default'])!!}
+	{!! link_to_route('store.admin.users.index', ($currentUser->hasrole('administrator') ? 'Cancelar' : 'Regresar'), null, ['class'=>'btn btn-default'])!!}
 
 </div>
 <div class="col-xs-12 col-sm-6">

@@ -70,7 +70,7 @@ class AdsController extends Controller {
 
         Flash::message('Ad Created');
 
-        return redirect::route('ads');
+        return redirect::route('store.admin.ads.index');
 	}
 
 
@@ -103,7 +103,7 @@ class AdsController extends Controller {
 
         Flash::message('Ad Updated');
 
-        return redirect::route('ads');
+        return redirect::route('store.admin.ads.index');
 	}
 
     /**
@@ -117,7 +117,7 @@ class AdsController extends Controller {
     {
         $this->adRepository->update_state($id, 1);
 
-        return Redirect::route('ads');
+        return Redirect::route('store.admin.ads.index');
     }
 
     /**
@@ -131,7 +131,7 @@ class AdsController extends Controller {
     {
         $this->adRepository->update_state($id, 0);
 
-        return Redirect::route('ads');
+        return Redirect::route('store.admin.ads.index');
     }
 
     /**
@@ -145,7 +145,7 @@ class AdsController extends Controller {
     {
         $this->adRepository->update_feat($id, 1);
 
-        return Redirect::route('ads');
+        return Redirect::route('store.admin.ads.index');
     }
 
     /**
@@ -159,7 +159,7 @@ class AdsController extends Controller {
     {
         $this->adRepository->update_feat($id, 0);
 
-        return Redirect::route('ads');
+        return Redirect::route('store.admin.ads.index');
     }
 
 
@@ -175,7 +175,7 @@ class AdsController extends Controller {
 
         Flash::message('Ad Deleted');
 
-        return Redirect::route('ads');
+        return Redirect::route('store.admin.ads.index');
 	}
 
 }

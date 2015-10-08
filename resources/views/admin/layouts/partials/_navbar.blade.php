@@ -15,19 +15,19 @@
             <li class="{!! set_active('admin') !!}">{!!  link_to_route('dashboard','Inicio')  !!}</li>
            @if (! Auth::guest())
             @if ($currentUser->hasRole('administrator') || $currentUser->hasRole('subadministrator'))
-                <li class="{!! set_active('admin/users') !!}">{!! link_to_route('users','Usuarios') !!}</li>
-                <li class="{!! set_active('admin/categories') !!}">{!! link_to_route('categories','Categorias') !!}</li>
+                <li class="{!! set_active('admin/users') !!}">{!! link_to_route('store.admin.users.index','Usuarios') !!}</li>
+                <li class="{!! set_active('admin/categories') !!}">{!! link_to_route('store.admin.categories.index','Categorias') !!}</li>
                 <li class="{!! set_active('admin/downloads') !!}">{!! link_to_route('store.admin.downloads.index','Downloads') !!}</li>
                 <li class="{!! set_active('admin/payments') !!}">{!! link_to_route('store.admin.payments.index','Pagos') !!}</li>
-                <li class="{!! set_active('admin/ads') !!}">{!! link_to_route('ads','Publicidad') !!}</li>
+                <li class="{!! set_active('admin/ads') !!}">{!! link_to_route('store.admin.ads.index','Publicidad') !!}</li>
                 <li class="{!! set_active('admin/test') !!}">{!! link_to_route('store.admin.tests.index','Test') !!}</li>
             @endif
-            <li class="{!! set_active('admin/products') !!}">{!! link_to_route('products','Productos') !!}</li>
-            <li class="{!! set_active('admin/orders') !!}">{!! link_to_route('orders','Ordenes') !!}</li>
+            <li class="{!! set_active('admin/products') !!}">{!! link_to_route('store.admin.products.index','Productos') !!}</li>
+            <li class="{!! set_active('admin/orders') !!}">{!! link_to_route('store.admin.orders.index','Ordenes') !!}</li>
             <li>{!! link_to_route('logout','Logout') !!}</li>
-           @else 
+           @else
               <li class="{!! set_active('admin/login') !!}">{!! link_to_route('login','Login') !!}</li>
-              
+
             @endif
           </ul>
         </div><!--/.nav-collapse -->

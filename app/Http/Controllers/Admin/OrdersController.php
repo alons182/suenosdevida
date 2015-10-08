@@ -73,7 +73,7 @@ class OrdersController extends Controller {
 
         Flash::message('Updated Order');
 
-        return Redirect::route('orders');
+        return Redirect::route('store.admin.orders.index');
     }
 
     /**
@@ -89,7 +89,7 @@ class OrdersController extends Controller {
 
         Flash::message('Order Deleted');
 
-        return Redirect::route('orders');
+        return Redirect::route('store.admin.orders.index');
     }
 
     /**
@@ -110,7 +110,7 @@ class OrdersController extends Controller {
 
         Flash::message('Orders Deleted');
 
-        return Redirect::route('orders');
+        return Redirect::route('store.admin.orders.index');
 
     }
 

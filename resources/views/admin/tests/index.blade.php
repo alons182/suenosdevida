@@ -49,14 +49,14 @@
 
                     {!! Form::close() !!}
 
-                    <h1>Corte Anual Automático (simulación)</h1>
-                    {!! Form::open(['route'=>'generate_charge']) !!}
+                    <!--<h1>Corte Anual Automático (simulación)</h1>
+                    {-- Form::open(['route'=>'generate_charge']) !!}
 
 
-                    {!! Form::submit('Generar corte',['class'=>'btn btn-primary'])!!}
+                        {-- Form::submit('Generar corte',['class'=>'btn btn-primary'])!!}
 
 
-                    {!! Form::close() !!}
+                    {-- Form::close() !!}-->
 
                 </div>
             </div>

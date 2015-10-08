@@ -5,7 +5,8 @@ return array(
     'payments_type' => array(
         'M'  => 'Membresía',
         'A'  => 'Administrativo',
-        'MA' => 'Membresia(A)'
+        'MA' => 'Membresia(A)',
+        'CO' => 'Comisión'
     ),
     'status'        => array(
         'P' => 'Pendiente',
