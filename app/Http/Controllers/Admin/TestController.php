@@ -79,6 +79,16 @@ class TestController extends Controller {
 
         $cant_users = ($request->input('cant_users')) ? $request->input('cant_users') : 5;
         $user_id = $request->input('user_id');
+        $parent_user = User::findOrFail($user_id);
+
+        if(($parent_user->immediateDescendants()->count() + $cant_users) > 25)
+        {
+            $soloAgregar = 25 - $parent_user->immediateDescendants()->count();
+
+            Flash::error('Supera el limite de 25 usuarios por usuario. solo puedes agregar '.$soloAgregar. ' más' );
+
+            return redirect()->route('store.admin.tests.index');
+        }
 
         foreach (range(1, $cant_users) as $index)
         {
