@@ -64,9 +64,10 @@ class AdsController extends Controller {
         $data['ad'] = $ad->name;
         $data['ad_email'] = $ad->email;
 
+        $this->adRepository->checkAd($ad, Auth::user()->id);
+
         $this->mailer->comment($data);
 
-        $this->adRepository->checkAd($ad, Auth::user()->id);
 
         Flash::message('Comentario enviado correctamente');
 
