@@ -68,7 +68,7 @@ class AdsController extends Controller {
 
         $this->adRepository->checkAd($ad, Auth::user()->id);
 
-        Flash::message('Commentario enviado correctamente');
+        Flash::message('Comentario enviado correctamente');
 
         return Redirect::route('payments.index');
 	}
