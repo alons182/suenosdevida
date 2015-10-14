@@ -102,6 +102,7 @@ class PaymentsController extends Controller
         //dd($dt->weekOfMonth. '-'.$dt->dayOfWeek);
         //dd($dt->dayOfWeek /*== Carbon::MONDAY*/);
         //dd($dayOfWeek);
+        dd($hits_per_day);
         return View::make('payments.index')->with([
             'paymentsOfUser' => $paymentsOfUser,
             'paymentsOfUserRed' => $paymentsOfUserRed,
