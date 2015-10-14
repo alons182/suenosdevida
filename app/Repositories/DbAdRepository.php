@@ -182,6 +182,50 @@ class DbAdRepository extends DbRepository implements AdRepository {
     public function getAds($zone, $user_id)
     {
 
+
+        $adsTotal = $this->model->with(['hits' => function ($query) use ($user_id) {
+            $query->where('user_id', '=', $user_id);
+
+        }])->where(function ($query) use ($zone)
+        {
+            $query->where('all_country', '=', 1)
+                ->orWhere('canton', '=', $zone)
+                ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+        })->get();
+
+        $adsWithHitsToday = $this->model->whereHas('hits', function ($q) use ($user_id)
+        {
+            $q->where('user_id', '=', $user_id)
+                ->where(\DB::raw('day(hit_date)'), '=', Carbon::now()->day)
+                ->where(\DB::raw('MONTH(hit_date)'), '=', Carbon::now()->month)
+                ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
+        })->where(function ($query) use ($zone)
+        {
+            $query->where('canton', '=', $zone)
+                ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+        })->get();
+
+
+        if($adsTotal->count() <= 5 && $adsWithHitsToday->count() == 0)
+        {
+
+            foreach($adsTotal as $ad)
+            {
+                if($ad->hits->count() > 0)
+                {
+                    foreach($ad->hits as $hit)
+                    {
+                        if($hit->user_id == $user_id)
+                            $hit->delete();
+                    }
+                }
+
+
+            }
+        }
+
         $ads = $this->model->with(['hits' => function ($query) use ($user_id) {
             $query->where('user_id', '=', $user_id);
 
@@ -193,7 +237,7 @@ class DbAdRepository extends DbRepository implements AdRepository {
                 ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
         })->get();
 
-        
+
         return $ads;
     }
 
