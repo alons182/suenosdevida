@@ -193,7 +193,7 @@ class DbAdRepository extends DbRepository implements AdRepository {
                 ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
         })->get();
 
-        dd($ads);
+        
         return $ads;
     }
 
