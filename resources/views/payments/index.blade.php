@@ -144,7 +144,7 @@
                                     @endif
                                 </a>
                             @else
-                                @if(dd($ad->hits->last()->check) == 0)
+                                @if($ad->hits->last()->check == 0)
                                     <a href="{!! URL::route('ads.show', $ad->id) !!}" class="payments-ad-link">
                                         <span class="ad_id">{!! $ad->id !!}</span>
                                         @if($ad->image)
