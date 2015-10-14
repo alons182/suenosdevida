@@ -134,7 +134,7 @@
                     <div class="payments-ad">
                         @if($hits_per_day != 5 && $hits_per_week != 25)
 
-                            @if($ad->hits->count() == 0)
+                            @if(dd($ad->hits->count() == 0))
                                 <a href="{!! URL::route('ads.show', $ad->id) !!}" class="payments-ad-link">
                                     <span class="ad_id">{!! $ad->id !!}</span>
                                     @if($ad->image)
