@@ -287,7 +287,7 @@ class DbUserRepository extends DbRepository implements UserRepository
             $parent_user = $this->model->findOrFail($parent_id);
 
             if ($parent_user->depth != 0) {
-
+                //50 limite 50
                 if ($parent_user->immediateDescendants()->count() == 4 && $parent_user->bonus != 1) //quinto afiliado
                 {
                     $parent_user->bonus = 1;
@@ -300,8 +300,15 @@ class DbUserRepository extends DbRepository implements UserRepository
                     $this->bonus($user, $parent_user->parent_id);
                 } */
                 else {
-                    $user->parent_id = $parent_user->id;
-                    $user->save();
+
+                    if($parent_user->immediateDescendants()->count() == 50) // si el patrocinador  tiene 50 usuario subirlo al padre
+                    {
+                        $this->bonus($user, $parent_user->parent_id);
+                    }else{
+                        $user->parent_id = $parent_user->id;
+                        $user->save();
+                    }
+
                 }
             } else {
                 $user->parent_id = $parent_user->id;
