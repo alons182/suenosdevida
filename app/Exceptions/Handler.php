@@ -40,7 +40,7 @@ class Handler extends ExceptionHandler {
         //add this to the render function
         if ($e instanceof ModelNotFoundException)
         {
-            return redirect('home'); //response()->view('errors.'.'404');
+            return redirect('/'); //response()->view('errors.'.'404');
         }
 
 		return parent::render($request, $e);
