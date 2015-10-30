@@ -1,3 +1,4 @@
+<button class="btn-menu">Menu</button>
 <nav class="menu">
     <ul class="inner">
         <li> <a href="/">Inicio</a> </li>

@@ -138,9 +138,9 @@
                                 <a href="{!! URL::route('ads.show', $ad->id) !!}" class="payments-ad-link">
                                     <span class="ad_id">{!! $ad->id !!}</span>
                                     @if($ad->image)
-                                        <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="190"  height="190"/>
+                                        <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="185"  height="185"/>
                                     @else
-                                        <img src="holder.js/190x190/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
+                                        <img src="holder.js/185x185/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
                                     @endif
                                 </a>
                             @else
@@ -148,9 +148,9 @@
                                     <a href="{!! URL::route('ads.show', $ad->id) !!}" class="payments-ad-link">
                                         <span class="ad_id">{!! $ad->id !!}</span>
                                         @if($ad->image)
-                                            <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="190"  height="190"/>
+                                            <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="1985  height="185"/>
                                         @else
-                                            <img src="holder.js/190x190/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
+                                            <img src="holder.js/185x185/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
                                         @endif
                                     </a>
 
@@ -158,12 +158,12 @@
                                     @if($ad->image)
                                         <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($ad->hits->last()) ? $ad->hits->last()->hit_date : '' !!}">
                                             <span class="ad_id">{!! $ad->id !!}</span>
-                                            <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="190"  height="190" />
+                                            <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="1985  height="185" />
                                         </span>
                                     @else
                                         <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($ad->hits->last()) ? $ad->hits->last()->hit_date : '' !!}">
                                             <span class="ad_id">{!! $ad->id !!}</span>
-                                            <img src="holder.js/190x190/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
+                                            <img src="holder.js/185x185/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
                                         </span>
                                     @endif
 
@@ -174,11 +174,11 @@
                         @else
                             @if($ad->image)
                                 <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($hits_per_week == 25) ? 'Has completado tus 5 dias por semana' : 'Solo 5 por dia' !!}">
-                                    <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="190"  height="190" />
+                                    <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="185"  height="185" />
                                 </span>
                             @else
                                 <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($hits_per_week == 25) ? 'Has completado tus 5 dias por semana' : 'Solo 5 por dia' !!}">
-                                    <img src="holder.js/190x190/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
+                                    <img src="holder.js/185x185/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
                                 </span>
                             @endif
                         @endif

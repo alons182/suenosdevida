@@ -6,7 +6,9 @@
         filters = $('.filters');
 
 
-
+    $('.btn-menu').on('click',function(e){
+        menu.toggle();
+    });
     menu.find(".parent").hoverIntent({
         over: function() {
             $(this).find(">.sub-menu").slideDown(200 );
