@@ -88,8 +88,8 @@ class PaymentsController extends Controller
         $week = Carbon::now()->weekOfMonth;
 
 
-       // $startOfMonth = Carbon::now()->startOfMonth();
-       // $startOfWeekDefault = Carbon::now()->startOfWeek();
+      // $startOfMonth = Carbon::now()->startOfMonth();
+       //$startOfWeekDefault = Carbon::now()->startOfWeek();
        // $endOfWeekDefault = Carbon::now()->endOfWeek();
 
 
@@ -98,10 +98,13 @@ class PaymentsController extends Controller
         //$startOfWeek = $startOfWeekDefault->subDays($differenceDays);
         //$endOfWeek = $endOfWeekDefault->subDays($differenceDays);
         $dayOfWeek = (Carbon::now()->dayOfWeek == Carbon::SUNDAY ) ? 7 : Carbon::now()->dayOfWeek;
-        $dt = Carbon::create(2015, 9, 22, 12, 0, 0);
+
         //dd($dt->weekOfMonth. '-'.$dt->dayOfWeek);
         //dd($dt->dayOfWeek /*== Carbon::MONDAY*/);
         //dd($dayOfWeek);
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+        $today = Carbon::now()->today();
 
         return View::make('payments.index')->with([
             'paymentsOfUser' => $paymentsOfUser,
@@ -116,9 +119,10 @@ class PaymentsController extends Controller
             'accumulatedGains' => $accumulatedGains,
             //'membership_cost'   => $membership_cost,
             'selectedMonth' => $data['month'],
-            //'startOfWeek' => $startOfWeek->toDateString(),
-            //'endOfWeek' => $endOfWeek->toDateString(),
-            'dayOfWeek' => $dayOfWeek
+            'startOfWeek' => $startOfWeek->toDateString(),
+            'endOfWeek' => $endOfWeek->toDateString(),
+            'dayOfWeek' => $dayOfWeek,
+            'today' => $today->toDateString()
         ]);
     }
 
