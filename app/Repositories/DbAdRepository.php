@@ -158,6 +158,8 @@ class DbAdRepository extends DbRepository implements AdRepository {
     public function hits_per_week($user_id)
     {
         $hits_per_week = [];
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
 
         $tasks = Task::where(function ($query) use ($user_id)
         {
@@ -168,7 +170,8 @@ class DbAdRepository extends DbRepository implements AdRepository {
 
         foreach($tasks as $task)
         {
-            if($task->created_at->weekOfMonth == Carbon::now()->weekOfMonth) $hits_per_week[] = $task;
+            //if($task->created_at->weekOfMonth == Carbon::now()->weekOfMonth) $hits_per_week[] = $task;
+            if($task->created_at->between($startOfWeek, $endOfWeek)) $hits_per_week[] = $task;
         }
        /* $tasksOfWeek = array_filter($tasks->toArray(),function($task){
 
