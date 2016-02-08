@@ -59,7 +59,7 @@
                     @else
                         <div class="btn-group actions">
                         @foreach (array('up', 'down') as $key)
-                            <button class="btn btn-xs btn-link" type="submit" title="Move {!!$key!!}" form="form-up-down" formaction="{!! URL::route('categories.$key', array($category->id)) !!}">
+                            <button class="btn btn-xs btn-link" type="submit" title="Move {!!$key!!}" form="form-up-down" formaction="{!! URL::route('categories.'.$key, array($category->id)) !!}">
                                <i class="glyphicon glyphicon-chevron-{!! $key !!}"></i>
                             </button>
                         @endforeach
