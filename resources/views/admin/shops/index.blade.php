@@ -34,13 +34,11 @@
                     <td>{!! $shop->products->count() !!}</td>
                     <td>{!! $shop->created_at !!}</td>
                     <td>
-                           
+
 
                     </td>
                     <td>
-                     @if($currentUser->hasrole('administrator'))
-                       <button type="submit" class="btn btn-danger btn-sm" form="form-delete" formaction="{!! URL::route('store.admin.shops.destroy', [$shop->id]) !!}">Eliminar</button>
-                      @endif
+                    
                     </td>
                     
                 </tr>
