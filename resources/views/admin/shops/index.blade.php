@@ -33,13 +33,7 @@
                     <td>{!! str_limit($shop->details, 20) !!}</td>
                     <td>{!! $shop->products->count() !!}</td>
                     <td>{!! $shop->created_at !!}</td>
-                    <td>
-
-
-                    </td>
-                    <td>
-                    
-                    </td>
+                   
                     
                 </tr>
                 @endif
