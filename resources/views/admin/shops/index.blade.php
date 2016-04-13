@@ -17,7 +17,7 @@
                 <th>Nombre</th>
                 <th>Canton</th>
                 <th>Detalles</th>
-                <th>Cant. Productos</th>
+                <th>Cant. Productos.</th>
                 <th>Creado</th>
                 <th>Publicado</th>
                 <th><i class="glyphicon glyphicon-cog"></i></th>
