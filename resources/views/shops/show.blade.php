@@ -15,7 +15,7 @@
 
 
 
-        <div class="shop-image " style="background-image: url('{!! photos_path('shops').'thumb_'.$shop->image !!}')">
+        <div class="shop-image " style="background-image: url('{!! photos_path('shops').$shop->image !!}')">
             <div class="shop-logo">
                 <img src="{!! photos_path('shops').'thumb_'.$shop->logo !!}" alt="{!! $shop->logo !!}" />
             </div>
