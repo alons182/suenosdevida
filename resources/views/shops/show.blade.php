@@ -12,15 +12,19 @@
     <div class="shop-info">
 
         <h1 class="shop-name item_name">{!! $shop->name !!} </h1>
-        <div class="shop-logo" style="background-image: url('{!! photos_path('shops').'thumb_'.$shop->logo !!}')">
-        </div>
 
+
+
+        <div class="shop-image " style="background-image: url('{!! photos_path('shops').'thumb_'.$shop->image !!}')">
+            <div class="shop-logo">
+                <img src="{!! photos_path('shops').'thumb_'.$shop->logo !!}" alt="{!! $shop->logo !!}" />
+            </div>
+
+        </div>
         <div class="shop-information">
             {!! $shop->information !!}
         </div>
-        <div class="shop-image" style="background-image: url('{!! photos_path('shops').'thumb_'.$shop->image !!}')">
-        </div>
-        <div class="shop-detais">
+        <div class="shop-details">
             {!! $shop->details !!}
         </div>
 
