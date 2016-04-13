@@ -34,7 +34,6 @@
                     <td>{!! $shop->products->count() !!}</td>
                     <td>{!! $shop->created_at !!}</td>
                     <td>
-                            
                             @if ($shop->published)
                                 <button type="submit"  class="btn btn-default btn-xs" form="form-pub-unpub" formaction="{!! URL::route('shops.unpub', [$shop->id]) !!}"><i class="glyphicon glyphicon-ok"></i></button>
                             @else 
@@ -61,7 +60,6 @@
              
         </tfoot>
     </table>
-    {!! Form::close() !!}
      
     </div>  
 
