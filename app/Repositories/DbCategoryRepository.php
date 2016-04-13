@@ -25,7 +25,7 @@ class DbCategoryRepository extends DbRepository implements CategoryRepository {
     public function store($data)
     {
         $data = $this->prepareData($data);
-        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'categories', null, null, 640, null) : '';
+        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['slug'], 'categories', null, null, 640, null) : '';
 
         return $this->model->create($data);
     }
@@ -40,7 +40,7 @@ class DbCategoryRepository extends DbRepository implements CategoryRepository {
     {
         $category = $this->model->findOrFail($id);
         $data = $this->prepareData($data);
-        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'categories', null, null, 640, null) : $category->image;
+        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['slug'], 'categories', null, null, 640, null) : $category->image;
 
         $category->fill($data);
         $category->save();
@@ -107,6 +107,12 @@ class DbCategoryRepository extends DbRepository implements CategoryRepository {
         {
             $categories = $categories->where('published', '=', $search['published']);
         }
+        if (isset($search['shop_id']) && $search['shop_id'] != "")
+        {
+            $categories = $categories->where('shop_id', '=', $search['shop_id']);
+            $categories = $categories->where('depth', '=','0');
+
+        }
 
         return $categories->orderBy('lft')->paginate($this->limit);
     }
@@ -115,9 +121,12 @@ class DbCategoryRepository extends DbRepository implements CategoryRepository {
      * get categories parents for the format to view the category select
      * @return array
      */
-    public function getParents()
+    public function getParents($shop = null)
     {
-        $all = $this->model->select('id', 'name', 'depth')->orderBy('lft')->get();
+        if($shop)
+            $all = $this->model->where('shop_id','=',$shop)->select('id', 'name', 'depth')->orderBy('lft')->get();
+        else
+            $all = $this->model->select('id', 'name', 'depth')->orderBy('lft')->get();
 
         $result = array();
 
@@ -159,8 +168,9 @@ class DbCategoryRepository extends DbRepository implements CategoryRepository {
         if($data['parent_id']== 'root')
             $data['parent_id'] = NULL;
 
-        $data['slug'] = Str::slug($data['name']);
+        $data['slug'] = Str::slug($data['shop_id'].'-'.$data['name']);
 
         return $data;
     }
+
 }

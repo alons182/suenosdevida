@@ -13,6 +13,7 @@
                 <th>#</th>
                 <th>Nombre</th>
                 <th>Descripción</th>
+                <th>Tienda</th>
                 <th>Creado</th>
                 <th>Pub | Des</th>
                 <th><i class="glyphicon glyphicon-cog"></i></th>
@@ -30,6 +31,7 @@
                         @endif
                     </td>
                     <td>{!! str_limit($category->description, 20) !!}</td>
+                    <td>{!! ($category->shop)? $category->shop->name : '' !!}</td>
                     <td>{!! $category->created_at !!}</td>
                     <td>
      

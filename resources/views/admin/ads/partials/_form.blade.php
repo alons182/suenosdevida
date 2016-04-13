@@ -24,7 +24,7 @@
 
     <div class="form-group">
         {!! Form::label('description','Descripción:')!!}
-        {!! Form::textarea('description',null,['class'=>'form-control','required'=>'required']) !!}
+        {!! Form::textarea('description',null,['class'=>'form-control','id'=>'ckeditor_description','required'=>'required']) !!}
         {!! errors_for('description',$errors) !!}
     </div>
 
@@ -80,6 +80,7 @@
         {!! Form::file('image') !!}
         {!! errors_for('image',$errors) !!}
     </div>
+
     <div class="form-group">
         {!! Form::label('video','Video:') !!}
         {!! Form::text('video', null,['class'=>'form-control','required'=>'required']) !!}
@@ -93,7 +94,75 @@
         {!! errors_for('email',$errors) !!}
     </div>
 
+    <div class="form-group">
+        {!! Form::label('company_logo','Logo Empresa:')!!}
+        @if (isset($ad))
+            <div class="main_image">
+                @if ($ad->company_logo)
+                    <img src="{!! photos_path('ads') !!}{!! $ad->company_logo !!}" alt="{!! $ad->company_logo !!}">
+                @else
+                    <img src="holder.js/140x140" alt="No Image">
+                @endif
 
+            </div>
+        @endif
+        {!! Form::file('company_logo') !!}
+        {!! errors_for('company_logo',$errors) !!}
+    </div>
+    <div class="form-group">
+        {!! Form::label('company_name','Nombre Empresa:') !!}
+        {!! Form::text('company_name', null,['class'=>'form-control','required'=>'required']) !!}
+        {!! errors_for('company_name',$errors) !!}
+
+    </div>
+    <div class="form-group">
+        {!! Form::label('company_info','Información Empresa:')!!}
+        {!! Form::textarea('company_info',null,['class'=>'form-control','id'=>'ckeditor_info','required'=>'required']) !!}
+        {!! errors_for('company_info',$errors) !!}
+    </div>
+
+
+
+</div>
+<div class="form-group">
+
+    <legend>Galeria</legend>
+
+    @if(isset($ad))
+
+        <div id="container-gallery">
+
+            <a class="UploadButton btn btn-info" id="UploadButtonAds">Subir Imagen</a>
+            <div id="InfoBox"></div>
+            <ul id="galleryAds">
+
+                @foreach ($ad->gallery as $photo)
+                    <li>
+                        <span class="delete" data-imagen="{!! $photo->id !!}"><i class="glyphicon glyphicon-remove"></i></span>
+                        <a href="{!! photos_path('ads') !!}{!! $photo->ad_id !!}/{!! $photo->url !!}" data-lightbox="gallery"><img src="{!! photos_path('ads') !!}{!! $photo->ad_id !!}/{!! $photo->url_thumb !!}" alt="img" /></a>
+                    </li>
+                @endforeach
+
+            </ul>
+            <script id="photoTemplate" type="text/x-handlebars-template">
+
+                <li>
+                    <span class="delete" data-imagen="@{{ id }}"><i class="glyphicon glyphicon-remove"></i></span>
+                    <a href="/images_store/ads/@{{ ad_id }}/@{{ url }}" data-lightbox="gallery"><img src="/images_store/ads/@{{ ad_id }}/@{{ url_thumb }}" alt="img" /></a>
+                </li>
+
+
+            </script>
+
+        </div>
+    @else
+        <div id="inputs_photos">
+
+            <input class="inputbox btn btn-info" type="button" name="new_photo"  value="Nueva Foto"  id="add_input_photo"/><i class="glyphicon glyphicon-plus-sign"></i>
+
+        </div>
+
+    @endif
 </div>
 
 

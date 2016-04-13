@@ -36,6 +36,8 @@ figure
 	margin 0
 textarea.form-control
 	height 90px
+.clear
+	clear both
 .img
 	border 1px solid gris2
 	padding .2em
@@ -248,6 +250,54 @@ footer
 	iframe
 		width 100%
 		height 450px
+.ads-company
+	&-image
+	&-logo
+		background-repeat no-repeat
+		background-position center center
+		background-size cover
+	&-image
+		width 100%
+		height 400px
+		position relative
+	&-logo
+		width 150px
+		position absolute
+		right 1rem
+		top 1rem
+		background-color white
+		padding .5rem
+		box-shadow 1px 1px 5px rgba(0,0,0,.55)
+		img
+			width 100%
+			display block
+	&-name
+		background verde
+		color white
+		padding .5rem
+		text-align center
+		margin-bottom 0
+	&-info
+		background-color morado
+		color white
+		padding .5rem
+.ads-description
+	background-color verde
+	color white
+	padding .5rem
+.ads-gallery
+	display flex
+	flex-wrap wrap
+	justify-content space-between
+	&-item
+		width 300px
+		height 200px
+		margin-bottom 1rem
+		background-repeat no-repeat
+		background-size cover
+		background-position center center
+		img
+			width 100%
 .countdown
 	padding .5em
 	background-color verde
@@ -1024,6 +1074,60 @@ small
 	padding .2em
 	color #FFFFFF
 	margin-top -20px
+.shops-details
+	ul
+		margin-left 45px
+		margin-bottom 1rem
+.shop-info
+	border-bottom 1px solid #eae8e7
+	overflow hidden
+.shop-logo
+	width 150px
+	margin 0 auto
+	height 150px
+	background-size cover
+	background-position  center center
+	background-repeat no-repeat
+	img
+		width 100%
+		display block
+.shop-image
+	width 100%
+	height 250px
+	background-size cover
+	background-position  center center
+	background-repeat no-repeat
+	img
+		width 100%
+		display block
+@media only screen and (min-width: 768px)
+	.shop-logo
+		float left
+		width 150px
+		margin-right 2rem
+		height 150px
+	.shop-image
+		float right
+		width 400px
+		margin-left 1rem
+		height 300px
+
+.cantones
+	display flex
+	flex-wrap wrap
+	justify-content space-around
+
+	.canton
+		background-color morado
+		border-radius 5px
+		&:hover
+			background-color verde
+		a
+			display block
+			text-decoration none
+			color white
+			text-transform uppercase
+			padding .5rem
 
 @import "easyzoom.styl"
 @import "responsive.styl"   

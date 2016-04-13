@@ -5,7 +5,7 @@
         <li> <a href="/about">Acerca de Nosotros</a></li>
         <li> <a href="/opportunity">Oportunidad</a></li>
         @if($currentUser)
-            <li> {!! link_to_payments('Publicidad') !!}</li>
+            <li> {!! link_to_payments('Balance') !!}</li>
         @endif
         <li> <a href="/contact">Contacto</a></li>
         <li class="store parent"> <span>Tienda</span>

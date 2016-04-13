@@ -42,9 +42,36 @@ class AdsController extends Controller {
 	{
         $canton = Auth::user()->profiles->canton;
 
-        $ads = $this->adRepository->getByZone($canton, Auth::user()->id);
+        $ads = $this->adRepository->getAds($canton, Auth::user()->id);
 
-        return View::make('ads.index')->with(compact('ads'));
+        $hits_per_day = $this->adRepository->hits_per_day(Auth::user()->id);
+        $hits_per_week = $this->adRepository->hits_per_week(Auth::user()->id);
+
+
+        // para mostrar de que dia empieza y termina la semana
+        $week = Carbon::now()->weekOfMonth;
+
+
+
+        $dayOfWeek = (Carbon::now()->dayOfWeek == Carbon::SUNDAY ) ? 7 : Carbon::now()->dayOfWeek;
+
+
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $endOfWeek = Carbon::now()->endOfWeek();
+        $today = Carbon::now()->today();
+
+        return View::make('ads.index')->with([
+            'ads' => $ads,
+            'hits_per_day' => $hits_per_day,
+            'hits_per_week' => $hits_per_week,
+            'week' => $week,
+            'startOfWeek' => $startOfWeek->toDateString(),
+            'endOfWeek' => $endOfWeek->toDateString(),
+            'dayOfWeek' => $dayOfWeek,
+            'today' => $today->toDateString()
+        ]);
+
+        /*return View::make('ads.index')->with(compact('ads'));*/
 	}
 
 

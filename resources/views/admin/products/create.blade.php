@@ -11,3 +11,28 @@
 	{!! Form::close() !!}
 </div>
 @stop
+@section('scripts')
+	<script>
+		(function($) {
+
+			$('#shop_id').change(function() {
+				var $this =  $(this);
+
+				$('select[name="categories[]"]').empty();
+				$.get('/store/admin/categories/list',{shop_id: $this.val()}, function(data){
+					console.log(data);
+					$.each(data, function(text,key) {
+						var option = new Option(key, text);
+						$('select[name="categories[]"]').append($(option));
+						/*$('select[name="categories[]"]').append('<option value=' + shop.id + '>' + shop.name + '</option>');*/
+					});
+				});
+
+
+			});
+
+
+
+		})(jQuery);
+	</script>
+@stop

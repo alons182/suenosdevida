@@ -80,7 +80,7 @@ class ProductsController extends Controller {
      */
     public function show($category, $product)
     {
-        $product = $this->productRepository->findBySlug($product);
+        $product = $this->productRepository->findById($product);
         //$relateds = $this->productRepository->relateds($product);
         $others = [];//$this->productRepository->others($category, $product->id);
         $photos = $this->photoRepository->getPhotos($product->id);

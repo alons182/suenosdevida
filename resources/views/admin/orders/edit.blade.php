@@ -16,7 +16,7 @@
       @if($currentUser->hasrole('administrator') || $currentUser->hasrole('tienda'))
         {!! Form::submit('Actualizar',['class'=>'btn btn-primary'])!!}
       @endif
-     {!! link_to_route('orders', 'Regresar', null, ['class'=>'btn btn-default'])!!}
+     {!! link_to_route('store.admin.orders.index', 'Regresar', null, ['class'=>'btn btn-default'])!!}
 
     {!! Form::close() !!}
         <h2>Articulos</h2>
@@ -58,7 +58,7 @@
 
 
                 </div>
-	 
+
 
 </div>
 @stop

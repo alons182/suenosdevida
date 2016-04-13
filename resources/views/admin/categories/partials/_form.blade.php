@@ -4,7 +4,13 @@
 
 </div>
 <div class="col-xs-12 col-sm-6">
-		
+
+		<div class="form-group">
+			{!! Form::label('shop_id','Tienda:')!!}
+			{!! Form::select('shop_id', ($shops) ?  ['0' => ''] + $shops : ['0' => '']  , null , ['class'=>'form-control','required'=>'required']) !!}
+			{!! errors_for('shop_id',$errors) !!}
+
+		</div>
 		<div class="form-group">
 			{!! Form::label('name','Nombre:')!!}
 			{!! Form::text('name',null,['class'=>'form-control','required'=>'required'])!!}
@@ -17,6 +23,7 @@
 			{!! Form::textarea('description',null,['class'=>'form-control','required'=>'required']) !!}
 			{!! errors_for('description',$errors) !!}
 		</div>
+
 
 		<div class="form-group">
 			{!! Form::label('parent_id','Categoria Padre:')!!}

@@ -110,4 +110,9 @@ class User extends Node implements AuthenticatableContract, CanResetPasswordCont
         return $this->roles()->detach($role);
     }
 
+    public function shop()
+    {
+        return $this->hasOne('App\Shop');
+    }
+
 }

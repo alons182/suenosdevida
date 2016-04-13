@@ -11,7 +11,7 @@ class Product extends Model {
     protected $table = 'products';
 
     protected $fillable = [
-        'name', 'slug', 'description', 'price', 'promo_price', 'discount', 'image', 'sizes', 'colors', 'related', 'published', 'featured'
+        'name', 'slug', 'description', 'price', 'promo_price', 'discount', 'image', 'sizes', 'colors', 'related', 'published', 'featured','shop_id'
     ];
 
 
@@ -85,6 +85,10 @@ class Product extends Model {
     public function photos()
     {
         return $this->hasMany('App\Photo');
+    }
+    public function shop()
+    {
+        return $this->belongsTo('App\Shop');
     }
 
 }

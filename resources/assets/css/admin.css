@@ -1,6 +1,9 @@
 body{
 	padding-top: 50px;
 }
+.clear {
+	clear: both;
+}
 .flash-message{
 	margin-top: 20px;
 }
@@ -14,11 +17,11 @@ body{
 	vertical-align: top;
 }
 
-#container-gallery #gallery, .relateds{
+#container-gallery #gallery, .relateds, #container-gallery #galleryAds{
 	margin:0;padding:0;
 }
 
-#container-gallery #gallery li{
+#container-gallery #gallery li, #container-gallery #galleryAds li{
 	display:inline-block;
 	vertical-align:top;
 	border:5px solid #fff;
@@ -26,7 +29,7 @@ body{
 	position: relative;
 }
 
-#container-gallery #gallery li .delete{
+#container-gallery #gallery li .delete, #container-gallery #galleryAds li .delete{
 	cursor:pointer;
 	position:absolute;
 	color: red;
@@ -127,7 +130,14 @@ textarea.form-control{
 {
     overflow: hidden;
 }
-
+.form-shopReply{
+	overflow: hidden;
+	padding: 1rem;
+	display: none;
+	background-color: #372f4a;
+	color: white;
+	margin-bottom: 1rem;
+}
 
 	
 					

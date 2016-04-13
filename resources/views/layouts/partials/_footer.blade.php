@@ -11,7 +11,7 @@
     <div class="column column-info">
         <h2>Información</h2>
         <ul>
-            <li><a href="/top-sellers">Los más vendidos</a></li>
+            <li><a href="/descargas">Descargas</a></li>
             <li><a href="/aid-plan">Plan de ayuda</a></li>
             <li><a href="/contact">Contáctenos</a></li>
             <li><a href="/about">Acerca de nosotros</a></li>

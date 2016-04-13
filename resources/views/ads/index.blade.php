@@ -1,48 +1,71 @@
 @extends('layouts.layout')
 
 @section('content')
-<section class="main payments">
-    <h1>Publicidad </h1>
+    <div class="payments-ads">
+        <h1>Publicidad | <small>Del: <b>{{ $startOfWeek  }}</b> al <b>{{ $endOfWeek  }}</b> (Puedes ver 5 anuncios por dia) Dia actual: <b>{{ $today  }}</b> </small></h1>
 
-    <div class="table-responsive payments-table">
+        <div class="payments-ads-not-seen">
 
-        <table class="table table-striped  ">
-            <thead>
-            <tr>
 
-                <th>#</th>
-                <th>Nombre Publicidad</th>
-                <th>Visto</th>
-                <th>=</th>
-            </tr>
-            </thead>
-            <tbody>
             @forelse ($ads as $ad)
-            <tr>
 
-                <td>{!! $ad->id !!}</td>
-                <td>{!! $ad->name !!}</td>
-                <td>{!! ($ad->hits->count() > 0) ? 'Si' : 'No' !!}</td>
+                <div class="payments-ad">
+                    @if($hits_per_day != 5 && $hits_per_week != 25)
 
-                <td>{!! ($ad->hits->count() > 0) ? '--' : link_to_route('ads.show', 'Ver publicidad', $ad->id) !!}</td>
-            </tr>
+                        @if($ad->hits->count() == 0)
+                            <a href="{!! URL::route('ads.show', $ad->id) !!}" class="payments-ad-link">
+                                <span class="ad_id">{!! $ad->id !!}</span>
+                                @if($ad->image)
+                                    <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="185"  height="185"/>
+                                @else
+                                    <img src="holder.js/185x185/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
+                                @endif
+                            </a>
+                        @else
+                            @if($ad->hits->last()->check == 0)
+                                <a href="{!! URL::route('ads.show', $ad->id) !!}" class="payments-ad-link">
+                                    <span class="ad_id">{!! $ad->id !!}</span>
+                                    @if($ad->image)
+                                        <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="1985  height="185"/>
+                                    @else
+                                        <img src="holder.js/185x185/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
+                                    @endif
+                                </a>
+
+                            @else
+                                @if($ad->image)
+                                    <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($ad->hits->last()) ? $ad->hits->last()->hit_date : '' !!}">
+                                            <span class="ad_id">{!! $ad->id !!}</span>
+                                            <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="1985  height="185" />
+                                        </span>
+                                @else
+                                    <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($ad->hits->last()) ? $ad->hits->last()->hit_date : '' !!}">
+                                            <span class="ad_id">{!! $ad->id !!}</span>
+                                            <img src="holder.js/185x185/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
+                                        </span>
+                                @endif
+
+                            @endif
+                        @endif
+
+
+                    @else
+                        @if($ad->image)
+                            <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($hits_per_week == 25) ? 'Has completado tus 5 dias por semana' : 'Solo 5 por dia' !!}">
+                                    <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="185"  height="185" />
+                                </span>
+                        @else
+                            <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($hits_per_week == 25) ? 'Has completado tus 5 dias por semana' : 'Solo 5 por dia' !!}">
+                                    <img src="holder.js/185x185/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
+                                </span>
+                        @endif
+                    @endif
+                </div>
+
+
+
             @empty
-             <tr><td colspan="4" style="text-align: center;">No hay publicidad para ver</td></tr>
+                <p>No hay publicidad para ver</p>
             @endforelse
-            </tbody>
-            <tfoot>
-
-            @if ($ads)
-                <td  colspan="4" class="pagination-container">{!!$ads->render()!!}</td>
-            @endif
-
-
-            </tfoot>
-        </table>
-
-
-    </div>
-
-</section>
-
+        </div>
 @stop

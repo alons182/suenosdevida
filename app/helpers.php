@@ -48,6 +48,10 @@ function dir_downloads_path($dir = null)
 {
     return ($dir) ? public_path() . '/downloads_files/'. $dir .'/' : public_path() . '/downloads_files/' ;
 }
+function dir_banners_path($dir = null)
+{
+    return ($dir) ? public_path() . '/banners_files/'. $dir .'/' : public_path() . '/banners_files/' ;
+}
 
 function photos_path($dir)
 {

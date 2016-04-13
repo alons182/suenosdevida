@@ -135,7 +135,7 @@ return [
 		'Illuminate\Translation\TranslationServiceProvider',
 		'Illuminate\Validation\ValidationServiceProvider',
         'Illuminate\View\ViewServiceProvider',
-        'Illuminate\Html\HtmlServiceProvider',
+        /*'Illuminate\Html\HtmlServiceProvider',*/
         'Illuminate\Broadcasting\BroadcastServiceProvider',
 		/*
 		 * Application Service Providers...
@@ -151,6 +151,7 @@ return [
         'Intervention\Image\ImageServiceProvider',
         'Laracasts\Flash\FlashServiceProvider',
         'Maatwebsite\Excel\ExcelServiceProvider',
+		'Collective\Html\HtmlServiceProvider',
 
 	],
 
@@ -199,11 +200,13 @@ return [
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
-        'Form'      => 'Illuminate\Html\FormFacade',
-        'Html'      => 'Illuminate\Html\HtmlFacade',
+        /*'Form'      => 'Illuminate\Html\FormFacade',
+        'Html'      => 'Illuminate\Html\HtmlFacade',*/
         'Image'     => 'Intervention\Image\Facades\Image',
         'Flash'     => 'Laracasts\Flash\Flash',
         'Excel'     => 'Maatwebsite\Excel\Facades\Excel',
+		'Form' 		=> 'Collective\Html\FormFacade',
+		'Html' 		=> 'Collective\Html\HtmlFacade',
 
 	],
 

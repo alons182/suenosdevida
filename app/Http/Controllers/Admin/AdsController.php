@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 
 use App\Http\Requests\AdRequest;
 use App\Repositories\AdRepository;
+use App\Repositories\GalleryAdRepository;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\View;
@@ -17,11 +18,18 @@ class AdsController extends Controller {
 
     protected  $adRepository;
     /**
-     * @param AdRepository $adRepository
+     * @var GalleryAdRepository
      */
-    function __construct(AdRepository $adRepository)
+    private $galleryAdRepository;
+
+    /**
+     * @param AdRepository $adRepository
+     * @param GalleryAdRepository $galleryAdRepository
+     */
+    function __construct(AdRepository $adRepository, GalleryAdRepository $galleryAdRepository)
     {
         $this->adRepository = $adRepository;
+        $this->galleryAdRepository = $galleryAdRepository;
     }
 
 
@@ -177,5 +185,31 @@ class AdsController extends Controller {
 
         return Redirect::route('store.admin.ads.index');
 	}
+
+    /**
+     * Store a newly created resource in storage.
+     * POST /photos
+     *
+     * @return Response
+     */
+    public function storeImage()
+    {
+        $data['ad_id'] = Request::get('id');
+        $data['photo'] = $_FILES['file'];
+
+        return $this->galleryAdRepository->store($data);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     * DELETE /photos/{id}
+     *
+     * @param  int $id
+     * @return Response
+     */
+    public function destroyImage($id)
+    {
+        return $this->galleryAdRepository->destroy($id);
+    }
 
 }

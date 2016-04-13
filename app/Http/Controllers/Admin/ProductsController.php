@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Shop;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Request;
 use Laracasts\Flash\Flash;
@@ -38,15 +39,19 @@ class ProductsController extends Controller {
         $search = Request::all();
         $search['q'] = (isset($search['q'])) ? trim($search['q']) : '';
         $search['cat'] = (isset($search['cat'])) ? $search['cat'] : '';
+        $search['shop'] = (isset($search['shop'])) ? $search['shop'] : '';
         $search['published'] = (isset($search['published'])) ? $search['published'] : '';
         $categories = $this->categoryRepository->getParents();
         $products = $this->productRepository->getAll($search);
+        $shops = Shop::where('published','=', 1)->lists('name','id')->all();
 
         return View::make('admin.products.index')->with([
             'products'         => $products,
+            'shops'             => $shops,
             'search'           => $search['q'],
             'options'          => $categories,
             'categorySelected' => $search['cat'],
+            'shopSelected'     => $search['shop'],
             'selectedStatus'   => $search['published']
 
         ]);
@@ -62,8 +67,8 @@ class ProductsController extends Controller {
     public function create()
     {
         $categories = $this->categoryRepository->getParents();
-
-        return View::make('admin.products.create')->withCategories($categories);
+        $shops = Shop::where('published','=', 1)->lists('name','id')->all();
+        return View::make('admin.products.create')->withCategories($categories)->withShops($shops);
     }
 
     /**
@@ -95,10 +100,11 @@ class ProductsController extends Controller {
     public function edit($id)
     {
         $product = $this->productRepository->findById($id);
-        $categories = $this->categoryRepository->getParents();
+        $categories = $this->categoryRepository->getParents($product->shop_id);
         $selectedCategories = $product->categories()->select('categories.id AS id')->lists('id')->all();
+        $shops = Shop::where('published','=', 1)->lists('name','id')->all();
 
-        return View::make('admin.products.edit')->withProduct($product)->withCategories($categories)->withSelected($selectedCategories);//->withRelateds($relateds);
+        return View::make('admin.products.edit')->withProduct($product)->withCategories($categories)->withSelected($selectedCategories)->withShops($shops);//->withRelateds($relateds);
     }
 
     /**

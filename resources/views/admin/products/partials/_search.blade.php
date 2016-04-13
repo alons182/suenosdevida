@@ -14,6 +14,10 @@
                             {!! Form::label('cat', 'Categorias') !!}
                             {!! Form::select('cat', ['' => '-- Seleccionar --'] + $options, $categorySelected, ['class'=>'form-control'] ) !!}
                         </div>
+                       <div class="controls">
+                           {!! Form::label('shop', 'Tiendas') !!}
+                           {!! Form::select('shop', ['' => '-- Seleccionar --'] + $shops, $shopSelected, ['class'=>'form-control'] ) !!}
+                       </div>
                          <div class="controls">
                             {!! Form::label('published', 'Estado') !!}
                             {!! Form::select('published', ['' => '-- Seleccionar --','0' => 'Unpublicado','1' => 'Publicado'], $selectedStatus, ['class'=>'form-control'] ) !!}

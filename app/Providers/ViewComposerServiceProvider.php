@@ -2,9 +2,12 @@
 
 
 use App\Category;
+use App\Shop;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -32,10 +35,34 @@ class ViewComposerServiceProvider extends ServiceProvider {
         view()->composer('payments/index', function($view){
             $view->with('currentUser', Auth::user());
         });
-        view()->composer('layouts/partials._list_categories', function($view){
-            $view->with('categories', Category::where('depth', '=','0')->get());
+        view()->composer('layouts/partials._banner', function($view){
+
+            $path = dir_banners_path();
+
+            File::exists($path) or File::makeDirectory($path);
+            $files =File::files($path);
+            $filesArray = [];
+
+            foreach ($files as $file)
+            {
+                $fileArray = array(
+                    'type' => File::extension($file),
+                    'name'  => explode("//",$file)[1]
+
+                );
+                $filesArray[] = $fileArray;
+            }
+
+
+
+            $view->with('files', new Collection($filesArray));
         });
 
+
+        /* view()->composer('layouts/partials._list_categories', function($view){
+            $view->with('categories', Category::where('depth', '=','0')->get());
+        });
+        */
 
         // admin
         view()->composer('admin/layouts/partials._navbar', function($view){
@@ -92,6 +119,15 @@ class ViewComposerServiceProvider extends ServiceProvider {
 
         view()->composer('admin/ads/partials._form', function($view){
             $view->with('currentUser', Auth::user());
+        });
+        view()->composer('admin/shops/index', function($view){
+            $view->with('currentUser', Auth::user());
+        });
+        view()->composer('admin/shops/partials._form', function($view){
+            $view->with('currentUser', Auth::user());
+        });
+        view()->composer('admin/shops/partials._reply', function($view){
+            $view->with('shops', Shop::where('published','=', 1)->lists('name','id')->all());
         });
         //View::share('currentUser', Auth::user());
        // View::share('currentMonth', Carbon::now()->month);

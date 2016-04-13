@@ -2,14 +2,39 @@
 
 @section('content')
 <section class="main ads">
-    <h1>Anuncio</h1>
-    <h2>{!! $ad->name !!}</h2>
+    <h1>Anuncio: {!! $ad->name !!}</h1>
+
     <div class="ads-video">
         {!! $ad->video !!}
+    </div>
+    <div class="ads-company">
+        <h1 class="ads-company-name">{!! $ad->company_name !!}</h1>
+        <div class="ads-company-image" style="background-image: url('{!! photos_path('ads').$ad->image !!}')">
+            <div class="ads-company-logo"><img src="{!! photos_path('ads').'thumb_'.$ad->company_logo !!}" alt="{!! $ad->company_logo !!}" /></div>
+
+        </div>
+
+
+
+    </div>
+    <div class="ads-company-info">
+        <p>{!! $ad->company_info !!}</p>
     </div>
     <div class="ads-description">
         <p>{!! $ad->description !!}</p>
     </div>
+    <h1>Galeria</h1>
+    <div class="ads-gallery">
+
+        @foreach ($ad->gallery as $photo)
+            <div class="ads-gallery-item" style="background-image: url('{!! photos_path('ads') !!}{!! $photo->ad_id !!}/{!! $photo->url_thumb !!}')">
+                <!--<img src="{!! photos_path('ads') !!}{!! $photo->ad_id !!}/{!! $photo->url_thumb !!}"
+                     data-src="{!! photos_path('ads') !!}{!! $photo->ad_id !!}/{!! $photo->url!!}"
+                     alt="{!! $ad->name !!}">-->
+            </div>
+        @endforeach
+    </div>
+    <div class="clear"></div>
     <div class="ads-comments">
         {!! Form::open([ 'route'=>['ads.comment', $ad->id] ,'class'=>'form-contact']) !!}
 

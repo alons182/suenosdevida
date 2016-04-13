@@ -7,7 +7,7 @@ class Category extends Node {
     protected $table = 'categories';
 
     protected $fillable = [
-        'name', 'slug', 'description', 'image', 'published', 'featured', 'parent_id'
+        'name', 'slug', 'description', 'image', 'published', 'featured', 'parent_id','shop_id'
     ];
 
     public function scopeSearch($query, $search)
@@ -49,5 +49,10 @@ class Category extends Node {
     public function products()
     {
         return $this->belongsToMany('App\Product');
+    }
+
+    public function shop()
+    {
+        return $this->belongsTo('App\Shop');
     }
 }

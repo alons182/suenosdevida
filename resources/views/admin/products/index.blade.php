@@ -20,6 +20,7 @@
                 <th>Descripción</th>
                 <th>Precio</th>
                 <th>Categorias</th>
+                <th>Tienda</th>
                 <th>Creado</th>
                 <th>Publicado</th>
                 <th><i class="glyphicon glyphicon-cog"></i></th>
@@ -38,6 +39,7 @@
                             {!! $category->name !!} -
                         @endforeach 
                     </td>
+                    <td> {!! ($product->shop)? $product->shop->name : '' !!} </td>
                     <td>{!! $product->created_at !!}</td>
                     <td>
                             

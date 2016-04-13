@@ -26,7 +26,7 @@ class DbProductRepository extends DbRepository implements ProductRepository {
     public function store($data)
     {
         $data = $this->prepareData($data);
-        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'products', null, null, 640, null) : '';
+        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['slug'], 'products', null, null, 640, null) : '';
 
         $product = $this->model->create($data);
         $this->sync_categories($product, $data['categories']);
@@ -46,7 +46,7 @@ class DbProductRepository extends DbRepository implements ProductRepository {
         $product = $this->model->findOrFail($id);
         $data = $this->prepareData($data);
 
-        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'products', null, null, 640, null) : $product->image;
+        $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['slug'], 'products', null, null, 640, null) : $product->image;
 
         $product->fill($data);
         $product->save();
@@ -135,9 +135,16 @@ class DbProductRepository extends DbRepository implements ProductRepository {
      */
     public function findByCategory($category)
     {
+
         $category = Category::searchSlug($category)->firstOrFail();
 
-        $products = $category->products()->with('categories')->where('published', '=', 1)->paginate($this->limit);
+        $products = $category->products()->with('categories')->where(function ($query) use ($category)
+        {
+            $query->where('published', '=', 1)
+                  ->where('shop_id', '=',$category->shop_id );
+
+        })->paginate($this->limit);
+
 
         return $products;
     }
@@ -167,6 +174,10 @@ class DbProductRepository extends DbRepository implements ProductRepository {
         if (isset($search['published']) && $search['published'] != "")
         {
             $products = $products->where('published', '=', $search['published']);
+        }
+        if (isset($search['shop']) && $search['shop'] != "")
+        {
+            $products = $products->where('shop_id', '=', $search['shop']);
         }
 
         return $products->with('categories')->orderBy('created_at', 'desc')->paginate($this->limit);
@@ -200,7 +211,7 @@ class DbProductRepository extends DbRepository implements ProductRepository {
      */
     private function prepareData($data)
     {
-        $data['slug'] = Str::slug($data['name']);
+        $data['slug'] = Str::slug($data['shop_id'].'-'.$data['name']);
         $data['sizes'] = existDataArray($data, 'sizes');
         $data['colors'] = existDataArray($data, 'colors');
         $data['related'] = existDataArray($data, 'related');

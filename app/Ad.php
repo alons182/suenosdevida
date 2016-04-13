@@ -8,7 +8,8 @@ class Ad extends Model {
     protected $table = 'ads';
 
     protected $fillable = [
-        'name', 'slug', 'description', 'image', 'video', 'province', 'canton','email','all_country', 'published', 'featured','publish_date'
+        'name', 'slug', 'description', 'image', 'video', 'province', 'canton','email','all_country', 'published', 'featured','publish_date','company_name',
+        'company_info', 'company_logo'
     ];
 
     public function scopeSearch($query, $search)
@@ -46,5 +47,8 @@ class Ad extends Model {
     {
         return $this->hasMany('App\Task');
     }
-
+    public function gallery()
+    {
+        return $this->hasMany('App\GalleryAd');
+    }
 }

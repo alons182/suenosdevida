@@ -2,6 +2,7 @@
 
 
 use App\Ad;
+use App\GalleryAd;
 use App\Hit;
 use App\Task;
 use Carbon\Carbon;
@@ -42,10 +43,32 @@ class DbAdRepository extends DbRepository implements AdRepository {
     {
         $data = $this->prepareData($data);
         $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'ads', 1024, null, 200, 200) : '';
+        $data['company_logo'] = (isset($data['company_logo'])) ? $this->storeImage($data['company_logo'], 'logo-'.$data['company_name'], 'ads', 400, null, 200, 200) : '';
 
         $ad = $this->model->create($data);
-
+        $this->sync_photos($ad, $data);
         return $ad;
+    }
+    /**
+     * Save the photos of the product
+     * @param $ad
+     * @param $data
+     */
+    public function sync_photos($ad, $data)
+    {
+        if (isset($data['new_photo_file']))
+        {
+            $cant = count($data['new_photo_file']);
+            foreach ($data['new_photo_file'] as $photo)
+            {
+                $filename = $this->storeImage($photo, 'photo_' . $cant --, 'ads/' . $ad->id, null, null, 300, null);
+                $photos = new GalleryAd;
+                $photos->url = $filename;
+                $photos->url_thumb = 'thumb_' . $filename;
+                $ad->gallery()->save($photos);
+            }
+        }
+
     }
 
     public function checkAd($ad, $user_id)
@@ -272,6 +295,7 @@ class DbAdRepository extends DbRepository implements AdRepository {
         $data = $this->prepareData($data);
 
         $data['image'] = (isset($data['image'])) ? $this->storeImage($data['image'], $data['name'], 'ads', 1024, null, 200, 200) : $ad->image;
+        $data['company_logo'] = (isset($data['company_logo'])) ? $this->storeImage($data['company_logo'], 'logo-'.$data['company_name'], 'ads', 400, null, 200, 200) : $ad->company_logo;
 
         $ad->fill($data);
         $ad->save();

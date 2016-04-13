@@ -95,10 +95,10 @@ class DownloadsController extends Controller {
         $path = dir_downloads_path();
 
         if(File::exists($path.$id))
-        {
             File::delete(dir_downloads_path() . $id);
 
-        }
+        if(File::exists($path.'/thumbnail/'.$id))
+            File::delete(dir_downloads_path() .'/thumbnail/'.$id);
 
 	}
 

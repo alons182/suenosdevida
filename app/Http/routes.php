@@ -25,7 +25,8 @@ App::bind('App\Repositories\PhotoRepository', 'App\Repositories\DbPhotoRepositor
 App::bind('App\Repositories\OrderRepository', 'App\Repositories\DbOrderRepository');
 App::bind('App\Repositories\AdRepository', 'App\Repositories\DbAdRepository');
 App::bind('App\Repositories\GainRepository', 'App\Repositories\DbGainRepository');
-
+App::bind('App\Repositories\ShopRepository', 'App\Repositories\DbShopRepository');
+App::bind('App\Repositories\GalleryAdRepository', 'App\Repositories\DbGalleryAdRepository');
 /**
  * Pages
  */
@@ -222,6 +223,30 @@ Route::group(['prefix' => 'store/admin', 'middleware' => 'authByRole'], function
      Route::resource('gains', 'Admin\GainsController',['only' => ['destroy']]);
     # hits
     Route::resource('hits', 'Admin\HitsController',['only' => ['destroy']]);
+
+    # shops
+
+    foreach (['pub', 'unpub'] as $key)
+    {
+        Route::post('shops/{shop}/' . $key, [
+            'as'   => 'shops.' . $key,
+            'uses' => 'Admin\ShopsController@' . $key,
+        ]);
+    }
+    Route::get('shops', [
+        'as'   => 'shops',
+        'uses' => 'Admin\ShopsController@index'
+    ]);
+    Route::get('shops/list', [
+        'as' => 'shops_list',
+        'uses' => 'Admin\ShopsController@list_shops'
+    ]);
+    Route::post('shops/reply', [
+        'as'   => 'shops_reply',
+        'uses' => 'Admin\ShopsController@reply'
+    ]);
+    Route::resource('shops', 'Admin\ShopsController');
+
     # categories
     foreach (['up', 'down', 'pub', 'unpub', 'feat', 'unfeat'] as $key)
     {
@@ -233,6 +258,10 @@ Route::group(['prefix' => 'store/admin', 'middleware' => 'authByRole'], function
     Route::get('categories', [
         'as'   => 'categories',
         'uses' => 'Admin\ProductsController@index'
+    ]);
+    Route::get('categories/list', [
+        'as' => 'categories_list',
+        'uses' => 'Admin\CategoriesController@list_categories'
     ]);
     Route::resource('categories', 'Admin\CategoriesController');
 
@@ -295,6 +324,17 @@ Route::group(['prefix' => 'store/admin', 'middleware' => 'authByRole'], function
         'uses' => 'Admin\DownloadsController@destroy'
     ]);
     Route::resource('downloads', 'Admin\DownloadsController');
+
+    #banners
+    Route::post('banners/store', [
+        'as'   => 'banners_store_path',
+        'uses' => 'Admin\BannersController@store'
+    ]);
+    Route::delete('banners/{image}', [
+        'as'   => 'banners_delete_path',
+        'uses' => 'Admin\BannersController@destroy'
+    ]);
+    Route::resource('banners', 'Admin\BannersController');
     # payments
     Route::resource('payments', 'Admin\PaymentsController');
 
@@ -310,6 +350,16 @@ Route::group(['prefix' => 'store/admin', 'middleware' => 'authByRole'], function
         'as'   => 'ads',
         'uses' => 'Admin\AdsController@index'
     ]);
+
+    Route::post('ads/photos', [
+        'as'   => 'save_ad_photo',
+        'uses' => 'Admin\AdsController@storeImage'
+    ]);
+    Route::post('ads/photos/{photo}', [
+        'as'   => 'delete_ad_photo',
+        'uses' => 'Admin\AdsController@destroyImage'
+    ]);
+
     Route::resource('ads', 'Admin\AdsController');
 
     #Test controller
@@ -387,6 +437,20 @@ Route::group(['prefix' => 'store'], function ()
     Route::get('categories', [
             'as'   => 'categories_path',
             'uses' => 'ProductsController@categories']
+    );
+
+    # shop
+    Route::get('cantones', [
+            'as'   => 'cantones_path',
+            'uses' => 'ShopsController@cantones']
+    );
+    Route::get('{canton}/shops', [
+            'as'   => 'shops_path',
+            'uses' => 'ShopsController@index']
+    );
+    Route::get('shops/{shop}', [
+            'as'   => 'shop_path',
+            'uses' => 'ShopsController@show']
     );
 
 

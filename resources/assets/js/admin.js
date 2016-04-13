@@ -8,6 +8,7 @@ $(function () {
         year = $( "#year"),
         filters = $(".filtros"),
         gallery = $('#gallery'),
+        galleryAds = $('#galleryAds'),
         infoBox = $('#InfoBox'),
         photos  = 0,
         chkProducts = $('.chk-product'),
@@ -18,6 +19,19 @@ $(function () {
         colorfield =  $('.colorfield'),
         patners;
 
+    /* replicar productos form*/
+    $('.btn-reply').on('click',function(e) {
+        e.preventDefault();
+        $('.form-shopReply').show('fast');
+
+
+    });
+    $('.btn-reply-cancel').on('click',function(e) {
+        e.preventDefault();
+        $('.form-shopReply').hide('fast');
+        $('.form-shopReply').find('select').val('');
+
+    });
     /*for ads visualizacion de anuncios entodo el pais o una zona*/
 
     $("input[name='all_country']").on('click', function () {
@@ -55,7 +69,11 @@ $(function () {
         filters.find('form').submit();
 
     });
+    $('#shop').change(function() {
 
+        filters.find('form').submit();
+
+    });
     published.change(function() {
         
         filters.find('form').submit();
@@ -193,6 +211,15 @@ $(function () {
             btn_delete.parent().fadeOut("slow");
         });
     }
+    function deletePhotoAds()
+    {
+        var btn_delete = $(this),
+            url = "/store/admin/ads/photos/" + btn_delete.attr("data-imagen");
+
+        $.post(url,{_token: $('input[name=_token]').val()}, function(data){
+            btn_delete.parent().fadeOut("slow");
+        });
+    }
     
     $("#UploadButton").ajaxUpload({
         url : "/store/admin/photos",
@@ -215,7 +242,28 @@ $(function () {
 
         }
     });
+    $("#UploadButtonAds").ajaxUpload({
+        url : "/store/admin/ads/photos",
+        name: "file",
+        data: {id: $('input[name=ad_id]').val(), _token: $('input[name=_token]').val() },
+        onSubmit: function() {
+            infoBox.html('Uploading ... ');
+        },
+        onComplete: function(result) {
 
+            infoBox.html('Uploaded succesfull!!!');
+
+            var photos = jQuery.parseJSON(result);
+
+
+            fillPhotosInfo(photos);
+
+            galleryAds.find('li').find('.delete').on('click',deletePhotoAds);
+
+
+        }
+    });
+    galleryAds.find('li').find('.delete').on('click',deletePhotoAds);
     gallery.find('li').find('.delete').on('click',deletePhoto);
     
     function photoTemplate(photo)
@@ -238,8 +286,9 @@ $(function () {
         var html = photoTemplate(jsonData);
      
         (gallery.length === 0) ? gallery.html( html ) : gallery.prepend(html);
-       
+        (galleryAds.length === 0) ? galleryAds.html( html ) : galleryAds.prepend(html);
         gallery.find('li').eq(0).hide().show("slow");
+        galleryAds.find('li').eq(0).hide().show("slow");
 
     }
 
@@ -294,6 +343,7 @@ $(function () {
 
                    $('input[name="parent_id"]').val(patners[i].id);
                    $('input[name="user_id_payment"]').val(patners[i].id);
+                   $('input[name="responsable_id"]').val(patners[i].id);
                 //    if (yaAgregado($(this).val()) == false)
                 //    {
                         $('ul.patners').append('<li data-id="' + patners[i].id +'"><span class="delete" data-id="'+ patners[i].id +'"><i class="glyphicon glyphicon-remove"></i></span>'+
@@ -583,6 +633,14 @@ $(function () {
 
     });
 
+    cantonesTiendas = $('.canton_shops #canton');
+    cantonesTiendas.empty();
+    $.each(ubicaciones, function(index,provincia) {
+        if(provincia.name_id == 'guanacaste')
+            $.each(provincia.cantones, function(index,canton) {
+                cantonesTiendas.append('<option value=' + canton.name_id + '>' + canton.title + '</option>');
+            });
+    });
 
 
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
+use App\Shop;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
@@ -11,6 +12,7 @@ use Baum\MoveNotPossibleException as moveExp;
 use View;
 
 class CategoriesController extends Controller {
+
 
     /**
      * @var CategoryRepository
@@ -24,6 +26,7 @@ class CategoriesController extends Controller {
     function __construct(CategoryRepository $categoryRepository)
     {
         $this->categoryRepository = $categoryRepository;
+
 
         $this->middleware('authByRoleAdmins');
     }
@@ -59,8 +62,9 @@ class CategoriesController extends Controller {
     public function create()
     {
         $options = $this->categoryRepository->getParents();
+        $shops = Shop::where('published','=', 1)->lists('name','id')->all();
 
-        return View::make('admin.categories.create')->withOptions($options);
+        return View::make('admin.categories.create')->withOptions($options)->withShops($shops);
     }
 
     /**
@@ -91,9 +95,10 @@ class CategoriesController extends Controller {
     public function edit($id)
     {
         $category = $this->categoryRepository->findById($id);
-        $options = $this->categoryRepository->getParents();
+        $options = $this->categoryRepository->getParents($category->shop_id);
+        $shops = Shop::where('published','=', 1)->lists('name','id')->all();
 
-        return View::make('admin.categories.edit')->withCategory($category)->withOptions($options);
+        return View::make('admin.categories.edit')->withCategory($category)->withOptions($options)->withShops($shops);
     }
 
     /**
@@ -249,6 +254,15 @@ class CategoriesController extends Controller {
         Flash::warning('The category did not move');
 
         return $response;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function list_categories()
+    {
+
+        return $this->categoryRepository->getParents(Request::get('shop_id'));
     }
 
 }
