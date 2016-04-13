@@ -123,6 +123,9 @@ class ViewComposerServiceProvider extends ServiceProvider {
         view()->composer('admin/shops/index', function($view){
             $view->with('currentUser', Auth::user());
         });
+        view()->composer('admin/shops/edit', function($view){
+            $view->with('currentUser', Auth::user());
+        });
         view()->composer('admin/shops/partials._form', function($view){
             $view->with('currentUser', Auth::user());
         });

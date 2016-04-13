@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="starter-template">
-	<h1>Editar Tienda <a href="#" class="btn btn-default btn-reply">Replicar Productos de..</a></h1>
+	<h1>Editar Tienda @if($currentUser->hasrole('administrator'))<a href="#" class="btn btn-default btn-reply">Replicar Productos de..</a>@endif</h1>
 
 	@include('admin/shops/partials/_reply')
 
