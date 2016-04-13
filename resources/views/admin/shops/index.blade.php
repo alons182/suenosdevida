@@ -30,10 +30,22 @@
                     <td>{!! $shop->id !!}</td>
                     <td>{!! link_to_route('store.admin.shops.edit', $shop->name, $shop->id) !!}</td>
                     <td>{!! $shop->canton !!}</td>
-                    <td>{!! str_limit($shop->details, 20) !!}</td>
+                    <td></td>
                     <td>{!! $shop->products->count() !!}</td>
                     <td>{!! $shop->created_at !!}</td>
-                   
+                    <td>
+                            @if ($shop->published)
+                                <button type="submit"  class="btn btn-default btn-xs" form="form-pub-unpub" formaction="{!! URL::route('shops.unpub', [$shop->id]) !!}"><i class="glyphicon glyphicon-ok"></i></button>
+                            @else
+                                <button type="submit"  class="btn btn-default btn-xs" form="form-pub-unpub" formaction="{!! URL::route('shops.pub', [$shop->id]) !!}" ><i class="glyphicon glyphicon-remove"></i></button>
+                            @endif
+
+                    </td>
+                    <td>
+                     @if($currentUser->hasrole('administrator'))
+                       <button type="submit" class="btn btn-danger btn-sm" form="form-delete" formaction="{!! URL::route('store.admin.shops.destroy', [$shop->id]) !!}">Eliminar</button>
+                      @endif
+                    </td>
                     
                 </tr>
                 @endif
