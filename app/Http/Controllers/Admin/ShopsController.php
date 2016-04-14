@@ -89,37 +89,13 @@ class ShopsController extends Controller
     {
         $input = $request->all();
 
-        $categoriesToReply = Category::where('shop_id','=',$input['shopToReply'])->get();
+        $categoriesToReply = Category::where('shop_id','=',$input['shopToReply']);
+        $categoriesToReply = $categoriesToReply->where('depth','=',0)->orderBy('lft')->get();
+
         $productsToReply = Product::where('shop_id','=',$input['shopToReply'])->get();
 
-        foreach($categoriesToReply as $catReply)
-        {
-            $newCategory = new Category;
-            $newCategory->name = $catReply->name;
-            $newCategory->slug =  Str::slug($input['currentShop'].'-'.$catReply->name);
-            $newCategory->description = $catReply->description;
-            $newCategory->published = $catReply->published;
-            $newCategory->featured = $catReply->featured;
-            $newCategory->shop_id = $input['currentShop'];
+        $this->categoriesReply($categoriesToReply,null, $input);
 
-
-            if($catReply->image) {
-                $oldPath = dir_photos_path('categories') . $catReply->image; // publc/images/1.jpg
-                $fileExtension = \File::extension($oldPath);
-                $newName = $newCategory->slug.'.' . $fileExtension;
-                $newPathWithName = dir_photos_path('categories') . $newName;
-
-                if (! \File::copy($oldPath, $newPathWithName)) {
-                    log('error copiando la imagen de la categoria');
-                }
-                if (! \File::copy(dir_photos_path('categories') . 'thumb_'.$catReply->image, dir_photos_path('categories') .'thumb_'.$newName)) {
-                    log('error copiando la imagen en miniatura de la categoria');
-                }
-                $newCategory->image = $newName;
-            }
-
-            $newCategory->save();
-        }
 
         foreach($productsToReply as $prodReply)
         {
@@ -178,6 +154,44 @@ class ShopsController extends Controller
         Flash::message('Shop Replicada');
 
         return Redirect::route('store.admin.shops.index');
+    }
+
+    private function categoriesReply($categories, $parent_id= null, $input) {
+
+        foreach ($categories as $catReply) {
+
+
+                $newCategory = new Category;
+                $newCategory->name = $catReply->name;
+                $newCategory->slug =  Str::slug($input['currentShop'].'-'.$catReply->name);
+                $newCategory->description = $catReply->description;
+                $newCategory->published = $catReply->published;
+                $newCategory->featured = $catReply->featured;
+                $newCategory->shop_id = $input['currentShop'];
+                if($parent_id)
+                    $newCategory->parent_id = $parent_id;
+
+                if($catReply->image) {
+                    $oldPath = dir_photos_path('categories') . $catReply->image; // publc/images/1.jpg
+                    $fileExtension = \File::extension($oldPath);
+                    $newName = $newCategory->slug.'.' . $fileExtension;
+                    $newPathWithName = dir_photos_path('categories') . $newName;
+
+                    if (! \File::copy($oldPath, $newPathWithName)) {
+                        log('error copiando la imagen de la categoria');
+                    }
+                    if (! \File::copy(dir_photos_path('categories') . 'thumb_'.$catReply->image, dir_photos_path('categories') .'thumb_'.$newName)) {
+                        log('error copiando la imagen en miniatura de la categoria');
+                    }
+                    $newCategory->image = $newName;
+                }
+
+                $newCategory->save();
+                 if ($catReply->children()->count())
+                     $this->categoriesReply($catReply->children()->get(), $newCategory->id, $input);
+            }
+
+
     }
 
     /**
