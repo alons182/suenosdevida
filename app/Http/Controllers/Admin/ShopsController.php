@@ -89,64 +89,68 @@ class ShopsController extends Controller
     {
         $input = $request->all();
 
-        $categoriesToReply = Category::where('shop_id','=',$input['shopToReply']);
-        $categoriesToReply = $categoriesToReply->where('depth','=',0)->orderBy('lft')->get();
 
-        $productsToReply = Product::where('shop_id','=',$input['shopToReply'])->get();
-
-        $this->categoriesReply($categoriesToReply,null, $input);
-
-
-        foreach($productsToReply as $prodReply)
+        if(isset($input['categoriesReply']))
         {
-            $newProduct = new Product;
-            $newProduct->name = $prodReply->name;
-            $newProduct->slug =  Str::slug($input['currentShop'].'-'.$prodReply->name);
-            $newProduct->description = $prodReply->description;
-            $newProduct->price = $prodReply->price;
-            $newProduct->promo_price = $prodReply->promo_price;
-            $newProduct->discount = $prodReply->discount;
-            $newProduct->sizes = (count($prodReply->present()->sizes)) ? $prodReply->present()->sizes : [];
-            $newProduct->colors = (count($prodReply->present()->colors)) ? $prodReply->present()->colors : [];
-            $newProduct->related = (count($prodReply->present()->related)) ? $prodReply->present()->related : [];
-            $newProduct->published = $prodReply->published;
-            $newProduct->featured = $prodReply->featured;
-            $newProduct->shop_id = $input['currentShop'];
+            $categoriesToReply = Category::where('shop_id','=',$input['shopToReply']);
+            $categoriesToReply = $categoriesToReply->where('depth','=',0)->orderBy('lft')->get();
+            $this->categoriesReply($categoriesToReply,null, $input);
+        }
 
-
-            if($prodReply->image) {
-                $oldPath = dir_photos_path('products') . $prodReply->image; // publc/images/1.jpg
-                $fileExtension = \File::extension($oldPath);
-                $newName = $newProduct->slug.'.' . $fileExtension;
-                $newPathWithName = dir_photos_path('products') . $newName;
-
-                if (! \File::copy($oldPath, $newPathWithName)) {
-                    log('error copiando la imagen del producto');
-                }
-                if (! \File::copy(dir_photos_path('products') . 'thumb_'.$prodReply->image, dir_photos_path('products') .'thumb_'.$newName)) {
-                    log('error copiando la imagen en miniatura del producto');
-                }
-                $newProduct->image = $newName;
-            }
-
-            $newProduct->save();
-
-            if($prodReply->photos)
+        if(isset($input['productsReply'])) {
+            $productsToReply = Product::where('shop_id', '=', $input['shopToReply'])->get();
+            foreach($productsToReply as $prodReply)
             {
-                foreach ($prodReply->photos as $photo)
-                {
-                    $newPhotos = new Photo;
-                    $newPhotos->url = $photo->url;
-                    $newPhotos->url_thumb = $photo->url_thumb;
-                    $newProduct->photos()->save($newPhotos);
+                $newProduct = new Product;
+                $newProduct->name = $prodReply->name;
+                $newProduct->slug =  Str::slug($input['currentShop'].'-'.$prodReply->name);
+                $newProduct->description = $prodReply->description;
+                $newProduct->price = $prodReply->price;
+                $newProduct->promo_price = $prodReply->promo_price;
+                $newProduct->discount = $prodReply->discount;
+                $newProduct->sizes = (count($prodReply->present()->sizes)) ? $prodReply->present()->sizes : [];
+                $newProduct->colors = (count($prodReply->present()->colors)) ? $prodReply->present()->colors : [];
+                $newProduct->related = (count($prodReply->present()->related)) ? $prodReply->present()->related : [];
+                $newProduct->published = $prodReply->published;
+                $newProduct->featured = $prodReply->featured;
+                $newProduct->shop_id = $input['currentShop'];
+
+
+                if($prodReply->image) {
+                    $oldPath = dir_photos_path('products') . $prodReply->image; // publc/images/1.jpg
+                    $fileExtension = \File::extension($oldPath);
+                    $newName = $newProduct->slug.'.' . $fileExtension;
+                    $newPathWithName = dir_photos_path('products') . $newName;
+
+                    if (! \File::copy($oldPath, $newPathWithName)) {
+                        log('error copiando la imagen del producto');
+                    }
+                    if (! \File::copy(dir_photos_path('products') . 'thumb_'.$prodReply->image, dir_photos_path('products') .'thumb_'.$newName)) {
+                        log('error copiando la imagen en miniatura del producto');
+                    }
+                    $newProduct->image = $newName;
                 }
 
-                $sourceDir = dir_photos_path('products'). $prodReply->id;
-                $destinationDir = dir_photos_path('products'). $newProduct->id;
-                if (! \File::copyDirectory($sourceDir, $destinationDir)) log('error copiando la galeria del producto');
+                $newProduct->save();
+
+                if($prodReply->photos)
+                {
+                    foreach ($prodReply->photos as $photo)
+                    {
+                        $newPhotos = new Photo;
+                        $newPhotos->url = $photo->url;
+                        $newPhotos->url_thumb = $photo->url_thumb;
+                        $newProduct->photos()->save($newPhotos);
+                    }
+
+                    $sourceDir = dir_photos_path('products'). $prodReply->id;
+                    $destinationDir = dir_photos_path('products'). $newProduct->id;
+                    if (! \File::copyDirectory($sourceDir, $destinationDir)) log('error copiando la galeria del producto');
+
+                }
+
 
             }
-
 
         }
 

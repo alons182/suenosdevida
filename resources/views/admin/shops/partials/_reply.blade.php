@@ -11,10 +11,12 @@
 
         <div class="form-group">
             <div class="controls">
-                {!! Form::select('shopToReply', ['' => '-- Tiendas --'] + $shops, null, ['class'=>'form-control'] ) !!}
-            </div>
-            <div class="controls">
-                {!! Form::submit('Replicar',['class'=>'btn btn-primary'])!!}
+                {!! Form::select('shopToReply', ['' => '-- Tiendas --'] + $shops, null, ['class'=>'form-control', 'required' => 'required'] ) !!}
+                {!! Form::checkbox('productsReply', '1', true) !!} Products
+                {!! Form::checkbox('categoriesReply', '1', true) !!} Categories
+             </div>
+             <div class="controls">
+                 {!! Form::submit('Replicar',['class'=>'btn btn-primary'])!!}
                 <a href="#" class="btn btn-default btn-reply-cancel">Cancelar</a>
             </div>
 
