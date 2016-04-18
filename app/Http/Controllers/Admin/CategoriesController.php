@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers\Admin;
 
+use App\Category;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Shop;
@@ -262,7 +263,7 @@ class CategoriesController extends Controller {
     public function list_categories()
     {
 
-        return $this->categoryRepository->getParents(Request::get('shop_id'));
+        return $this->categoryRepository->getParents(Request::get('shop_id'),true);
     }
 
 }

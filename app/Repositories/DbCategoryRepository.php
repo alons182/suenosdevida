@@ -121,24 +121,42 @@ class DbCategoryRepository extends DbRepository implements CategoryRepository {
      * get categories parents for the format to view the category select
      * @return array
      */
-    public function getParents($shop = null)
+    public function getParents($shop = null, $ajax = false)
     {
-        if($shop)
-            $all = $this->model->where('shop_id','=',$shop)->select('id', 'name', 'depth')->orderBy('lft')->get();
-        else
-            $all = $this->model->select('id', 'name', 'depth')->orderBy('lft')->get();
 
-        $result = array();
+            if($shop)
+                $all = $this->model->where('shop_id','=',$shop)->select('id', 'name', 'depth')->orderBy('lft')->get();
+            else
+                $all = $this->model->select('id', 'name', 'depth')->orderBy('lft')->get();
 
-        foreach ($all as $item)
-        {
-            $name = $item->name;
-            if ($item->depth > 0) $name = str_repeat('—', $item->depth) . ' ' . $name;
-            $result[ $item->id ] = $name;
-        }
 
-        return $result;
+            $result = array();
+            $list = array();
+
+            foreach ($all as $item)
+            {
+
+                $name = $item->name;
+                if ($item->depth > 0) $name = str_repeat('—', $item->depth) . ' ' . $name;
+                if($ajax) {
+                    $result['id'] = $item->id;
+                    $result['name'] = $name;
+                    $list[]= $result;
+                }else{
+                    $result[$item->id] = $name;
+                }
+
+
+            }
+            if($ajax) return $list;
+
+            return $result;
+
+
+
+
     }
+
 
     /**
      * Get children categories from one category

@@ -21,8 +21,8 @@
 				$('select[name="categories[]"]').empty();
 				$.get('/store/admin/categories/list',{shop_id: $this.val()}, function(data){
 					console.log(data);
-					$.each(data, function(text,key) {
-						var option = new Option(key, text);
+					$.each(data, function(index,category) {
+						var option = new Option(category.name, category.id);
 						$('select[name="categories[]"]').append($(option));
 						/*$('select[name="categories[]"]').append('<option value=' + shop.id + '>' + shop.name + '</option>');*/
 					});
