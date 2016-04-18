@@ -17,8 +17,11 @@
 				var $this =  $(this);
 
 				$('#parent_id').empty();
+				var option = new Option('Cargando Categorias...', '');
+				$('#parent_id').append(option);
 				$.get('/store/admin/categories/list',{shop_id: $this.val()}, function(data){
-					console.log(data);
+					//console.log(data);
+					$('#parent_id').empty();
 					$('#parent_id').append('<option value="root">Root</option>');
 					$.each(data, function(index,category) {
 						var option = new Option(category.name, category.id);

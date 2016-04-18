@@ -19,8 +19,11 @@
 				var $this =  $(this);
 
 				$('select[name="categories[]"]').empty();
+				var option = new Option('Cargando Categorias...', '');
+				$('select[name="categories[]"]').append(option);
 				$.get('/store/admin/categories/list',{shop_id: $this.val()}, function(data){
-					console.log(data);
+					//console.log(data);
+					$('select[name="categories[]"]').empty();
 					$.each(data, function(index,category) {
 						var option = new Option(category.name, category.id);
 						$('select[name="categories[]"]').append($(option));
