@@ -1,13 +1,13 @@
 <div class="form-group">
 			 @if(isset($buttonText))
-			    @if($currentUser->hasrole('administrator'))
+			    @if($currentUser->hasrole('administrator') || $currentUser->hasrole('store'))
 			        {!! Form::submit(isset($buttonText) ? $buttonText : 'Crear Producto',['class'=>'btn btn-primary'])!!}
 			    @endif
                @else
                     {!! Form::submit('Crear Producto',['class'=>'btn btn-primary'])!!}
                 @endif
 
-			{!! link_to_route('store.admin.products.index',  ($currentUser->hasrole('administrator') ? 'Cancelar' : 'Regresar'), null, ['class'=>'btn btn-default'])!!}
+			{!! link_to_route('store.admin.products.index',  ($currentUser->hasrole('administrator') || $currentUser->hasrole('store') ? 'Cancelar' : 'Regresar'), null, ['class'=>'btn btn-default'])!!}
 
 </div>
 <div class="col-xs-12 col-sm-6">
@@ -16,7 +16,7 @@
 		@endif
 		<div class="form-group">
 			{!! Form::label('shop_id','Tienda:')!!}
-			{!! Form::select('shop_id', ($shops) ?  ['0' => ''] + $shops : ['0' => '']  , null , ['class'=>'form-control','required'=>'required']) !!}
+			{!! Form::select('shop_id', ($shops) ?  ['' => ''] + $shops : ['' => '']  , null , ['class'=>'form-control','required'=>'required']) !!}
 			{!! errors_for('shop_id',$errors) !!}
 
 		</div>

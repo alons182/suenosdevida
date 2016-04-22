@@ -17,7 +17,7 @@
                 <th>=</th>
                 <th>#</th>
                 <th>Nombre</th>
-                <th>Descripción</th>
+
                 <th>Creado</th>
                 <th>Publicado</th>
                 <th><i class="glyphicon glyphicon-cog"></i></th>
@@ -29,7 +29,7 @@
                     <td>{!! Form::checkbox('chk_ad[]', $ad->id, null, ['class' => 'chk-product']) !!}</td>
                     <td>{!! $ad->id !!}</td>
                     <td>{!! link_to_route('store.admin.ads.edit', $ad->name, $ad->id) !!}</td>
-                    <td>{!! str_limit($ad->description, 20) !!}</td>
+
 
                     <td>{!! $ad->created_at !!}</td>
                     <td>

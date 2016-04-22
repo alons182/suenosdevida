@@ -21,6 +21,7 @@
         </thead>
         <tbody>
             @foreach ($categories as $category)
+                @if($category->shop->responsable_id == $currentUser->id || $currentUser->hasrole('administrator'))
                 <tr>
                     <td>{!! $category->id !!}</td>
                     <td>
@@ -73,6 +74,7 @@
                     </td>
                     
                 </tr>
+                @endif
             @endforeach
         </tbody>
        <tfoot>

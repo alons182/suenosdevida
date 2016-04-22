@@ -7,7 +7,7 @@
 
 		<div class="form-group">
 			{!! Form::label('shop_id','Tienda:')!!}
-			{!! Form::select('shop_id', ($shops) ?  ['0' => ''] + $shops : ['0' => '']  , null , ['class'=>'form-control','required'=>'required']) !!}
+			{!! Form::select('shop_id', ($shops) ?  ['' => ''] + $shops : ['' => '']  , null , ['class'=>'form-control','required'=>'required']) !!}
 			{!! errors_for('shop_id',$errors) !!}
 
 		</div>

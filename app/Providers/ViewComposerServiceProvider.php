@@ -65,6 +65,9 @@ class ViewComposerServiceProvider extends ServiceProvider {
         */
 
         // admin
+        view()->composer('admin/dashboard/index', function($view){
+            $view->with('currentUser', Auth::user());
+        });
         view()->composer('admin/layouts/partials._navbar', function($view){
             $view->with('currentUser', Auth::user());
         });

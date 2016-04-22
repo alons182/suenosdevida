@@ -28,6 +28,7 @@
         </thead>
         <tbody>
             @foreach ($products as $product)
+                @if($product->shop->responsable_id == $currentUser->id || $currentUser->hasrole('administrator'))
                 <tr>
                     <td>{!! Form::checkbox('chk_product[]', $product->id, null, ['class' => 'chk-product']) !!}</td>
                     <td>{!! $product->id !!}</td>
@@ -63,6 +64,7 @@
                     </td>
                     
                 </tr>
+                @endif
             @endforeach
         </tbody>
        <tfoot>

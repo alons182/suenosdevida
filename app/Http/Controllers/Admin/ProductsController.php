@@ -43,7 +43,7 @@ class ProductsController extends Controller {
         $search['published'] = (isset($search['published'])) ? $search['published'] : '';
         $categories = $this->categoryRepository->getParents();
         $products = $this->productRepository->getAll($search);
-        $shops = Shop::where('published','=', 1)->lists('name','id')->all();
+        $shops = $this->getShopsToSelect();
 
         return View::make('admin.products.index')->with([
             'products'         => $products,
@@ -67,7 +67,7 @@ class ProductsController extends Controller {
     public function create()
     {
         $categories = $this->categoryRepository->getParents();
-        $shops = Shop::where('published','=', 1)->lists('name','id')->all();
+        $shops = $this->getShopsToSelect();
         return View::make('admin.products.create')->withCategories($categories)->withShops($shops);
     }
 
@@ -102,7 +102,7 @@ class ProductsController extends Controller {
         $product = $this->productRepository->findById($id);
         $categories = $this->categoryRepository->getParents($product->shop_id);
         $selectedCategories = $product->categories()->select('categories.id AS id')->lists('id')->all();
-        $shops = Shop::where('published','=', 1)->lists('name','id')->all();
+        $shops = $this->getShopsToSelect();
 
         return View::make('admin.products.edit')->withProduct($product)->withCategories($categories)->withSelected($selectedCategories)->withShops($shops);//->withRelateds($relateds);
     }
@@ -231,6 +231,23 @@ class ProductsController extends Controller {
     public function list_products()
     {
         return $this->productRepository->list_products(input::get('exc_id'), input::get('key'));
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getShopsToSelect()
+    {
+        if (auth()->user()->hasrole('store')) {
+            $shops = Shop::where(function ($q) {
+                $q->where('published', '=', 1)
+                    ->where('responsable_id', '=', auth()->user()->id);
+            })->lists('name', 'id')->all();
+
+        } else
+            $shops = Shop::where('published', '=', 1)->lists('name', 'id')->all();
+
+        return $shops;
     }
 
 

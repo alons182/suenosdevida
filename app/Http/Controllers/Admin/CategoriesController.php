@@ -29,7 +29,7 @@ class CategoriesController extends Controller {
         $this->categoryRepository = $categoryRepository;
 
 
-        $this->middleware('authByRoleAdmins');
+        //$this->middleware('authByRoleAdmins');
     }
 
 
@@ -63,7 +63,8 @@ class CategoriesController extends Controller {
     public function create()
     {
         $options = $this->categoryRepository->getParents();
-        $shops = Shop::where('published','=', 1)->lists('name','id')->all();
+
+        $shops = $this->getShopsToSelect();
 
         return View::make('admin.categories.create')->withOptions($options)->withShops($shops);
     }
@@ -97,7 +98,8 @@ class CategoriesController extends Controller {
     {
         $category = $this->categoryRepository->findById($id);
         $options = $this->categoryRepository->getParents($category->shop_id);
-        $shops = Shop::where('published','=', 1)->lists('name','id')->all();
+
+        $shops = $this->getShopsToSelect();
 
         return View::make('admin.categories.edit')->withCategory($category)->withOptions($options)->withShops($shops);
     }
@@ -264,6 +266,23 @@ class CategoriesController extends Controller {
     {
 
         return $this->categoryRepository->getParents(Request::get('shop_id'),true);
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getShopsToSelect()
+    {
+        if (auth()->user()->hasrole('store')) {
+            $shops = Shop::where(function ($q) {
+                $q->where('published', '=', 1)
+                    ->where('responsable_id', '=', auth()->user()->id);
+            })->lists('name', 'id')->all();
+
+        } else
+            $shops = Shop::where('published', '=', 1)->lists('name', 'id')->all();
+
+        return $shops;
     }
 
 }

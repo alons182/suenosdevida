@@ -27,6 +27,7 @@
         </thead>
         <tbody>
             @foreach ($orders as $order)
+
                 <tr>
                     <td>{!! Form::checkbox('chk_order[]', $order->id, null, ['class' => 'chk-product']) !!}</td>
                     <td>{!! $order->id !!}</td>
@@ -43,6 +44,7 @@
                     </td>
                     
                 </tr>
+                
             @endforeach
         </tbody>
        <tfoot>

@@ -22,6 +22,7 @@ class CategoryRequest extends Request {
 	public function rules()
 	{
 		return [
+			'shop_id' => 'required',
             'name' => 'required'
 		];
 	}

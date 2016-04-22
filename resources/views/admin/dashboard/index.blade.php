@@ -32,6 +32,7 @@
          </div>
          <p><a class="btn btn-primary" href="/store/admin/orders" role="button">Ver todas &raquo; <span class="badge">{!! $to !!}</span></a></p>
       </div>
+        @if($currentUser->hasrole('administrator'))
         <div class="col-md-4">
           <h2>Últimos Usuarios</h2>
           <div class="list-group">
@@ -42,5 +43,6 @@
 		 </div>
           <p><a class="btn btn-primary" href="/store/admin/users" role="button">Ver todos &raquo; <span class="badge">{!! $tu !!}</span></a></p>
         </div>
+        @endif
    </div>
 @stop

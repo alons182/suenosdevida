@@ -37,6 +37,10 @@ class Shop extends Model
     {
         return $this->hasMany('App\Category');
     }
+    /*public function orders()
+    {
+        return $this->hasMany('App\Order');
+    }*/
     public function responsable()
     {
         return $this->hasOne('App\User','id','responsable_id');
