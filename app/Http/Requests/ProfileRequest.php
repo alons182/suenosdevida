@@ -29,9 +29,8 @@ class ProfileRequest extends Request {
             'telephone' => 'required',
             'province' => 'required',
             'canton' => 'required',
-            'city' => 'required',
-            'bank' => 'required',
-            'number_account' => 'required',
+            'city' => 'required'
+
 		];
 	}
 
