@@ -110,9 +110,12 @@ class ViewComposerServiceProvider extends ServiceProvider {
         view()->composer('admin/orders/index', function($view){
             $view->with('currentUser', Auth::user());
         });
-        view()->composer('layouts/partials._navbarSite', function($view){
+        /*view()->composer('layouts/partials._navbarSite', function($view){
             $view->with('categories', Category::where('depth', '=','0')->get());
-        });
+        });*/
+        view()->composer('layouts/partials._navbarSite', function($view){
+           $view->with('shops', Shop::where('published', '=','1')->get());
+       });
         view()->composer('layouts/partials._footer', function($view){
             $view->with('categories', Category::where('depth', '=','0')->get());
         });

@@ -7,11 +7,13 @@ use App\Http\Requests\OrderRequest;
 use App\Mailers\OrderMailer;
 use App\Repositories\OrderRepository;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Laracasts\Flash\Flash;
+use Swift_RfcComplianceException;
 
 
 class OrdersController extends Controller {
@@ -73,7 +75,38 @@ class OrdersController extends Controller {
 
         $order = $this->orderRepository->store($data_cart);
 
-        $this->mailer->sendConfirmMessageOrder($order, $data_form);
+        //$this->mailer->sendConfirmMessageOrder($order, $data_form);
+        $shops = [];
+
+        foreach ($order->details as $detail)
+        {
+            $shops[] = $detail->products->shop;
+        }
+        $shops = array_unique($shops);
+
+        foreach ($shops as $shop)
+        {
+            $products = [];
+
+            foreach ($order->details as $detail)
+            {
+                if($shop->id == $detail->products->shop_id )
+                   $products[] = $detail->products->id  . " - ". $detail->products->name;
+            }
+
+            try {
+                $this->mailer->sendNotificationToShop($order, $shop, $products, $data_form);
+            }catch (Swift_RfcComplianceException $e)
+            {
+                Log::error($e->getMessage());
+            }
+
+
+        }
+
+
+
+        //$this->mailer->sendNotificationToShop($order, $data_form);
 
         Flash::message('Pago realizado con exito - orden ' . $order->id);
 

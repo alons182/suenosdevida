@@ -20,7 +20,7 @@
          <!-- Create Account Form Input -->
 
          <div class="col-2">
-             <a href="javascript:;" class="simpleCart_checkout btn btn-purple">Pagar</a>
+             <a href="javascript:;" class="simpleCart_checkout btn btn-purple">Realizar Pedido</a>
 
          </div>
 

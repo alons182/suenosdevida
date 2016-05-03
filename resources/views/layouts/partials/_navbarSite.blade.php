@@ -10,8 +10,8 @@
         <li> <a href="/contact">Contacto</a></li>
         <li class="store parent"> <span>Tienda</span>
             <ul class="sub-menu">
-               @foreach($categories as $category)
-                   <li>{!! link_to_route('products_path',$category->name,$category->slug) !!}</li>
+               @foreach($shops as $shop)
+                   <li>{!! link_to_route('shop_path',$shop->name.' ('. $shop->canton.')',$shop->id) !!}</li>
                @endforeach
             </ul>
         </li>

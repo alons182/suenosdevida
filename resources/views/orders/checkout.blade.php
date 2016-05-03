@@ -65,7 +65,11 @@
 
             {!! Form::close() !!}
         </div>
-
+        <div class="col-2">
+            <h1 style="margin-bottom: 0; text-align: center;">Tus Productos</h1>
+            <div class="simpleCart_items"></div>
+            <div class="simpleCart_grandTotal"></div>
+        </div>
     </section>
 @stop
 
