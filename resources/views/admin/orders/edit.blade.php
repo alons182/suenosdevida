@@ -28,6 +28,7 @@
 
                             <th>#</th>
                             <th>Producto</th>
+                            <th>Tienda</th>
                             <th>Cantidad</th>
                             <th>precio</th>
 
@@ -39,6 +40,7 @@
 
                             <td>{!! $detail->id !!}</td>
                             <td>{!! $detail->products->name !!}</td>
+                            <td>{!! $detail->products->shop->name !!}</td>
                             <td>{!! $detail->quantity !!}</td>
                             <td>{!! money($detail->products->price,'₡') !!}</td>
 
