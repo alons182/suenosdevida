@@ -3,9 +3,9 @@
 @section('content')
     <section class="main register">
         <h1>Registro | <small> Registrandose a la red de {!!  isset($parent_user) ? $parent_user->username : 'Administrador' !!} </small></h1>
-        @if(isset($parent_user) && $parent_user->immediateDescendants()->count() >= 10)
+        @if(isset($parent_user) && $parent_user->immediateDescendants()->count() >= 1000)
             <div class="alert alert-danger">
-                No puedes registrate a la red del usuario {!! $parent_user->username !!}, ya ha alcanzado el numero maximo en su red (10 usuarios)
+                No puedes registrate a la red del usuario {!! $parent_user->username !!}, ya ha alcanzado el numero maximo en su red (1000 usuarios)
             </div>
         @else
             <div class="col-1">
@@ -57,9 +57,9 @@
 
                 {!! Form::close() !!}
             </div>
-        @endif
+    @endif
 
 
-    </section>
+</section>
 @stop
 
