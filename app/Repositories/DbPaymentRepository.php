@@ -50,8 +50,8 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
     {
         $data = $this->prepareData($data);
 
-        if ($this->existsPaymentOfMonth()) return false;
-        if ($this->existsAutomaticPaymentOfMonth()) return false;
+        if ($this->existsPaymentOfMonth($data['user_id'])) return false;
+        if ($this->existsAutomaticPaymentOfMonth($data['user_id'])) return false;
 
 
         $payment = $this->model->create($data);
@@ -274,6 +274,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
      */
     public function existsPaymentOfMonth($user_id = null)
     {
+        
         $payment = $this->model->where(function ($query) use ($user_id)
         {
             $query->where('user_id', '=', ($user_id) ? $user_id : Auth::user()->id)
