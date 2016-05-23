@@ -56,9 +56,22 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
 
         $payment = $this->model->create($data);
 
+        $payment2 = $this->model->create($data);
+        $payment2->created_at = $payment2->created_at->addMonth();
+        $payment2->save();
+        $payment3 = $this->model->create($data);
+        $payment3->created_at = $payment3->created_at->addMonths(2);
+        $payment3->save();
+        $payment4 = $this->model->create($data);
+        $payment4->created_at = $payment4->created_at->addMonths(3);
+        $payment4->save();
+
         //Generate Gain for the payment
         $user = $this->userRepository->findById($data['user_id']);
         $this->generateGain($user->parent_id);
+        $this->generateGain($user->parent_id, $payment2->created_at->month,$payment2->created_at->year);
+        $this->generateGain($user->parent_id, $payment3->created_at->month,$payment3->created_at->year);
+        $this->generateGain($user->parent_id, $payment4->created_at->month,$payment4->created_at->year);
 
 
         return $payment;
@@ -323,21 +336,41 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
     /**
      * Generate Gain to user
      * @param $parent_id
+     * @param null $month
+     * @param null $year
      */
-    public function generateGain($parent_id)
+    public function generateGain($parent_id, $month = null, $year = null)
     {
         if ($parent_id)
         {
+            $data = [
+                "user_id" => $parent_id,
+                "description" => 'Ganancia generada por la pestaña de pagos',
+                "amount" => 3000,
+                "gain_type" => 'P',
+                "month" => ($month) ? $month : Carbon::now()->month,
+                "year" => ($year) ? $year : Carbon::now()->year,
+            ];
+            $gain = Gain::create($data);
+            $newMonth= $month - $gain->created_at->month;
+            if($newMonth > 0)
+            {
+                $gain->created_at =$gain->created_at->addMonths($newMonth);
+                $gain->save();
+            }
 
-            $gain = new Gain();
+            /*$gain = new Gain();
             $gain->user_id = $parent_id;
             $gain->description = 'Ganancia generada por la pestaña de pagos';
             $gain->amount = 3000;
             $gain->gain_type = 'P';
-            $gain->month = Carbon::now()->month;
-            $gain->year = Carbon::now()->year;
-            $gain->save();
+            $gain->month = ($month) ? $month : Carbon::now()->month;
+            $gain->year = ($year) ? $year : Carbon::now()->year;*/
+
+
+
         }
+
     }
 
     /**

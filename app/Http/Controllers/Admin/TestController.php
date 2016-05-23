@@ -9,6 +9,7 @@ use App\Payment;
 use App\Repositories\PaymentRepository;
 use App\Repositories\UserRepository;
 
+use App\Task;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -145,6 +146,7 @@ class TestController extends Controller {
     {
         $gains = Gain::all();
         $payments = Payment::all();
+        $tasks = Task::all();
        foreach($gains as $gain)
         {
             if($gain->month == 1)
@@ -161,6 +163,12 @@ class TestController extends Controller {
 
             $payment->created_at = $payment->created_at->subMonth();
             $payment->save();
+        }
+        foreach($tasks as $task)
+        {
+
+            $task->created_at = $task->created_at->subMonth();
+            $task->save();
         }
         $exitCode = Artisan::call('suenos:generatecut');
 

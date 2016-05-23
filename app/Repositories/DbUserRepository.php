@@ -460,7 +460,7 @@ class DbUserRepository extends DbRepository implements UserRepository
         })->count();
 
         if ($paymentsOfRedCount <= 5)
-            $charge = 3000;
+            $charge = 3000; // comision 1000 si vio mas de 75 o 3000 si vio menos 75
         if ($paymentsOfRedCount > 5 && $paymentsOfRedCount <= 10)
             $charge = 5000;
         if ($paymentsOfRedCount > 10 && $paymentsOfRedCount <= 15)
@@ -469,6 +469,15 @@ class DbUserRepository extends DbRepository implements UserRepository
             $charge = 25000;
         if ($paymentsOfRedCount > 20)
             $charge = 50000;
+
+        if($paymentsOfRedCount >= 5)
+        {
+            $adsVistos = $this->getHitsPerMonth($userToGenerate, $data['month'], (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year );
+
+            $comision = ($adsVistos >= 75) ? 1000 : 3000; // rebaja mil si > 75 sino  3000
+        }else{
+            $comision = 1000;
+        }
 
         if (($possibleGain - $charge) >= 0) {
             $payment = Payment::create([
@@ -491,15 +500,15 @@ class DbUserRepository extends DbRepository implements UserRepository
                 $gain->save();
             }
             if (($possibleGain - $charge) > 0) {
-                //comision del 5% a la ganancia generada
+
                 $ganancia = $possibleGain - $charge;
-                $comision = $ganancia * 0.05;
+                //$comision = $ganancia * 0.05; // rebaja mil si > 75 sino  3000
 
                 $payment = Payment::create([
                     'user_id' => $userToGenerate->id,
                     'payment_type' => "CO",//Comision
                     'amount' => $comision,
-                    'description' => 'Cobro de comision de 5% a la ganacia por corte',
+                    'description' => 'Cobro de comision de '. $comision .' a la ganacia por corte',
                     'bank' => '--',
                     'transfer_number' => '--',
                     'transfer_date' => Carbon::now()
@@ -734,5 +743,19 @@ class DbUserRepository extends DbRepository implements UserRepository
 
         return $hits;
     }
+
+    public function getHitsPerMonth($user, $month = null, $year = null)
+    {
+        $hits = Task::with('ad')->where(function ($query) use ($user, $month, $year)
+        {
+            $query->where('user_id', '=', $user->id)
+                ->where(\DB::raw('MONTH(created_at)'), '=', ($month) ? $month : Carbon::now()->month)
+                ->where(\DB::raw('YEAR(created_at)'), '=', ($year) ? $year : Carbon::now()->year);
+        })->count();
+
+        return $hits;
+    }
+
+
 
 }
