@@ -190,10 +190,10 @@ class DbProductRepository extends DbRepository implements ProductRepository {
     public function getFeatured()
     {
 
-        $products = $this->model->Featured()->paginate(4);
-      /*  if($products->count() > 4)
-            $products = $products->random();*/
-
+        $products = $this->model->Featured()->get();
+        if($products->count() > 4)
+            $products = $products->random(4);
+        
         return $products;
     }
 
