@@ -193,7 +193,7 @@ class DbProductRepository extends DbRepository implements ProductRepository {
         $products = $this->model->Featured()->get();
         if($products->count() > 4)
             $products = $products->random(4);
-        
+
         return $products;
     }
 
