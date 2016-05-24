@@ -98,7 +98,7 @@ class AdsController extends Controller {
 
         Flash::message('Comentario enviado correctamente');
 
-        return Redirect::route('payments.index');
+        return Redirect::route('ads.index');
 	}
 
 	/**

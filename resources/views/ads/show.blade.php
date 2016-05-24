@@ -47,7 +47,7 @@
         <div class="form-group">
 
             {!! Form::submit('Enviar',['class'=>'btn btn-primary', 'disabled'=>'disabled'])!!}
-            {!! link_to_route('payments.index','Regresar')!!}
+            {!! link_to_route('ads.index','Regresar')!!}
         </div>
 
         {!! Form::close() !!}
