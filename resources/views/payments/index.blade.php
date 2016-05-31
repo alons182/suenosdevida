@@ -51,6 +51,7 @@
                 </thead>
                 <tbody>
                 @forelse ($paymentsOfUserRed as $payment)
+                    @if($payment->amount > 0)
                     <tr>
 
                         <td>{!! $payment->id !!}</td>
@@ -66,6 +67,7 @@
 
 
                     </tr>
+                    @endif
                 @empty
                     <tr><td colspan="8" style="text-align: center;">No hay movimientos en tu red de afiliados</td></tr>
                 @endforelse
