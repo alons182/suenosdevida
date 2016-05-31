@@ -5,7 +5,7 @@
         <h1>Balance | <small>Movimientos en tu red de afiliados</small></h1> {!! link_to_route('payments.create', 'Realizar Pago',null,['class'=>'btn btn-primary']) !!}
         {!! Form::open(['route' => 'payments.cashing', 'method' => 'post','style'=>'display:inline-block;']) !!}
 
-            {!! Form::submit('Retirar Ganancias', ['class' => 'btn btn-orange', 'title'=>'Se envia un correo al administrador solicitando el retiro de tus fondos']) !!}
+            {{-- Form::submit('Retirar Ganancias', ['class' => 'btn btn-orange', 'title'=>'Se envia un correo al administrador solicitando el retiro de tus fondos']) --}}
 
         {!! Form::close() !!}
 
