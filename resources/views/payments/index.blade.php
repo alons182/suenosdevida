@@ -46,6 +46,8 @@
                     <th>Tipo de pago</th>
                     <th>Descripción</th>
                     <th>Fecha</th>
+                    <th>Mes</th>
+                    <th>Año</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -62,6 +64,8 @@
                         <td> {!! $payment->present()->paymentType !!}</td>
                         <td> {!! $payment->description !!}</td>
                         <td> {!! $payment->created_at !!}</td>
+                        <td> {!! $payment->month !!}</td>
+                        <td> {!! $payment->year !!}</td>
 
                     </tr>
                 @empty
@@ -93,6 +97,8 @@
                     <th>Tipo de pago</th>
                     <th>Descripción</th>
                     <th>Fecha</th>
+                    <th>Mes</th>
+                    <th>Año</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -105,6 +111,8 @@
                         <td> {!! $payment->present()->paymentType !!}</td>
                         <td> {!! $payment->description !!}</td>
                         <td> {!! $payment->created_at !!}</td>
+                        <td> {!! $payment->month !!}</td>
+                        <td> {!! $payment->year !!}</td>
 
                     </tr>
                 @empty
