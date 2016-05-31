@@ -58,6 +58,8 @@
                     <th>Descripción</th>
                     <th>Monto</th>
                     <th>Fecha</th>
+                    <th>Mes</th>
+                    <th>Año</th>
                     <th><i class="glyphicon glyphicon-cog"></i></th>
                 </tr>
                 </thead>
@@ -69,6 +71,8 @@
                         <td>{!! $gain->description !!}</td>
                         <td> {!! money($gain->amount,'₡') !!}</td>
                         <td> {!! $gain->created_at !!}</td>
+                        <td> {!! $gain->month !!}</td>
+                        <td> {!! $gain->year !!}</td>
                         <td>
                             @if($currentUser->hasrole('administrator'))
                                 <button type="submit" class="btn btn-danger btn-sm" form="form-delete-gains" formaction="{!! URL::route("store.admin.gains.destroy", [$gain->id]) !!}">Eliminar</button>

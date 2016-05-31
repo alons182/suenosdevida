@@ -20,6 +20,8 @@
                 <th>Tipo de pago</th>
                 <th>Fecha Transf.</th>
                 <th>Fecha Agregado</th>
+                <th>Mes</th>
+                <th>Año</th>
                 <th><i class="glyphicon glyphicon-cog"></i></th>
             </tr>
             </thead>
@@ -43,6 +45,8 @@
                 <td> {!! $payment->present()->paymentType !!}</td>
                 <td> {!! $payment->transfer_date !!}</td>
                 <td> {!! $payment->created_at !!}</td>
+                <td> {!! $payment->month !!}</td>
+                <td> {!! $payment->year !!}</td>
                 <td>
                      @if($currentUser->hasrole('administrator'))
                        <button type="submit" class="btn btn-danger btn-sm" form="form-delete" formaction="{!! URL::route('store.admin.payments.destroy', [$payment->id]) !!}">Eliminar</button>

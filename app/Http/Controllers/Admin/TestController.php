@@ -155,13 +155,20 @@ class TestController extends Controller {
                 $gain->year -= 1;
             }else
                 $gain->month -= 1;
-            $gain->created_at = $gain->created_at->subMonth();
+            //$gain->created_at = $gain->created_at->subMonth();
             $gain->save();
         }
         foreach($payments as $payment)
         {
 
-            $payment->created_at = $payment->created_at->subMonth();
+            //$payment->created_at = $payment->created_at->subMonth();
+            if($payment->month == 1)
+            {
+                $payment->month = 12;
+                $payment->year -= 1;
+            }else
+                $payment->month -= 1;
+
             $payment->save();
         }
         foreach($tasks as $task)
@@ -170,6 +177,7 @@ class TestController extends Controller {
             $task->created_at = $task->created_at->subMonth();
             $task->save();
         }
+        //dd('cambio fechas');
         $exitCode = Artisan::call('suenos:generatecut');
 
         Flash::message('Se genero el corte mensual correctamente' );

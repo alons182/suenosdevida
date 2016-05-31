@@ -13,7 +13,7 @@ class Payment extends Model {
     protected $table = 'payments';
 
     protected $fillable = [
-        'user_id', 'bank', 'transfer_number', 'transfer_date', 'amount',  'description', 'payment_type','level'
+        'user_id', 'bank', 'transfer_number', 'transfer_date', 'amount',  'description', 'payment_type','month','year'
     ];
 
     public function setAmountAttribute($amount)
