@@ -158,6 +158,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
             $query->whereIn('user_id', $usersOfRed)
                 ->where('payment_type', '<>', 'A')
                 ->where('payment_type', '<>', 'CO')
+                ->where('amount', '>', 0)
                 ->where('month', '=', $data['month'])//->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
                 ->where('year', '=', Carbon::now()->year);//->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
         })->orderBy('month', 'desc')->paginate($this->limit);
