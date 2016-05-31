@@ -46,7 +46,7 @@
                     <th>Tipo de pago</th>
                     <th>Descripción</th>
                     <th>Fecha</th>
-                    
+
                 </tr>
                 </thead>
                 <tbody>

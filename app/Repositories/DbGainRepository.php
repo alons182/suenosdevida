@@ -45,8 +45,8 @@ class DbGainRepository extends DbRepository implements GainRepository {
         {
             $query->where('user_id', '=', Auth::user()->id)
                 ->where('gain_type', '=', 'B')
-                ->where('month', '<=', $data['month']);
-                //->where('year', '=', Carbon::now()->year);
+                ->where('month', '=', $data['month'])//->where('month', '<=', $data['month']);
+                ->where('year', '=', Carbon::now()->year);
         })->sum('amount');
 
         return $gainOfMonth;
