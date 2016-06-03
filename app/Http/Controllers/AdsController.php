@@ -41,8 +41,9 @@ class AdsController extends Controller {
 	public function index()
 	{
         $canton = Auth::user()->profiles->canton;
+        $province = Auth::user()->profiles->province;
 
-        $ads = $this->adRepository->getAds($canton, Auth::user()->id);
+        $ads = $this->adRepository->getAds($province, $canton, Auth::user()->id);
 
         $hits_per_day = $this->adRepository->hits_per_day(Auth::user()->id);
         $hits_per_week = $this->adRepository->hits_per_week(Auth::user()->id);

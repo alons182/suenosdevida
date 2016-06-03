@@ -25,6 +25,7 @@
         (function($) {
 
             setTimeout(function(){
+
                 $('#province option[value="{!! $ad->province !!}"]').attr("selected", true);
                 $('#province').change();
                 $('#canton option[value="{!! $ad->canton !!}"]').attr("selected", true);

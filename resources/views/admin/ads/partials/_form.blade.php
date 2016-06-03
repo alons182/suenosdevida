@@ -42,7 +42,7 @@
     <!-- District Form Input -->
     <div class="form-group">
         {!! Form::label('canton', 'Canton:') !!}
-        {!! Form::select('canton', ['' => ''], null, ['class' => 'form-control',(isset($ad)) ? ($ad->all_country) ? 'disabled' : '' : '' ]) !!}
+        {!! Form::select('canton', ['Todos' => 'Todos'], null, ['class' => 'form-control',(isset($ad)) ? ($ad->all_country) ? 'disabled' : '' : '' ]) !!}
         {!! errors_for('canton',$errors) !!}
     </div>
 

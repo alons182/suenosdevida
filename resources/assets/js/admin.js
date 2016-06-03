@@ -43,6 +43,7 @@ $(function () {
         } else {
             $("select[name='province']").attr('disabled', false);
             $("select[name='canton']").attr('disabled', false);
+            $('#province').change();
         }
     });
     $("form[data-confirm]").submit(function() {
@@ -621,17 +622,23 @@ $(function () {
         provincias.append('<option value='+ provincia.name_id +'>' + provincia.title + '</option>');
     });
 
+   // $('#all_country').checked();
     provincias.change(function() {
         var $this =  $(this);
         cantones.empty();
+        cantones.append('<option value="Todos">Todos</option>');
         $.each(ubicaciones, function(index,provincia) {
+
             if(provincia.name_id == $this.val())
                 $.each(provincia.cantones, function(index,canton) {
+
                     cantones.append('<option value=' + canton.name_id + '>' + canton.title + '</option>');
                 });
         });
 
     });
+    //provincias.change(this);
+
 
     cantonesTiendas = $('.canton_shops #canton');
     cantonesTiendas.empty();

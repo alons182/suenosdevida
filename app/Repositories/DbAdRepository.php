@@ -205,16 +205,19 @@ class DbAdRepository extends DbRepository implements AdRepository {
         return count($hits_per_week);
     }
 
-    public function getAds($zone, $user_id)
+    public function getAds($province, $zone, $user_id)
     {
 
 
         $adsTotal = $this->model->with(['hits' => function ($query) use ($user_id) {
             $query->where('user_id', '=', $user_id);
 
-        }])->where(function ($query) use ($zone)
+        }])->where(function ($query) use ($zone, $province)
         {
+
             $query->where('all_country', '=', 1)
+                ->orWhere('province', '=', $province)
+                ->Where('canton', '=', 'Todos')
                 ->orWhere('canton', '=', $zone)
                 ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
                 ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
@@ -226,9 +229,12 @@ class DbAdRepository extends DbRepository implements AdRepository {
                 ->where(\DB::raw('day(hit_date)'), '=', Carbon::now()->day)
                 ->where(\DB::raw('MONTH(hit_date)'), '=', Carbon::now()->month)
                 ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
-        })->where(function ($query) use ($zone)
+        })->where(function ($query) use ($zone, $province)
         {
-            $query->where('canton', '=', $zone)
+            $query->where('all_country', '=', 1)
+                ->orWhere('province', '=', $province)
+                ->Where('canton', '=', 'Todos')
+                ->orWhere('canton', '=', $zone)
                 ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
                 ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
         })->get();
@@ -255,9 +261,11 @@ class DbAdRepository extends DbRepository implements AdRepository {
         $ads = $this->model->with(['hits' => function ($query) use ($user_id) {
             $query->where('user_id', '=', $user_id);
 
-        }])->where(function ($query) use ($zone)
+        }])->where(function ($query) use ($zone, $province)
         {
             $query->where('all_country', '=', 1)
+                ->orWhere('province', '=', $province)
+                ->Where('canton', '=', 'Todos')
                 ->orWhere('canton', '=', $zone)
                 ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
                 ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
