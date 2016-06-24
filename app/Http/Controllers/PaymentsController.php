@@ -69,60 +69,24 @@ class PaymentsController extends Controller
         $paymentsOfUserRed = $this->paymentRepository->getPaymentsOfUserRed($data);
         $paymentsOfMembership = $this->paymentRepository->getPaymentsOfMembership($data);
         $commissionOfGain = $this->paymentRepository->getCommissionOfGain($data);
-        $canton = Auth::user()->profiles->canton;
 
-        $ads = $this->adRepository->getAds($canton, Auth::user()->id);
-
-        $hits_per_day = $this->adRepository->hits_per_day(Auth::user()->id);
-        $hits_per_week = $this->adRepository->hits_per_week(Auth::user()->id);
 
         $possibleGains = $this->gainRepository->getPossibleGainsPerAffiliates($data);
 
         $accumulatedGains = $this->gainRepository->getAccumulatedGains($data);
 
-        //$membership_cost = $this->paymentRepository->getMembershipCost();
-
-        // $annualCharge = $this->paymentRepository->getAnnualCharge();
-
-        // para mostrar de que dia empieza y termina la semana
-        $week = Carbon::now()->weekOfMonth;
 
 
-      // $startOfMonth = Carbon::now()->startOfMonth();
-       //$startOfWeekDefault = Carbon::now()->startOfWeek();
-       // $endOfWeekDefault = Carbon::now()->endOfWeek();
-
-
-       // $differenceDays = ($startOfMonth->diffInDays($startOfWeekDefault));
-
-        //$startOfWeek = $startOfWeekDefault->subDays($differenceDays);
-        //$endOfWeek = $endOfWeekDefault->subDays($differenceDays);
-        $dayOfWeek = (Carbon::now()->dayOfWeek == Carbon::SUNDAY ) ? 7 : Carbon::now()->dayOfWeek;
-
-        //dd($dt->weekOfMonth. '-'.$dt->dayOfWeek);
-        //dd($dt->dayOfWeek /*== Carbon::MONDAY*/);
-        //dd($dayOfWeek);
-        $startOfWeek = Carbon::now()->startOfWeek();
-        $endOfWeek = Carbon::now()->endOfWeek();
-        $today = Carbon::now()->today();
 
         return View::make('payments.index')->with([
             'paymentsOfUser' => $paymentsOfUser,
             'paymentsOfUserRed' => $paymentsOfUserRed,
             'paymentsOfMembership' => $paymentsOfMembership,
             'commission' => $commissionOfGain,
-            'ads' => $ads,
-            'hits_per_day' => $hits_per_day,
-            'hits_per_week' => $hits_per_week,
-            'week' => $week,
             'possible_gains' => $possibleGains,
             'accumulatedGains' => $accumulatedGains,
-            //'membership_cost'   => $membership_cost,
-            'selectedMonth' => $data['month'],
-            'startOfWeek' => $startOfWeek->toDateString(),
-            'endOfWeek' => $endOfWeek->toDateString(),
-            'dayOfWeek' => $dayOfWeek,
-            'today' => $today->toDateString()
+            'selectedMonth' => $data['month']
+
         ]);
     }
 
