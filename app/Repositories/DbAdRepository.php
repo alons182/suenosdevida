@@ -259,7 +259,8 @@ class DbAdRepository extends DbRepository implements AdRepository {
         }
 
         $ads = $this->model->with(['hits' => function ($query) use ($user_id) {
-            $query->where('user_id', '=', $user_id);
+            $query->where('user_id', '=', $user_id)
+                ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
 
         }])->where(function ($query) use ($zone, $province)
         {
