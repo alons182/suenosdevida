@@ -96,7 +96,8 @@ class DbAdRepository extends DbRepository implements AdRepository {
 
         $adsWithHitsIds = $this->model->whereHas('hits', function ($q) use ($user_id)
         {
-            $q->where('user_id', '=', $user_id);
+            $q->where('user_id', '=', $user_id)
+                ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
 
         })->where(function ($query) use ($zone)
         {
@@ -106,7 +107,8 @@ class DbAdRepository extends DbRepository implements AdRepository {
         })->get()->lists('id')->all();
 
         $adsWithoutHits = $this->model->with(['hits' => function ($query) use ($user_id) {
-            $query->where('user_id', '=', $user_id);
+            $query->where('user_id', '=', $user_id)
+                ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
 
         }])->where(function ($query) use ($zone, $adsWithHitsIds)
         {
@@ -118,7 +120,8 @@ class DbAdRepository extends DbRepository implements AdRepository {
 
         $ads = $this->model->with(['hits' => function ($query) use ($user_id) {
             $query->where('user_id', '=', $user_id)
-                  ->where(\DB::raw('DAY(hit_date)'), '<>', Carbon::now()->day );
+                  ->where(\DB::raw('DAY(hit_date)'), '<>', Carbon::now()->day )
+                  ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
         }])->where(function ($query) use ($zone)
         {
             $query->where('canton', '=', $zone)
@@ -210,7 +213,8 @@ class DbAdRepository extends DbRepository implements AdRepository {
 
 
         $adsTotal = $this->model->with(['hits' => function ($query) use ($user_id) {
-            $query->where('user_id', '=', $user_id);
+            $query->where('user_id', '=', $user_id)
+                ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
 
         }])->where(function ($query) use ($zone, $province)
         {
@@ -259,8 +263,8 @@ class DbAdRepository extends DbRepository implements AdRepository {
         }
 
         $ads = $this->model->with(['hits' => function ($query) use ($user_id) {
-            $query->where('user_id', '=', $user_id);
-               // ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
+            $query->where('user_id', '=', $user_id)
+                ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
 
         }])->where(function ($query) use ($zone, $province)
         {
