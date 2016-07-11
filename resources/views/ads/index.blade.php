@@ -34,15 +34,15 @@
 
                             @else
                                 @if($ad->image)
-                                    <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($ad->hits->last()) ? $ad->hits->last()->hit_date : '' !!}">
+                                    <a href="{!! URL::route('ads.show', $ad->id) !!}" class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($ad->hits->last()) ? $ad->hits->last()->hit_date : '' !!}">
                                             <span class="ad_id">{!! $ad->id !!}</span>
                                             <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="185"  height="185" />
-                                        </span>
+                                        </a>
                                 @else
-                                    <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($ad->hits->last()) ? $ad->hits->last()->hit_date : '' !!}">
+                                    <a href="{!! URL::route('ads.show', $ad->id) !!}" class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($ad->hits->last()) ? $ad->hits->last()->hit_date : '' !!}">
                                             <span class="ad_id">{!! $ad->id !!}</span>
                                             <img src="holder.js/185x185/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
-                                        </span>
+                                        </a>
                                 @endif
 
                             @endif
@@ -51,13 +51,13 @@
 
                     @else
                         @if($ad->image)
-                            <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($hits_per_week == 25) ? 'Has completado tus 5 dias por semana' : 'Solo 5 por dia' !!}">
+                            <a href="{!! URL::route('ads.show', $ad->id) !!}" class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($hits_per_week == 25) ? 'Has completado tus 5 dias por semana' : 'Solo 5 por dia' !!}">
                                     <img src="{!! photos_path('ads').'thumb_'.$ad->image !!}" alt="{!! $ad->name !!}" width="185"  height="185" />
-                                </span>
+                                </a>
                         @else
-                            <span class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($hits_per_week == 25) ? 'Has completado tus 5 dias por semana' : 'Solo 5 por dia' !!}">
+                            <a href="{!! URL::route('ads.show', $ad->id) !!}" class="payments-ad-link payments-ad-link--hit" data-msg="{!! ($hits_per_week == 25) ? 'Has completado tus 5 dias por semana' : 'Solo 5 por dia' !!}">
                                     <img src="holder.js/185x185/text:{!! $ad->name !!}{!! $ad->id !!}" alt="{!! $ad->name !!}">
-                                </span>
+                                </a>
                         @endif
                     @endif
                 </div>

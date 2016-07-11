@@ -113,7 +113,10 @@ class AdsController extends Controller {
         $ad = $this->adRepository->findById($id);
        $targetDate =  Carbon::now()->addMinutes(1);
 
-		return view::make('ads.show')->with(compact('ad','targetDate'));
+        $hits_per_day = $this->adRepository->hits_per_day(Auth::user()->id);
+        $hits_per_week = $this->adRepository->hits_per_week(Auth::user()->id);
+
+		return view::make('ads.show')->with(compact('ad','targetDate','hits_per_day', 'hits_per_week'));
 	}
 
 

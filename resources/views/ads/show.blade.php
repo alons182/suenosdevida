@@ -35,24 +35,51 @@
         @endforeach
     </div>
     <div class="clear"></div>
-    <div class="ads-comments">
-        {!! Form::open([ 'route'=>['ads.comment', $ad->id] ,'class'=>'form-contact']) !!}
+    @if($hits_per_day != 5 && $hits_per_week != 25)
+
+        @if($ad->hits->count() == 0)
+                <div class="ads-comments">
+                    {!! Form::open([ 'route'=>['ads.comment', $ad->id] ,'class'=>'form-contact']) !!}
 
 
-        <div class="form-group">
-            {!! Form::label('comment','Deja tu comentario:') !!}
-            {!! Form::textarea('comment',null,['class'=>'form-control', 'id' => 'comment', 'disabled'=>'disabled']) !!}
-            {!! errors_for('comment',$errors) !!}
-        </div>
-        <div class="form-group">
+                    <div class="form-group">
+                        {!! Form::label('comment','Deja tu comentario:') !!}
+                        {!! Form::textarea('comment',null,['class'=>'form-control', 'id' => 'comment', 'disabled'=>'disabled']) !!}
+                        {!! errors_for('comment',$errors) !!}
+                    </div>
+                    <div class="form-group">
 
-            {!! Form::submit('Enviar',['class'=>'btn btn-primary', 'disabled'=>'disabled'])!!}
-            {!! link_to_route('ads.index','Regresar')!!}
-        </div>
+                        {!! Form::submit('Enviar',['class'=>'btn btn-primary', 'disabled'=>'disabled'])!!}
+                        {!! link_to_route('ads.index','Regresar')!!}
+                    </div>
 
-        {!! Form::close() !!}
-        <span id="countdown" class="countdown" style="background-color:#98ba33;color:#FFFFFF"></span>
-    </div>
+                    {!! Form::close() !!}
+                    <span id="countdown" class="countdown" style="background-color:#98ba33;color:#FFFFFF"></span>
+                </div>
+        @else
+            @if($ad->hits->last()->check == 0)
+                <div class="ads-comments">
+                    {!! Form::open([ 'route'=>['ads.comment', $ad->id] ,'class'=>'form-contact']) !!}
+
+
+                    <div class="form-group">
+                        {!! Form::label('comment','Deja tu comentario:') !!}
+                        {!! Form::textarea('comment',null,['class'=>'form-control', 'id' => 'comment', 'disabled'=>'disabled']) !!}
+                        {!! errors_for('comment',$errors) !!}
+                    </div>
+                    <div class="form-group">
+
+                        {!! Form::submit('Enviar',['class'=>'btn btn-primary', 'disabled'=>'disabled'])!!}
+                        {!! link_to_route('ads.index','Regresar')!!}
+                    </div>
+
+                    {!! Form::close() !!}
+                    <span id="countdown" class="countdown" style="background-color:#98ba33;color:#FFFFFF"></span>
+                </div>
+            @endif
+        @endif
+
+    @endif
 </section>
 
 @stop
