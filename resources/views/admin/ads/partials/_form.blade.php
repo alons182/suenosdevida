@@ -51,6 +51,11 @@
         {!! Form::text('publish_date', null, ['class' => 'form-control datepicker-ads']) !!}
         {!! errors_for('publish_date',$errors) !!}
     </div>
+    <div class="form-group">
+        {!! Form::label('active_months', 'Meses Activo:') !!}
+        {!! Form::text('active_months', null, ['class' => 'form-control']) !!}
+        {!! errors_for('active_months',$errors) !!}
+    </div>
 
 
     <div class="form-group">

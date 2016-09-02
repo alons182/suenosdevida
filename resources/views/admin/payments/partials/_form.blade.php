@@ -22,6 +22,11 @@
             {!! Form::text('amountAdmin', null, ['class' => 'form-control']) !!}
             {!! errors_for('amountAdmin',$errors) !!}
         </div>
+        <div class="form-group">
+            {!! Form::label('description', 'Descripción:') !!}
+            {!! Form::textarea('description', null, ['class' => 'form-control']) !!}
+            {!! errors_for('description',$errors) !!}
+        </div>
         <!-- Banco Form Input -->
         <div class="form-group">
             {!! Form::label('bank', 'Banco:') !!}

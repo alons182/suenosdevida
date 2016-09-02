@@ -222,10 +222,14 @@ class DbAdRepository extends DbRepository implements AdRepository {
             $query->where('all_country', '=', 1)
                 ->orWhere('province', '=', $province)
                 ->Where('canton', '=', 'Todos')
-                ->orWhere('canton', '=', $zone)
-                ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
-                ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+                ->orWhere('canton', '=', $zone);
+                //->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                //->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
         })->get();
+
+        $adsTotalActives = $this->getAdsActives($adsTotal);
+
+
 
         $adsWithHitsToday = $this->model->whereHas('hits', function ($q) use ($user_id)
         {
@@ -238,16 +242,17 @@ class DbAdRepository extends DbRepository implements AdRepository {
             $query->where('all_country', '=', 1)
                 ->orWhere('province', '=', $province)
                 ->Where('canton', '=', 'Todos')
-                ->orWhere('canton', '=', $zone)
-                ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
-                ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+                ->orWhere('canton', '=', $zone);
+               // ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+               // ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
         })->get();
 
+        $adsWithHitsTodayActives = $this->getAdsActives($adsWithHitsToday);
 
-        if($adsTotal->count() <= 5 && $adsWithHitsToday->count() == 0)
+        if($adsTotalActives->count() <= 5 && $adsWithHitsTodayActives->count() == 0)
         {
 
-            foreach($adsTotal as $ad)
+            foreach($adsTotalActives as $ad)
             {
                 if($ad->hits->count() > 0)
                 {
@@ -271,15 +276,30 @@ class DbAdRepository extends DbRepository implements AdRepository {
             $query->where('all_country', '=', 1)
                 ->orWhere('province', '=', $province)
                 ->Where('canton', '=', 'Todos')
-                ->orWhere('canton', '=', $zone)
-                ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
-                ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+                ->orWhere('canton', '=', $zone);
+                //->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                //->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
         })->orderBy(\DB::raw('RAND()'))->get();
 
+        $adsActives = $this->getAdsActives($ads);
 
-        return $ads;
+        return $adsActives;
     }
+    private function getAdsActives($ads)
+    {
+        $adsActives = collect([]);
+        foreach($ads as $item)
+        {
 
+            if($item->active_months > 0){
+                $meses = $item->publish_date->diffInMonths(Carbon::now());
+                if($item->active_months > $meses)
+                    $adsActives->push($item);
+            }
+
+        }
+        return $adsActives;
+    }
 
 
     public function getAll($search)

@@ -84,6 +84,7 @@ class PaymentsController extends Controller {
         $data['transfer_date'] = $data['transfer_date_submit'];
 
 
+
         if(!$this->paymentRepository->store($data))
             Flash::error('Ya existe un pago para este mes.');
         else

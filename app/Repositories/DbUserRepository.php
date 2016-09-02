@@ -456,7 +456,8 @@ class DbUserRepository extends DbRepository implements UserRepository
         $descendantsIds = $descendants->lists('id')->all();
         $paymentsOfRedCount = Payment::where(function ($query) use ($descendantsIds) {
             $query->whereIn('user_id', $descendantsIds)
-                ->where('payment_type', '<>', 'A')
+                ->where('payment_type', '<>', 'A') //A - Anual
+                ->where('payment_type', '<>', 'PA') // PA -Pago Adicional
                 ->where('month', '=', Carbon::now()->subMonth()->month)//->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->subMonth()->month)
                 ->where('year', '=', (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year);//->where(\DB::raw('YEAR(created_at)'), '=', (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year);
 
@@ -475,7 +476,7 @@ class DbUserRepository extends DbRepository implements UserRepository
 
         $paymentOfMonth = Payment::where(function ($query) use ($userToGenerate) {
             $query->where('user_id', '=', $userToGenerate->id)
-                ->where('payment_type', '=', 'M')
+                ->where('payment_type', '=', 'M') //M - Membresia
                 ->where('month', '=', Carbon::now()->month)//->where(\DB::raw('MONTH(created_at)'), '=', $month)
                 ->where('year', '=', Carbon::now()->year);//->where(\DB::raw('YEAR(created_at)'), '=', $year);
 
@@ -497,7 +498,7 @@ class DbUserRepository extends DbRepository implements UserRepository
         if (($possibleGain - $charge) >= 0) {
             $payment = Payment::create([
                 'user_id' => $userToGenerate->id,
-                'payment_type' => "MA", //membresia automatica
+                'payment_type' => "MA", //MA - membresia automatica
                 'amount' => $charge,
                 'description' => 'Cobro de membresia por corte',
                 'bank' => '--',
@@ -511,7 +512,7 @@ class DbUserRepository extends DbRepository implements UserRepository
                 $gain->user_id = $userToGenerate->parent_id;
                 $gain->description = 'Ganancia generada por cobro automatico de un hijo';
                 $gain->amount = $charge;
-                $gain->gain_type = 'P'; // Ganacia generada de un hijo
+                $gain->gain_type = 'P'; // P - Ganacia generada de un hijo
                 $gain->month = Carbon::now()->month;
                 $gain->year = Carbon::now()->year;
                 $gain->save();
@@ -523,7 +524,7 @@ class DbUserRepository extends DbRepository implements UserRepository
 
                 $payment = Payment::create([
                     'user_id' => $userToGenerate->id,
-                    'payment_type' => "CO",//Comision
+                    'payment_type' => "CO",//CO - Comision
                     'amount' => $comision,
                     'description' => 'Cobro de comision de '. $comision .' a la ganacia por corte',
                     'bank' => '--',
@@ -537,7 +538,7 @@ class DbUserRepository extends DbRepository implements UserRepository
                 $gain->user_id = $userToGenerate->id;
                 $gain->description = 'Ganancia total generada por corte';
                 $gain->amount = ($ganancia < 0 ? 0 : ($ganancia - $comision));
-                $gain->gain_type = 'B'; //ganancia del mes
+                $gain->gain_type = 'B'; //B - ganancia del mes
                 $gain->month = Carbon::now()->month;
                 $gain->year = Carbon::now()->year;
                 $gain->save();

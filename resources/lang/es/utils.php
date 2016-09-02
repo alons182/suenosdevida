@@ -6,7 +6,8 @@ return array(
         'M'  => 'Membresía',
         'A'  => 'Administrativo',
         'MA' => 'Membresia(A)',
-        'CO' => 'Comisión'
+        'CO' => 'Comisión',
+        'PA' => 'Pago Adicional'
     ),
     'status'        => array(
         'P' => 'Pendiente',
