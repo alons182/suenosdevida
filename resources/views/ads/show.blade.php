@@ -23,6 +23,22 @@
     <div class="ads-description">
         <p>{!! $ad->description !!}</p>
     </div>
+    <div class="ads-social">
+        <span class="ads-share-title">Compartir</span>
+        <a class="icon-facebook" title="Facebook" href="#"
+           onclick="
+                                window.open(
+                                  'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.href),
+                                  'facebook-share-dialog',
+                                  'width=626,height=436');
+                                return false;">
+
+        </a>
+        <a class="icon-twitter" href="https://twitter.com/share?url={!! Request::url()!!}"
+           target="_blank"></a>
+        <a class="icon-googleplus" href="https://plus.google.com/share?url={!! Request::url()!!}" onclick="javascript:window.open(this.href,
+  '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;"></a>
+    </div>
     <h1>Galeria</h1>
     <div class="ads-gallery">
 
