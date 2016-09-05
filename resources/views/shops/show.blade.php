@@ -28,7 +28,7 @@
             {!! $shop->details !!}
         </div>
         <div class="shop-social">
-            <span class="shop-share-title">Compartir</span>
+            <span class="shop-share-title">Compartir:</span>
             <a class="icon-facebook" title="Facebook" href="#"
                onclick="
                                 window.open(

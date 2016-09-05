@@ -24,7 +24,7 @@
         <p>{!! $ad->description !!}</p>
     </div>
     <div class="ads-social">
-        <span class="ads-share-title">Compartir</span>
+        <span class="ads-share-title">Compartir:</span>
         <a class="icon-facebook" title="Facebook" href="#"
            onclick="
                                 window.open(
