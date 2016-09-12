@@ -84,7 +84,7 @@
 
 
         </div>
-        <h1>Tus Movimientos de pago</h1>
+        <h1>Tus Movimientos</h1>
         <div class="table-responsive payments-table">
 
             <table class="table table-striped  ">
