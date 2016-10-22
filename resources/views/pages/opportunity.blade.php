@@ -5,34 +5,119 @@
     <h1>Oportunidad</h1>
     <h2>Descripción del programa</h2>
 
-    <p><b>Sueños de vida</b> es un programa de mercadeo que te permite crear una red de afiliados donde puedes generar ingresos extra por recomendar a tus familiares, amigos y conocidos adquirir la membresía del programa de afiliados Sueños de Vida.</p>
-    <p><b>¿Cómo se consigue esto?</b> Es muy fácil tienes que afiliarte en nuestra página web <a href="www.suenosdevidacr.com"><b>www.suenosdevidacr.com</b></a>  , esto inmediatamente te va a genera un link personal ejemplo: <a href="#"><b>www.suenosdevidacr.com/juanp</b></a>. </p>
-    <p><b>¿Para qué sirve tu link personal?</b> Este link personal es la herramienta más importante, ya que al enviarla a tus amigos, conocidos, familiares y estos se afilien en tu sitio web personal, automáticamente quedan registrados como miembros de tu red.</p>
-   <p>Una vez que tengas tú sitio personal debes hacer el pago de tu membrecía, la cual tiene un valor de ₡12.000 y registrarlo en la pestaña de pagos.</p>
-    <p>Cuando hayas registrado el pago, serás un afiliado activo de Sueños de Vida y para estar debidamente registrado deberás descargar y enviar el formulario y contrato de afiliación debidamente lleno y firmado, junto con el contrato se debe adjuntar copia de la cedula de identidad por ambos lados.</p>
-    <p>Con la adquisición de esta membresía accedes a múltiples beneficios, iniciando con la posibilidad de generar un ingreso extra por la red que desarrollaras gracias a las personas que adquieran esta membresía en tu link personal, luego puedes comprar artículos a precios increíbles en nuestra tienda virtual, además de participar en los sorteos y promociones que efectuaremos.</p>
+    <p><b>Sueños de vida</b> vida es una empresa publicitaria, de mercadeo y ventas que te da la oportunidad de generar ingresos por vender y ver espacios publicitarios en su sitio web, además obtienes el 100% de comisión por la venta de membresías publicitarias a otras personas (familiares, amigos y conocidos) generando ganancias residuales por la activación y permanencia de tus recomendados. Estos al registrarse en tu <b>link personal</b> van a formar una red de vendedores que mes a mes te generaran ganancias residuales, siempre que cumplas con la tarea de visitar los banners publicitarios que encontraras en la sección de publicidad.   </p>
+    <p><b>¿Cómo consigo mi link personal?</b>  Al registrarte en nuestro sitio web o en el link de quien te recomendó nuestra empresa, te llegara un mensaje al correo electrónico que registraste, donde encontraras información de la empresa y una dirección web personal como esta: <b>www.suenosdevidacr.com/juanp</b> que incluye al final tu usuario, este será tu link personal que servirá para que la personas que recomiendes y paguen su membresía, el sistema los identifique como tus recomendados, los incorpore a tu red de ventas y las comisiones generadas por cada uno de ellos sean acreditadas a tu cuenta.  </p>
+    <h2>Pago de afiliación</h2>
     <p>
-    El pago de la membresía se deberá hacer mensualmente con la ventaja, que con solo tu primer afiliado activo no tendrás que volver a pagar de tu bolsillo ya que nuestro sistema de control de afiliados deducirá mensualmente de tus ganancias el monto correspondiente a tu membresía.</p>
-    <p>
-     Del monto de tu pago <b>(₡12.000)</b> se le estará bonificando a tu patrocinador <b>(persona que te afilio)</b> el 100% <b>(₡12.000)</b> De igual manera del pago que hagan las personas que tú afilies se te bonificaran mensualmente el 100% <b>(₡12.000)</b>.
-    </p>
-    <p>
-     A partir de tu segundo afiliado se te estará deduciendo de tus ganancias <b>(₡5.000)</b> correspondientes a la comisión administrativa, que es el pago por la administración del sitio web y el programa de control de afiliados.
-    </p>
+        Para ser un miembro activo de la empresa debes adquirir tu membresía publicitaria efectuando un único pago de ₡12.000, este pago cubre la inscripción de tus primeros cuatro meses como miembro en tu primer nivel de pago, si antes de los cuatro meses subes de nivel el sistema deducirá de tus ganancias el monto correspondiente a la diferencia del nivel en que te encuentres. Una vez pasados los primeros cuatro meses la membresía se deducirá automáticamente de tus ganancias.  </p>
 
     <h2>Plan de crecimiento por bonificación</h2>
-    <p>Nuestra empresa establece como plan de crecimiento, que la <b>quinta y la décima persona</b> que ingresen a la red de cada uno de los afiliados, se convertirán en una bonificación a la red del patrocinador, por lo tanto la red se desarrollara no solo por el esfuerzo que hagas para que nuevas personas adquieran la membresía, también crece por el desarrollo de la red de tus afiliados; esto con el fin de promover de esta manera el trabajo en equipo ya que apoyar el crecimiento de la red de tus afiliados generara adicionalmente el crecimiento de tu red.</p>
+    <p>La empresa ha creado un plan para promover el trabajo en equipo que establece, que la <b>quinta y la décima persona</b> que ingresen a la red de cada uno de los afiliados, se convierta en una bonificación a la red del patrocinador, por lo tanto, la red se desarrollará no solo por el esfuerzo que hagas para que nuevas personas se registren, también crecerá si ayudas a desarrollar de la red de tus afiliados.  </p>
 
     <h2>Plan de ganancias residuales</h2>
     <p>
-    Para generar ingresos residuales debes crear una red de afiliados, lo cual te generara una ganancia de <b>₡12.000</b> por cada afiliado activo que tengas en tu red, al afiliar a una nueva persona empezaras a crear una estructura de líneas donde por cada línea podrás incluir 15 personas. Completar una estructura de 15 líneas te generara un total de 225 (15x15=225) afiliados en tu red personal.<b>(Ver imagen adjunta)</b>. Al completar tu red con 225 personas tu ganancia bruta mensual seria <b>₡2.700.000</b> y tu ganancia neta mensual <b>(menos membresía ₡12.000 y la comisión administrativa ₡5.000)</b> seria <b>₡2.683.000 (₡2.700.000 - ₡17.000)</b> con la posibilidad de seguir aumentando tus ganancias
-
-
-</p>
-
-    <p class="txt-center">
-        <img class="img" src="/img/piramide.png" alt="Red de miembros"/>
+        La empresa ha estructurado el plan de ganancias enfocado siempre al trabajo en equipo, buscando que todos tengamos la necesidad de apoyar a los integrantes de nuestra red de ventas. 
     </p>
+    <p>Cuando una persona se registra en tu red y realiza el pago de la membrecía publicitaria, el sistema registra a tu cuenta un pago de ₡3000 en cada uno de los siguientes 4 meses, pero este ingreso va a aumentar si la red de mi afiliado crece y aumenta de nivel, de la siguiente manera:  </p>
+    <table class="table table-bordered table-responsive">
+        <thead>
+            <tr>
+                <th>Número de afiliados</th>
+                <th>Ganancia</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>De 1 a 5</td>
+                <td>₡3.000</td>
+            </tr>
+            <tr>
+                <td>De 6 a 10</td>
+                <td>₡5.000</td>
+            </tr>
+            <tr>
+                <td>De 11 a 15</td>
+                <td>₡15.000</td>
+            </tr>
+            <tr>
+                <td>De 16 a 20</td>
+                <td>₡25.000</td>
+            </tr>
+            <tr>
+                <td>De 21 en adelante</td>
+                <td>₡50.000</td>
+            </tr>
+        </tbody>
+
+
+    </table>
+    <p>El siguiente cuadro lo podemos interpretar de la siguiente manera:</p>
+
+     <p>Entre más afiliados hay en la red de tus afiliados, mayor es la comisión que se acredita a tu cuenta, por lo tanto, mayor es tu ganancia residual.
+    </p>
+    <h2>Plan de ganancias por venta de publicidad</h2>
+
+    <p>Como miembro de Sueños de Vida CR puedes vender espacios publicitarios dentro de nuestro sitio web y ganar el 75% del valor de la venta.  </p>
+    <p>En la siguiente tabla podrás ver la duración y precios de los paquetes publicitarios que ponemos a tu disposición para que vendas y ganes. 
+    </p>
+    <table class="table table-bordered table-responsive">
+        <thead>
+        <tr>
+            <th>Categoría</th>
+            <th>Paquete trimestral</th>
+            <th>Ganancia afiliado</th>
+            <th>Paquete semestral</th>
+            <th>Ganancia afiliado</th>
+            <th>Paquete anual</th>
+            <th>Ganancia afiliado</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Cantón</td>
+            <td>₡12.000</td>
+            <td>₡9.000</td>
+            <td>₡20.000</td>
+            <td>₡15.000</td>
+            <td>₡30.000</td>
+            <td>₡22.500</td>
+        </tr>
+        <tr>
+            <td>Provincia</td>
+            <td>₡15.000</td>
+            <td>₡11.250</td>
+            <td>₡25.000</td>
+            <td>₡18.750</td>
+            <td>₡40.000</td>
+            <td>₡30.000</td>
+        </tr>
+        <tr>
+            <td>Nacional</td>
+            <td>₡18.000</td>
+            <td>₡13.500</td>
+            <td>₡30.000</td>
+            <td>₡22.500</td>
+            <td>₡50.000</td>
+            <td>₡37.500</td>
+        </tr>
+
+        </tbody>
+
+
+    </table>
+    <h2>Retiro de ganancias y comisión administrativa</h2>
+    <p>El sistema genera un corte el último día de cada mes y recolecta la información de la ganancia acumulada por la venta de publicidad y membresías, una vez generado el corte la empresa tiene como máximo los primeros 15 días naturales del mes que inicia, para realizar el pago de tus ganancias.</p>
+    <p>Al efectuarse el corte mensual se van a generar dos deducciones automáticas:</p>
+    <ul class="ul-numbers">
+        <li>1 - El pago de la membresía, que va a variar de acuerdo a l nivel de pago en que te encuentres (ver tabla de plan de ganancias residuales) </li>
+        <li>2 - La comisión administrativa establecida en ₡1.000 para el primer nivel y ₡2.000 en los siguientes niveles, esto corresponde a la cuota de mantenimiento y administración de la página y el sistema de publicidad. Este monto es lo único que cobra la empresa a sus afiliados por el servicio que se brinda independientemente de cual sea el monto de tu ganancia.
+        Este monto varía únicamente si incumples con las visitas a los banners publicitarios, según se establece en los términos y condiciones de uso del sistema a un monto de ₡6.000 o más si el incumplimiento es reincidente, pudiendo llegar a perder tus ganancias.</li>
+
+
+    </ul>
+    <!--<p class="txt-center">
+        <img class="img" src="/img/piramide.png" alt="Red de miembros"/>
+    </p>-->
 </section>
 
 @stop
