@@ -78,58 +78,100 @@ class DbAdRepository extends DbRepository implements AdRepository {
         $hit->week_of_month = Carbon::now()->weekOfMonth;
         $hit->check = 1;
         $hit->user_id = $user_id;
-        $ad->hits()->save($hit);
+        $hit = $ad->hits()->save($hit);
 
         $task = new Task();
         $task->user_id = $user_id;
         $task->ad_id = $ad->id;
+        $task->hit_id = $hit->id;
         $task->save();
 
-        $this->checkCompleteAllAds($user_id);
+        $this->checkCompleteAllAds($user_id, 1); // para el tipo video
+        $this->checkCompleteAllAds($user_id, 2); // para el tipo web
 
         return $ad;
     }
 
-    public function checkCompleteAllAds($user_id)
+    public function checkCompleteAllAds($user_id, $ad_type = null)
     {
         $zone = Auth::user()->profiles->canton;
 
-        $adsWithHitsIds = $this->model->whereHas('hits', function ($q) use ($user_id)
-        {
-            $q->where('user_id', '=', $user_id)
-                ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
+        if($ad_type) {
+            $adsWithHitsIds = $this->model->whereHas('hits', function ($q) use ($user_id) {
+                $q->where('user_id', '=', $user_id)
+                    ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
 
-        })->where(function ($query) use ($zone)
-        {
-            $query->where('canton', '=', $zone)
-                ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
-                ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
-        })->get()->lists('id')->all();
+            })->where(function ($query) use ($zone, $ad_type) {
+                $query->where('canton', '=', $zone)
+                    ->where('ad_type', '=', $ad_type)
+                    ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                    ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+            })->get()->lists('id')->all(); //obtener los ids de los anuncios con hits de un usuario
 
-        $adsWithoutHits = $this->model->with(['hits' => function ($query) use ($user_id) {
-            $query->where('user_id', '=', $user_id)
-                ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
 
-        }])->where(function ($query) use ($zone, $adsWithHitsIds)
-        {
-            $query->whereNotIn('id', $adsWithHitsIds)
-                ->where('canton', '=', $zone)
-                ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
-                ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
-        })->get();
+            $adsWithoutHits = $this->model->with(['hits' => function ($query) use ($user_id) {
+                $query->where('user_id', '=', $user_id)
+                    ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
 
-        $ads = $this->model->with(['hits' => function ($query) use ($user_id) {
-            $query->where('user_id', '=', $user_id)
-                  ->where(\DB::raw('DAY(hit_date)'), '<>', Carbon::now()->day )
-                  ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
-        }])->where(function ($query) use ($zone)
-        {
-            $query->where('canton', '=', $zone)
-                ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
-                ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
-        })->get();
+            }])->where(function ($query) use ($zone, $adsWithHitsIds, $ad_type) //compara con los ids de anuncios con hits
+            {
+                $query->whereNotIn('id', $adsWithHitsIds)
+                    ->where('canton', '=', $zone)
+                    ->where('ad_type', '=', $ad_type)
+                    ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                    ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+            })->get(); //obtener los anuncios sin hits de un usuario
 
-        if($adsWithoutHits->count() == 0)
+            $ads = $this->model->with(['hits' => function ($query) use ($user_id) {
+                $query->where('user_id', '=', $user_id)
+                    ->where(\DB::raw('DAY(hit_date)'), '<>', Carbon::now()->day)
+                    ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
+            }])->where(function ($query) use ($zone, $ad_type) {
+                $query->where('canton', '=', $zone)
+                    ->where('ad_type', '=', $ad_type)
+                    ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                    ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+            })->get(); //obtener los anuncios con los hits que no sean de hoy
+
+        }else{
+            $adsWithHitsIds = $this->model->whereHas('hits', function ($q) use ($user_id)
+            {
+                $q->where('user_id', '=', $user_id)
+                    ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
+
+            })->where(function ($query) use ($zone)
+            {
+                $query->where('canton', '=', $zone)
+                    ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                    ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+            })->get()->lists('id')->all(); //obtener los ids de los anuncios con hits de un usuario
+
+
+
+            $adsWithoutHits = $this->model->with(['hits' => function ($query) use ($user_id) {
+                $query->where('user_id', '=', $user_id)
+                    ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
+
+            }])->where(function ($query) use ($zone, $adsWithHitsIds) //compara con los ids de anuncios con hits
+            {
+                $query->whereNotIn('id', $adsWithHitsIds)
+                    ->where('canton', '=', $zone)
+                    ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                    ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+            })->get(); //obtener los anuncios sin hits de un usuario
+
+            $ads = $this->model->with(['hits' => function ($query) use ($user_id) {
+                $query->where('user_id', '=', $user_id)
+                    ->where(\DB::raw('DAY(hit_date)'), '<>', Carbon::now()->day )
+                    ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
+            }])->where(function ($query) use ($zone)
+            {
+                $query->where('canton', '=', $zone)
+                    ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                    ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+            })->get(); //obtener los anuncios con los hits que no sean de hoy
+        }
+        if($adsWithoutHits->count() == 0) //cuando ya esten todos vistos, empezar a eliminar los hits del anuncio dependiendo del user
         {
 
             foreach($ads as $ad)
@@ -168,8 +210,23 @@ class DbAdRepository extends DbRepository implements AdRepository {
         return $this->model->SearchSlug($slug)->first();
     }
 
-    public function hits_per_day($user_id)
+    public function hits_per_day($user_id, $ad_type = null)
     {
+
+        if($ad_type) {
+            $hits_per_day = Task::whereHas('ad', function ($q) use ($ad_type) {
+                $q->where('ad_type', '=', $ad_type);
+
+            })->where(function ($query) use ($user_id) {
+                $query->where('user_id', '=', $user_id)
+                    ->where(\DB::raw('DAY(created_at)'), '=', Carbon::now()->day)
+                    ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
+                    ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+            })->count();
+
+            return $hits_per_day;
+        }
+
         $hits_per_day = Task::where(function ($query) use ($user_id)
         {
             $query->where('user_id', '=', $user_id)
@@ -181,19 +238,32 @@ class DbAdRepository extends DbRepository implements AdRepository {
 
         return $hits_per_day;
     }
-    public function hits_per_week($user_id)
+    public function hits_per_week($user_id, $ad_type = null)
     {
         $hits_per_week = [];
         $startOfWeek = Carbon::now()->startOfWeek();
         $endOfWeek = Carbon::now()->endOfWeek();
 
-        $tasks = Task::where(function ($query) use ($user_id)
-        {
-            $query->where('user_id', '=', $user_id)
-                 ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
-                ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
-        })->get();
+        if($ad_type) {
 
+            $tasks = Task::whereHas('ad', function ($q) use ($ad_type) {
+                $q->where('ad_type', '=', $ad_type);
+
+            })->where(function ($query) use ($user_id)
+            {
+                $query->where('user_id', '=', $user_id)
+                    ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
+                    ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+            })->get();
+
+        }else {
+
+            $tasks = Task::where(function ($query) use ($user_id) {
+                $query->where('user_id', '=', $user_id)
+                    ->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->month)
+                    ->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+            })->get();
+        }
         foreach($tasks as $task)
         {
             //if($task->created_at->weekOfMonth == Carbon::now()->weekOfMonth) $hits_per_week[] = $task;
@@ -208,10 +278,116 @@ class DbAdRepository extends DbRepository implements AdRepository {
         return count($hits_per_week);
     }
 
-    public function getAds($province, $zone, $user_id)
+    public function getAdsPublic($type = null)
+    {
+
+        if($type)
+        {
+
+            $adsByType = $this->model->where('ad_type', $type);
+
+            $ads = $adsByType->orderBy(\DB::raw('RAND()'))->get();
+
+            $adsActives = $this->getAdsActives($ads);
+
+            return $adsActives;
+        }
+        /********si no hay type *******/
+
+        $ads = $this->model->orderBy(\DB::raw('RAND()'))->get();
+
+        $adsActives = $this->getAdsActives($ads);
+
+        return $adsActives;
+    }
+    public function getAds($province, $zone, $user_id,$type = null)
     {
 
 
+        if($type)
+        {
+           // dd($type);
+            $adsTotalByType = $this->model->with(['hits' => function ($query) use ($user_id) {
+                $query->where('user_id', '=', $user_id)
+                    ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
+
+            }])->where('ad_type', $type);
+
+            $adsTotal = $adsTotalByType->where(function ($query) use ($zone, $province)
+            {
+
+                $query->where('all_country', '=', 1)
+                    ->orWhere('province', '=', $province)
+                    ->Where('canton', '=', 'Todos')
+                    ->orWhere('canton', '=', $zone);
+
+                //->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                //->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+            })->get();
+
+            $adsTotalActives = $this->getAdsActives($adsTotal);
+
+
+
+            $adsByTypeWithHitsToday = $this->model->whereHas('hits', function ($q) use ($user_id)
+            {
+                $q->where('user_id', '=', $user_id)
+                    ->where(\DB::raw('day(hit_date)'), '=', Carbon::now()->day)
+                    ->where(\DB::raw('MONTH(hit_date)'), '=', Carbon::now()->month)
+                    ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
+            })->where('ad_type', $type);
+
+            $adsWithHitsToday = $adsByTypeWithHitsToday->where(function ($query) use ($zone, $province)
+                {
+                    $query->where('all_country', '=', 1)
+                        ->orWhere('province', '=', $province)
+                        ->Where('canton', '=', 'Todos')
+                        ->orWhere('canton', '=', $zone);
+                    // ->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                    // ->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+                })->get();
+
+            $adsWithHitsTodayActives = $this->getAdsActives($adsWithHitsToday);
+
+            if($adsTotalActives->count() <= 5 && $adsWithHitsTodayActives->count() == 0)
+            {
+
+                foreach($adsTotalActives as $ad)
+                {
+                    if($ad->hits->count() > 0)
+                    {
+                        foreach($ad->hits as $hit)
+                        {
+                            if($hit->user_id == $user_id)
+                                $hit->delete();
+                        }
+                    }
+
+
+                }
+            }
+
+            $adsByType = $this->model->with(['hits' => function ($query) use ($user_id) {
+                $query->where('user_id', '=', $user_id)
+                    ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);
+
+            }])->where('ad_type', $type);
+
+            $ads = $adsByType->where(function ($query) use ($zone, $province)
+            {
+                $query->where('all_country', '=', 1)
+                    ->orWhere('province', '=', $province)
+                    ->Where('canton', '=', 'Todos')
+                    ->orWhere('canton', '=', $zone);
+                //->where(\DB::raw('MONTH(publish_date)'), '=', Carbon::now()->month)
+                //->where(\DB::raw('YEAR(publish_date)'), '=', Carbon::now()->year);
+            })->orderBy(\DB::raw('RAND()'))->get();
+
+            $adsActives = $this->getAdsActives($ads);
+
+            return $adsActives;
+        }
+        /********si no hay type *******/
         $adsTotal = $this->model->with(['hits' => function ($query) use ($user_id) {
             $query->where('user_id', '=', $user_id)
                 ->where(\DB::raw('YEAR(hit_date)'), '=', Carbon::now()->year);

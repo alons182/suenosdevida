@@ -27,7 +27,8 @@ class AdRequest extends Request {
             'all_country' => 'required',
             'email' => 'email|required',
             'publish_date' => 'required',
-			'active_months' => 'required|numeric'
+			'active_months' => 'required|numeric',
+			'url' => 'url'
 		];
 	}
 

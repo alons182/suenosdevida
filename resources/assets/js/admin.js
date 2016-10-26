@@ -46,6 +46,21 @@ $(function () {
             $('#province').change();
         }
     });
+
+    /*for ads si es video o un sitio web*/
+
+    $("input[name='ad_type']").on('click', function () {
+
+        if ($(this).attr('value') == 1) {
+            $("input[name='url']").attr('disabled', true);
+            $("input[name='video']").attr('disabled', false);
+
+        } else {
+            $("input[name='video']").attr('disabled', true);
+            $("input[name='url']").attr('disabled', false);
+
+        }
+    });
     $("form[data-confirm]").submit(function() {
         if ( ! confirm($(this).attr("data-confirm"))) {
             return false;

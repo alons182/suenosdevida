@@ -490,7 +490,7 @@ class DbUserRepository extends DbRepository implements UserRepository
         {
             $adsVistos = $this->getHitsPerMonth($userToGenerate, $data['month'], (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year );
 
-            $comision = ($adsVistos >= 25) ? 1000 : 3000; // rebaja mil si > 75 sino  3000
+            $comision = ($adsVistos >= 120) ? 2000 : 6000; // rebaja mil si > 75 sino  3000
         }else{
             $comision = 1000;
         }

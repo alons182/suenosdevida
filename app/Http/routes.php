@@ -101,6 +101,15 @@ Route::post('ads/comment/{ad}', [
     'uses' => 'AdsController@postComment'
 ]);
 
+Route::get('ads/type/{type}', [
+    'as'   => 'ads_type',
+    'uses' => 'AdsController@adsByType'
+]);
+Route::post('ads/viewed/{ad}', [
+    'as'   => 'ads.viewed',
+    'uses' => 'AdsController@postViewed'
+]);
+
 Route::resource('ads', 'AdsController');
 /**
  * Payments user

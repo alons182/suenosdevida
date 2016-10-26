@@ -9,7 +9,7 @@ class Ad extends Model {
 
     protected $fillable = [
         'name', 'slug', 'description', 'image', 'video', 'province', 'canton','email','all_country', 'published', 'featured','publish_date','company_name',
-        'company_info', 'company_logo','active_months'
+        'company_info', 'company_logo','active_months','ad_type','url'
     ];
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'publish_date'];
 

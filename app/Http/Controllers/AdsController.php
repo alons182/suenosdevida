@@ -28,7 +28,12 @@ class AdsController extends Controller {
     function __construct(AdRepository $adRepository, ContactMailer $mailer)
     {
         $this->adRepository = $adRepository;
-        $this->middleware('auth');
+
+        $this->middleware('auth', ['only' => [
+            'postComment',
+            'postViewed',
+        ]]);
+
         $this->mailer = $mailer;
     }
 
@@ -40,13 +45,32 @@ class AdsController extends Controller {
 	 */
 	public function index()
 	{
-        $canton = Auth::user()->profiles->canton;
-        $province = Auth::user()->profiles->province;
 
-        $ads = $this->adRepository->getAds($province, $canton, Auth::user()->id);
+        return View::make('ads.index');
 
-        $hits_per_day = $this->adRepository->hits_per_day(Auth::user()->id);
-        $hits_per_week = $this->adRepository->hits_per_week(Auth::user()->id);
+        /*return View::make('ads.index')->with(compact('ads'));*/
+	}
+    public function adsByType($type)
+    {
+
+        if(Auth::user()) {
+            $canton = Auth::user()->profiles->canton;
+            $province = Auth::user()->profiles->province;
+
+            $ads = $this->adRepository->getAds($province, $canton, Auth::user()->id, $type);
+
+            $hits_per_day = $this->adRepository->hits_per_day(Auth::user()->id, $type);
+            $hits_per_week = $this->adRepository->hits_per_week(Auth::user()->id, $type);
+
+        }else{
+
+            $ads = $this->adRepository->getAdsPublic($type);
+
+            $hits_per_day = 0;
+            $hits_per_week = 0;
+        }
+
+
 
 
         // para mostrar de que dia empieza y termina la semana
@@ -61,7 +85,7 @@ class AdsController extends Controller {
         $endOfWeek = Carbon::now()->endOfWeek();
         $today = Carbon::now()->today();
 
-        return View::make('ads.index')->with([
+        return View::make('ads.ads')->with([
             'ads' => $ads,
             'hits_per_day' => $hits_per_day,
             'hits_per_week' => $hits_per_week,
@@ -71,9 +95,8 @@ class AdsController extends Controller {
             'dayOfWeek' => $dayOfWeek,
             'today' => $today->toDateString()
         ]);
+    }
 
-        /*return View::make('ads.index')->with(compact('ads'));*/
-	}
 
 
     /**
@@ -101,6 +124,16 @@ class AdsController extends Controller {
 
         return Redirect::route('ads.index');
 	}
+    public function postViewed(Request $request, $ad_id)
+    {
+        $data = $request->all();
+        $ad = $this->adRepository->findById($ad_id);
+
+        $this->adRepository->checkAd($ad, Auth::user()->id);
+
+
+        return 'web vista';
+    }
 
 	/**
 	 * Display the specified resource.
@@ -111,12 +144,15 @@ class AdsController extends Controller {
 	public function show($id)
 	{
         $ad = $this->adRepository->findById($id);
-       $targetDate =  Carbon::now()->addMinutes(1);
+        $targetDate =  Carbon::now()->addMinutes(1);
+        $hits_per_day = 0;
+        $hits_per_week = 0;
 
-        $hits_per_day = $this->adRepository->hits_per_day(Auth::user()->id);
-        $hits_per_week = $this->adRepository->hits_per_week(Auth::user()->id);
-
-		return view::make('ads.show')->with(compact('ad','targetDate','hits_per_day', 'hits_per_week'));
+        if(Auth::user()) {
+            $hits_per_day = $this->adRepository->hits_per_day(Auth::user()->id, $ad->ad_type);
+            $hits_per_week = $this->adRepository->hits_per_week(Auth::user()->id, $ad->ad_type);
+        }
+		return view::make('ads.show-'.$ad->ad_type)->with(compact('ad','targetDate','hits_per_day', 'hits_per_week'));
 	}
 
 

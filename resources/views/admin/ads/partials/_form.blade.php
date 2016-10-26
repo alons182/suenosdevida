@@ -87,9 +87,22 @@
     </div>
 
     <div class="form-group">
+        {!! Form::label('ad_type','Tipo de anuncio:') !!} <br />
+        {!! Form::radio('ad_type', '1', true) !!} Video <br />
+        {!! Form::radio('ad_type', '2') !!} Sitio Web
+        {!! errors_for('ad_type',$errors) !!}
+    </div>
+
+    <div class="form-group">
         {!! Form::label('video','Video:') !!}
-        {!! Form::text('video', null,['class'=>'form-control','required'=>'required']) !!}
+        {!! Form::text('video', null,['class'=>'form-control',(isset($ad)) ? ($ad->ad_type == 2) ? 'disabled' : '' : '' ]) !!}
         {!! errors_for('video',$errors) !!}
+
+    </div>
+    <div class="form-group">
+        {!! Form::label('url','Sitio Web:') !!}
+        {!! Form::url('url', null,['class'=>'form-control', (isset($ad)) ? ($ad->ad_type == 1) ? 'disabled' : '' : '' ]) !!}
+        {!! errors_for('url',$errors) !!}
 
     </div>
     <!-- Email Form Input -->
