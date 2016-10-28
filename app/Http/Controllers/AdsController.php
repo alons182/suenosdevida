@@ -129,8 +129,15 @@ class AdsController extends Controller {
         $data = $request->all();
         $ad = $this->adRepository->findById($ad_id);
 
+        $data['name'] = Auth::user()->profiles->first_name;
+        $data['email'] = Auth::user()->email;
+        $data['ad'] = $ad->name;
+        $data['ad_email'] = $ad->email;
+        $data['comment'] = 'Sitio Web';
+
         $this->adRepository->checkAd($ad, Auth::user()->id);
 
+        $this->mailer->comment($data);
 
         return 'web vista';
     }
