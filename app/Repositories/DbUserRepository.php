@@ -443,15 +443,23 @@ class DbUserRepository extends DbRepository implements UserRepository
 
     }
 
-    public function generateCut($userToGenerate, $sendEmail)
+    public function generateCut($userToGenerate, $sendEmail, $test = false)
     {
         // para obtener posible ganancias del mes anterior
         $data['month'] = Carbon::now()->subMonth()->month;
         $data['year'] = (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year;
 
         // para testcontroller si estamos en diciembre simular que se ejecuta en enero
-        $month = Carbon::now()->month == 12 ? Carbon::now()->addMonth()->month : Carbon::now()->month;
-        $year = Carbon::now()->month == 12 ? Carbon::now()->addMonth()->year : Carbon::now()->month;
+        if($test)
+        {
+            $month = Carbon::now()->month == 12 ? Carbon::now()->addMonth()->month : Carbon::now()->month;
+            $year = Carbon::now()->month == 12 ? Carbon::now()->addMonth()->year : Carbon::now()->year;
+            
+        }else{
+            $month = Carbon::now()->month;
+            $year = Carbon::now()->year;
+        }
+
 
         $usersGenerated = 0;
         $charge = 0;
