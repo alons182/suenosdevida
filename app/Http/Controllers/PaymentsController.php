@@ -64,6 +64,9 @@ class PaymentsController extends Controller
         if (!isset($data['month'])) {
             $data = array_add($data, 'month', Carbon::now()->month);
         }
+        if (!isset($data['year'])) {
+            $data = array_add($data, 'year', Carbon::now()->year);
+        }
 
         $paymentsOfUser = $this->paymentRepository->getPaymentsOfUser($data);
         $paymentsOfUserRed = $this->paymentRepository->getPaymentsOfUserRed($data);

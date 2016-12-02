@@ -161,7 +161,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
         {
             $query->where('user_id', '=', $user_logged->id)
                 ->where('month', '=', $data['month'])//->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
-                ->where('year', '=',  Carbon::now()->year);//->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+                ->where('year', '=',  $data['year']);//->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
         })->orderBy('created_at', 'desc')->paginate($this->limit);
 
         return $paymentsOfUser;
@@ -185,7 +185,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
                 ->where('payment_type', '<>', 'PA')
                 ->where('amount', '>', 0)
                 ->where('month', '=', $data['month'])//->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
-                ->where('year', '=', Carbon::now()->year);//->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+                ->where('year', '=', $data['year']);//->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
         })->orderBy('month', 'desc')->orderBy('created_at', 'desc')->paginate($this->limit);
 
 
@@ -208,7 +208,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
                 ->where('payment_type', '<>', 'CO')
                 ->where('payment_type', '<>', 'PA')
                 ->where('month', '=', $data['month'])//->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
-                ->where('year', '=', Carbon::now()->year);//->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+                ->where('year', '=', $data['year']);//->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
         })->get()->last();
 
         $paymentsOfMembership = ($payment) ? $payment->amount : 0;
@@ -231,7 +231,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
             $query->where('user_id', '=', $user_logged->id)
                 ->where('payment_type', '=', 'CO')
                 ->where('month', '=', $data['month'])//->where(\DB::raw('MONTH(created_at)'), '=', $data['month'])
-                ->where('year', '=', Carbon::now()->year);//->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
+                ->where('year', '=', $data['year']);//->where(\DB::raw('YEAR(created_at)'), '=', Carbon::now()->year);
         })->get()->last();
 
         $commissionOfGain = ($payment) ? $payment->amount : 0;
