@@ -446,6 +446,7 @@ class DbUserRepository extends DbRepository implements UserRepository
     public function generateCut($userToGenerate, $sendEmail)
     {
         $data['month'] = Carbon::now()->subMonth()->month;
+        $data['year'] = (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year; // para obtener posible ganancias
         $usersGenerated = 0;
         $charge = 0;
 
@@ -488,7 +489,7 @@ class DbUserRepository extends DbRepository implements UserRepository
 
         if($paymentsOfRedCount > 5)
         {
-            $adsVistos = $this->getHitsPerMonth($userToGenerate, $data['month'], (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year );
+            $adsVistos = $this->getHitsPerMonth($userToGenerate, $data['month'], $data['year'] );
 
             $comision = ($adsVistos >= 120) ? 2000 : 6000; // rebaja mil si > 75 sino  3000
         }else{
