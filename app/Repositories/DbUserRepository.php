@@ -445,8 +445,14 @@ class DbUserRepository extends DbRepository implements UserRepository
 
     public function generateCut($userToGenerate, $sendEmail)
     {
+        // para obtener posible ganancias del mes anterior
         $data['month'] = Carbon::now()->subMonth()->month;
-        $data['year'] = (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year; // para obtener posible ganancias
+        $data['year'] = (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year;
+
+        // para testcontroller si estamos en diciembre simular que se ejecuta en enero
+        $month = Carbon::now()->month == 12 ? Carbon::now()->addMonth()->month : Carbon::now()->month;
+        $year = Carbon::now()->month == 12 ? Carbon::now()->addMonth()->year : Carbon::now()->month;
+        
         $usersGenerated = 0;
         $charge = 0;
 
@@ -455,12 +461,12 @@ class DbUserRepository extends DbRepository implements UserRepository
         $descendants = $userToGenerate->immediateDescendants();
 
         $descendantsIds = $descendants->lists('id')->all();
-        $paymentsOfRedCount = Payment::where(function ($query) use ($descendantsIds) {
+        $paymentsOfRedCount = Payment::where(function ($query) use ($descendantsIds, $data) {
             $query->whereIn('user_id', $descendantsIds)
                 ->where('payment_type', '<>', 'A') //A - Anual
                 ->where('payment_type', '<>', 'PA') // PA -Pago Adicional
-                ->where('month', '=', Carbon::now()->subMonth()->month)//->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->subMonth()->month)
-                ->where('year', '=', (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year);//->where(\DB::raw('YEAR(created_at)'), '=', (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year);
+                ->where('month', '=', $data['month'])//->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->subMonth()->month)
+                ->where('year', '=', $data['year']);//->where(\DB::raw('YEAR(created_at)'), '=', (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year);
 
         })->count();
        // dd(Carbon::now()->subMonth()->month);
@@ -475,11 +481,11 @@ class DbUserRepository extends DbRepository implements UserRepository
         if ($paymentsOfRedCount > 25)
             $charge = 25000;
 
-        $paymentOfMonth = Payment::where(function ($query) use ($userToGenerate) {
+        $paymentOfMonth = Payment::where(function ($query) use ($userToGenerate, $month, $year) {
             $query->where('user_id', '=', $userToGenerate->id)
                 ->where('payment_type', '=', 'M') //M - Membresia
-                ->where('month', '=', Carbon::now()->month)//->where(\DB::raw('MONTH(created_at)'), '=', $month)
-                ->where('year', '=', Carbon::now()->year);//->where(\DB::raw('YEAR(created_at)'), '=', $year);
+                ->where('month', '=', $month)//->where(\DB::raw('MONTH(created_at)'), '=', $month)
+                ->where('year', '=', $year);//->where(\DB::raw('YEAR(created_at)'), '=', $year);
 
         })->get()->last();
 
@@ -505,8 +511,8 @@ class DbUserRepository extends DbRepository implements UserRepository
                 'bank' => '--',
                 'transfer_number' => '--',
                 'transfer_date' => Carbon::now(),
-                'month' => Carbon::now()->month,
-                'year' => Carbon::now()->year
+                'month' =>  $month,
+                'year' =>  $year
             ]);
             if ($userToGenerate->parent_id) {
                 $gain = new Gain();
@@ -514,8 +520,8 @@ class DbUserRepository extends DbRepository implements UserRepository
                 $gain->description = 'Ganancia generada por cobro automatico de un hijo';
                 $gain->amount = $charge;
                 $gain->gain_type = 'P'; // P - Ganacia generada de un hijo
-                $gain->month = Carbon::now()->month;
-                $gain->year = Carbon::now()->year;
+                $gain->month = $month;
+                $gain->year = $year;
                 $gain->save();
             }
             if (($possibleGain - $charge) > 0) {
@@ -531,8 +537,8 @@ class DbUserRepository extends DbRepository implements UserRepository
                     'bank' => '--',
                     'transfer_number' => '--',
                     'transfer_date' => Carbon::now(),
-                    'month' => Carbon::now()->month,
-                    'year' => Carbon::now()->year
+                    'month' => $month,
+                    'year' => $year
                 ]);
 
                 $gain = new Gain();
@@ -540,8 +546,8 @@ class DbUserRepository extends DbRepository implements UserRepository
                 $gain->description = 'Ganancia total generada por corte';
                 $gain->amount = ($ganancia < 0 ? 0 : ($ganancia - $comision));
                 $gain->gain_type = 'B'; //B - ganancia del mes
-                $gain->month = Carbon::now()->month;
-                $gain->year = Carbon::now()->year;
+                $gain->month = $month;
+                $gain->year = $year;
                 $gain->save();
 
 
