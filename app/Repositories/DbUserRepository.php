@@ -468,11 +468,11 @@ class DbUserRepository extends DbRepository implements UserRepository
         if ($paymentsOfRedCount > 5 && $paymentsOfRedCount <= 10)
             $charge = 5000;
         if ($paymentsOfRedCount > 10 && $paymentsOfRedCount <= 15)
-            $charge = 15000;
-        if ($paymentsOfRedCount > 15 && $paymentsOfRedCount <= 20)
+            $charge = 10000;
+        if ($paymentsOfRedCount > 15 && $paymentsOfRedCount <= 25)
+            $charge = 20000;
+        if ($paymentsOfRedCount > 25)
             $charge = 25000;
-        if ($paymentsOfRedCount > 20)
-            $charge = 50000;
 
         $paymentOfMonth = Payment::where(function ($query) use ($userToGenerate) {
             $query->where('user_id', '=', $userToGenerate->id)
