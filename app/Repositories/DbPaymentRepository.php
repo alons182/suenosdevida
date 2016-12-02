@@ -81,12 +81,12 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
         $payment2->year = ($payment->month == 12) ? $payment->year + 1 : $payment->year;
         $payment2->save();
         $payment3 = $this->model->create($data);
-        $payment3->month = ($payment->month == 12) ? 1 : $payment->month + 2;
-        $payment3->year = ($payment->month == 12) ? $payment->year + 1 : $payment->year;//$payment3->created_at = $payment3->created_at->addMonths(2);
+        $payment3->month = ($payment2->month == 12) ? 1 : $payment2->month + 1;
+        $payment3->year = ($payment2->month == 12) ? $payment2->year + 1 : $payment2->year;//$payment3->created_at = $payment3->created_at->addMonths(2);
         $payment3->save();
         $payment4 = $this->model->create($data);
-        $payment4->month = ($payment->month == 12) ? 1 : $payment->month + 3;
-        $payment4->year = ($payment->month == 12) ? $payment->year + 1 : $payment->year;
+        $payment4->month = ($payment3->month == 12) ? 3 : $payment3->month + 3;
+        $payment4->year = ($payment3->month == 12) ? $payment3->year + 1 : $payment3->year;
         $payment4->save();
 
         //Generate Gain for the payment

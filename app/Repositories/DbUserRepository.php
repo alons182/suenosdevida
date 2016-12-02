@@ -452,7 +452,7 @@ class DbUserRepository extends DbRepository implements UserRepository
         // para testcontroller si estamos en diciembre simular que se ejecuta en enero
         $month = Carbon::now()->month == 12 ? Carbon::now()->addMonth()->month : Carbon::now()->month;
         $year = Carbon::now()->month == 12 ? Carbon::now()->addMonth()->year : Carbon::now()->month;
-        
+
         $usersGenerated = 0;
         $charge = 0;
 
