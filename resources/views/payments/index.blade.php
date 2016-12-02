@@ -10,16 +10,17 @@
         {!! Form::close() !!}
 
         <div class="gains-container">
+
+            <small>Ganancias</small>
             <div class="months">
                 {!! Form::open(['route' => 'payments.index', 'method' => 'get']) !!}
 
                 <div class="form-group">
-                    {!! Form::selectMonth('month', $selectedMonth, ['class' => 'form-control']) !!}
-
+                    {!! Form::selectMonth('month', $selectedMonth, ['class' => 'form-control','style'=>'width:115px;float:right;']) !!}
+                    {!! Form::selectYear('year','2016',\Carbon\Carbon::now()->year + 1, $selectedYear, ['class' => 'form-control', 'style' =>'width:100px;float:right;']) !!}
                 </div>
                 {!! Form::close() !!}
             </div>
-            <small>Ganancias</small>
             <div class="gains">
                 <h2>Pago de membresia : <span class="amount {{ ($paymentsOfMembership < 3000) ? 'red' : '' }}">{{ money($paymentsOfMembership,'₡') }}</span></h2>
                 <h2>Posible: <span class="amount">{!! money($possible_gains,'₡') !!}</span></h2>

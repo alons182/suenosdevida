@@ -41,6 +41,11 @@
         $('.months').find('form').submit();
 
     });
+    $('select[name="year"]').change(function() {
+
+        $('.months').find('form').submit();
+
+    });
 
     $easyzoom = $('.easyzoom').easyZoom();
     api = $easyzoom.data('easyZoom');

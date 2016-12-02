@@ -88,7 +88,8 @@ class PaymentsController extends Controller
             'commission' => $commissionOfGain,
             'possible_gains' => $possibleGains,
             'accumulatedGains' => $accumulatedGains,
-            'selectedMonth' => $data['month']
+            'selectedMonth' => $data['month'],
+            'selectedYear' => $data['year']
 
         ]);
     }
