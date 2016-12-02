@@ -43,7 +43,8 @@
                     <h1>Corte mensual</h1>
                     {!! Form::open(['route'=>'generate_cut']) !!}
 
-
+                    {!! Form::selectMonth('month', \Carbon\Carbon::now()->month, ['class' => 'form-control','style'=>'width:115px;float:right;']) !!}
+                    {!! Form::selectYear('year','2016',\Carbon\Carbon::now()->year + 1, \Carbon\Carbon::now()->year, ['class' => 'form-control', 'style' =>'width:100px;float:right;']) !!}
                         {!! Form::submit('Generar corte',['class'=>'btn btn-primary'])!!}
 
 

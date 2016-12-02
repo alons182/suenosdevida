@@ -144,10 +144,10 @@ class TestController extends Controller {
     }
     public function callGenerateCut()
     {
-        $gains = Gain::all();
-        $payments = Payment::all();
-        $tasks = Task::all();
-       foreach($gains as $gain)
+        //$gains = Gain::all();
+        //$payments = Payment::all();
+        //$tasks = Task::all();
+       /*foreach($gains as $gain)
         {
             if($gain->month == 1)
             {
@@ -176,9 +176,18 @@ class TestController extends Controller {
 
             $task->created_at = $task->created_at->subMonth();
             $task->save();
-        }
+        }*/
         //dd('cambio fechas');
-        $exitCode = Artisan::call('suenos:generatecut');
+        $users = User::all();
+        $count = 0;
+
+        foreach ($users as $user)
+        {
+            $count += $this->userRepository->generateCut($user, false, request('month'), request('year') );
+
+        }
+
+        //$exitCode = Artisan::call('suenos:generatecut');
 
         Flash::message('Se genero el corte mensual correctamente' );
 
