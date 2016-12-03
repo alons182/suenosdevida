@@ -82,14 +82,14 @@ class TestController extends Controller {
         $user_id = $request->input('user_id');
         $parent_user = User::findOrFail($user_id);
 
-        if(($parent_user->immediateDescendants()->count() + $cant_users) > 1000)
+        /*if(($parent_user->immediateDescendants()->count() + $cant_users) > 1000)
         {
             $soloAgregar = 1000 - $parent_user->immediateDescendants()->count();
 
             Flash::error('Supera el limite de 1000 usuarios por usuario. solo puedes agregar '.$soloAgregar. ' más' );
 
             return redirect()->route('store.admin.tests.index');
-        }
+        }*/
 
         foreach (range(1, $cant_users) as $index)
         {
