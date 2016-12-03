@@ -302,7 +302,7 @@ class DbUserRepository extends DbRepository implements UserRepository
                 }
                 else {
 
-                    if($parent_user->immediateDescendants()->count() == 1000) // si el patrocinador  tiene 1000 usuario subirlo al padre
+                    if($parent_user->immediateDescendants()->count() == 1000 && $parent_user->bonus == 2) // si el patrocinador  tiene 1000 usuario subirlo al padre
                     {
                         $this->bonus($user, $parent_user->parent_id);
                     }else{
