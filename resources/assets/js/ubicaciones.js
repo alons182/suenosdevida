@@ -103,6 +103,10 @@ window.ubicaciones = [
                 title: 'Acosta'
             },
             {
+                name_id: 'tibas',
+                title: 'Tibas'
+            },
+            {
                 name_id: 'moravia',
                 title: 'Moravia'
             },
