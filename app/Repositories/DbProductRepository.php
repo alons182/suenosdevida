@@ -15,7 +15,7 @@ class DbProductRepository extends DbRepository implements ProductRepository {
     function __construct(Product $model)
     {
         $this->model = $model;
-        $this->limit = 10;
+        $this->limit = 12;
     }
 
     /**
