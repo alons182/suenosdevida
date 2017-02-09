@@ -8,7 +8,8 @@
         @include('layouts.partials._filter_products')
         @include('layouts.partials._list_products')
         @if ($products)
-           <div class="pagination-container">{{$products->appends(['subcat'=>$selected])->render()}}</div>
+           <div class="pagination-container">{!! $products->appends(['subcat'=>$selected])->render() !!}</div>
+           
        @endif
     </section>
 @stop
