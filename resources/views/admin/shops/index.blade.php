@@ -29,7 +29,7 @@
                     <td>{!! $shop->id !!}</td>
                     <td>{!! link_to_route('store.admin.shops.edit', $shop->name, $shop->id) !!}</td>
                     <td>{!! $shop->canton !!}</td>
-                    <td>{!! $shop->products()->count() !!}</td>
+                    <td>{!! $shop->products->count() !!}</td>
                     <td>{!! $shop->created_at !!}</td>
                     <td>
                             @if ($shop->published)

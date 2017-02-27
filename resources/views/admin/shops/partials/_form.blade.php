@@ -94,7 +94,7 @@
 @include('admin/users/partials/_addPatner',['buttonText' => 'Agregar Responsable'])
 
 <ul class="patners">
-	@if(isset($shop->responsable_id))
+	@if(isset($shop) && $shop->responsable_id)
 
 		<li data-id="{!! $shop->responsable_id !!}">
 			<span class="delete" data-id="{!! $shop->responsable_id !!}"><i class="glyphicon glyphicon-remove"></i></span>
