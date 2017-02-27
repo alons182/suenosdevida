@@ -21,7 +21,7 @@
         </thead>
         <tbody>
             @foreach ($categories as $category)
-                @if($category->shop->responsable_id == $currentUser->id || $currentUser->hasrole('administrator'))
+                @if(($category->shop_id && $category->shop->responsable_id == $currentUser->id) || $currentUser->hasrole('administrator'))
                 <tr>
                     <td>{!! $category->id !!}</td>
                     <td>
@@ -32,7 +32,7 @@
                         @endif
                     </td>
                     <td>{!! str_limit($category->description, 20) !!}</td>
-                    <td>{!! ($category->shop)? $category->shop->name : '' !!}</td>
+                    <td>{!! ($category->shop) ? $category->shop->name : '' !!}</td>
                     <td>{!! $category->created_at !!}</td>
                     <td>
      

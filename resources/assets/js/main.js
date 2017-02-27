@@ -19,6 +19,13 @@
         timeout: 200
 
     });
+
+    $('.btn-catalogue-query').on('click',function(e){
+        e.preventDefault();
+        
+        $('.shop-catalogues-query').toggle();
+    });
+
     //menu.find('.item-109 a').addClass('btn btn-red');
 
     // Login form

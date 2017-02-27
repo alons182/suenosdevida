@@ -22,6 +22,14 @@ class ContactMailer extends Mailer{
 
         return $this->sendTo($emailTo, $subject, $view, $data);
     }
+    public function catalogue($data)
+    {
+        $view = 'emails.contact.catalogue';
+        $subject = 'Información desde formulario de solicitud del catalogo';
+        $emailTo = $data['shop_email'];
+
+        return $this->sendTo($emailTo, $subject, $view, $data);
+    }
     public function cashing($data)
     {
         $view = 'emails.contact.cashing';

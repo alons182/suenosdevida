@@ -33,6 +33,10 @@ class Shop extends Model
     {
         return $this->hasMany('App\Product');
     }
+    public function catalogues()
+    {
+        return $this->hasMany('App\Catalogue');
+    }
     public function categories()
     {
         return $this->hasMany('App\Category');

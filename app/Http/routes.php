@@ -27,6 +27,7 @@ App::bind('App\Repositories\AdRepository', 'App\Repositories\DbAdRepository');
 App::bind('App\Repositories\GainRepository', 'App\Repositories\DbGainRepository');
 App::bind('App\Repositories\ShopRepository', 'App\Repositories\DbShopRepository');
 App::bind('App\Repositories\GalleryAdRepository', 'App\Repositories\DbGalleryAdRepository');
+App::bind('App\Repositories\CatalogueRepository', 'App\Repositories\DbCatalogueRepository');
 /**
  * Pages
  */
@@ -298,6 +299,9 @@ Route::group(['prefix' => 'store/admin', 'middleware' => 'authByRole'], function
 
     Route::resource('products', 'Admin\ProductsController');
 
+    #catalogues
+    Route::resource('catalogues', 'Admin\CataloguesController');
+
     #photos
     Route::post('photos', [
         'as'   => 'save_photo',
@@ -460,6 +464,12 @@ Route::group(['prefix' => 'store'], function ()
     Route::get('shops/{shop}', [
             'as'   => 'shop_path',
             'uses' => 'ShopsController@show']
+    );
+
+    #catalogues
+     Route::post('shops/{shop}/catalogues/request', [
+            'as'   => 'catalogues.resquest',
+            'uses' => 'CataloguesController@request']
     );
 
 

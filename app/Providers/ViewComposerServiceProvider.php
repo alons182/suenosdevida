@@ -35,6 +35,9 @@ class ViewComposerServiceProvider extends ServiceProvider {
         view()->composer('payments/index', function($view){
             $view->with('currentUser', Auth::user());
         });
+         view()->composer('shops/show', function($view){
+            $view->with('currentUser', Auth::user());
+        });
         view()->composer('layouts/partials._banner', function($view){
 
             $path = dir_banners_path();
@@ -78,6 +81,9 @@ class ViewComposerServiceProvider extends ServiceProvider {
             $view->with('currentUser', Auth::user());
         });
         view()->composer('admin/categories/index', function($view){
+            $view->with('currentUser', Auth::user());
+        });
+        view()->composer('admin/catalogues/index', function($view){
             $view->with('currentUser', Auth::user());
         });
         view()->composer('admin/users/partials._export', function($view){
