@@ -45,7 +45,7 @@
         </div>
         <div class="shop-catalogues">
            @foreach($shop->catalogues as $catalogue)
-             <iframe src="{{ $catalogue->url }}" frameborder="0"  width="100%" height="450"> </iframe> 
+             <iframe src="{{ $catalogue->url }}" frameborder="0"  width="100%" height="700"> </iframe> 
             @endforeach
         </div>
          @if(auth()->check())
