@@ -172,7 +172,7 @@ class DbUserRepository extends DbRepository implements UserRepository
                 'Nombre' => $payment->users->profiles->present()->fullname,
                 'Cedula' => $payment->users->profiles->ide,
                 'Cuenta' => $payment->users->profiles->number_account,
-                'Monto pago' => $payment->amount,
+                'Monto pago' => floatval($payment->amount),
                 'Fecha del pago' => $payment->created_at->toDateTimeString(),
                 'Fecha de la transferencia' => $payment->transfer_date
 
@@ -242,9 +242,9 @@ class DbUserRepository extends DbRepository implements UserRepository
                 'Cedula' => $user->profiles->ide,
                 'Cuenta' => $user->profiles->number_account,
                 '# Afiliados' => $user->children()->get()->count(),
-                'Ganancia Por Corte' => $gainsOfUser,
-                'Pago membresia' => $paymentsOfMembership,
-                'Inscripción' => $paymentsAnnual,
+                'Ganancia Por Corte' => floatval($gainsOfUser),
+                'Pago membresia' => floatval ($paymentsOfMembership),
+                'Inscripción' => floatval($paymentsAnnual),
                 'Mes' => $month,
                 'Año' => $year
             );
