@@ -9,7 +9,7 @@
         <!-- Tipo de pago Form Input -->
         <div class="form-group">
             {!! Form::label('payment_type', 'Tipo de pago:') !!}
-            {!! Form::select('payment_type', ['M' => 'Membresia 4 Meses (₡12,000)'], null,['class'=>'form-control']) !!}
+            {!! Form::select('payment_type', ['M' => 'Membresia 4 Meses (₡10,000)'], null,['class'=>'form-control']) !!}
             {!! errors_for('payment_type',$errors) !!}
         </div>
         <!-- Banco Form Input -->

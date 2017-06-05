@@ -35,7 +35,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
     {
         $this->model = $model;
         $this->limit = 10;
-        $this->membership_cost = 15000;
+        $this->membership_cost = 10000;
         $this->mailer = $mailer;
         $this->userRepository = $userRepository;
     }
@@ -291,7 +291,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
             $data = array_add($data, 'description', 'Generado por medio de la pestaña pagos');
         }
         if ($data['payment_type'] == "M1" || $data['payment_type'] == "M")
-            $data = array_add($data, 'amount', 3000);
+            $data = array_add($data, 'amount', 2000);
         if ($data['payment_type'] == "M2")
             $data = array_add($data, 'amount', 10000);
         if ($data['payment_type'] == "M3")
@@ -380,7 +380,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
             $data = [
                 "user_id" => $parent_id,
                 "description" => 'Ganancia generada por la pestaña de pagos',
-                "amount" => 3000,
+                "amount" => 2000,
                 "gain_type" => 'P',
                 "month" => ($month) ? $month : Carbon::now()->month,
                 "year" => ($year) ? $year : Carbon::now()->year,

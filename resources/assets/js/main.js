@@ -121,7 +121,25 @@
         },
         // event callbacks
         beforeAdd               : null,
-        afterAdd                : null,
+        afterAdd                : function( data ){
+           console.log(data);
+
+            $.ajax({
+                type: 'GET',
+                url: '/cart/added',//'/api/get_post/?id='+ post_id +'&post_type=tours',
+                data:{product_id: $('.item_add').data('product')},
+                success: function(data){
+                   console.log(data)
+
+                    
+                },
+                error:function(){
+                    console.log('error enviando email')
+                }
+            });
+
+
+        },
         load                    : null,
         beforeSave              : null,
         afterSave               : null,

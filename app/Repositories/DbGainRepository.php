@@ -22,7 +22,7 @@ class DbGainRepository extends DbRepository implements GainRepository {
     {
         $this->model = $model;
         $this->limit = 20;
-        $this->membership_cost = 12000;
+        $this->membership_cost = 10000;
 
     }
 

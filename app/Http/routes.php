@@ -135,6 +135,12 @@ Route::get('cart', [
     'as'   => 'cart_path',
     'uses' => 'OrdersController@cart'
 ]);
+Route::get('cart/added', [
+    'as'   => 'cart.added',
+    'uses' => 'OrdersController@sendEmailAdded'
+    
+]);
+
 
 Route::get('cart/checkout', [
     'as'   => 'cart_checkout',
@@ -176,6 +182,7 @@ Route::get('/{profile}', [
     'uses' => 'RegistrationController@create',
     'middleware' => 'guest'
 ]);
+
 
 /**
  * Administration Store

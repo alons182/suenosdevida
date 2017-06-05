@@ -5,7 +5,9 @@
 
 use App\Http\Requests\OrderRequest;
 use App\Mailers\OrderMailer;
+use App\Product;
 use App\Repositories\OrderRepository;
+use App\Shop;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -136,6 +138,39 @@ class OrdersController extends Controller {
     public function cart()
     {
         return View::make('orders.cart');
+    }
+
+     public function sendEmailAdded()
+    {
+         $product = Product::find(request('product_id'));
+         $userLogged = auth()->user();
+       
+        if($product)
+        {
+             $shop = Shop::find($product->shop_id);
+
+             if(!$userLogged){
+
+                $user['name'] = 'Invitado';
+                $user['email'] = 'Invitado';
+            }else{
+                
+                $user['name'] =  $userLogged->profiles->first_name;
+                $user['email'] = $userLogged->email;
+            }
+
+             try {
+                    $this->mailer->sendNotificationProductAddedToCart($product,  $shop, $user);
+
+                     return 'ok';
+
+                }catch (Swift_RfcComplianceException $e)
+                {
+                    Log::error($e->getMessage());
+                     return 'error';
+                }
+
+        }
     }
 
     /**

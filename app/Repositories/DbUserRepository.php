@@ -34,7 +34,7 @@ class DbUserRepository extends DbRepository implements UserRepository
     {
         $this->model = $model;
         $this->limit = 10;
-        $this->membership_cost = 12000;
+        $this->membership_cost = 10000;
         $this->annualCharge = 5000;
         $this->gainRepository = $gainRepository;
         $this->mailer = $mailer;
@@ -296,9 +296,9 @@ class DbUserRepository extends DbRepository implements UserRepository
                     $this->bonus($user, $parent_user->parent_id);
                 }else if ($parent_user->immediateDescendants()->count() == 9 && $parent_user->bonus != 2) //decimo afiliado
                 {
-                    $parent_user->bonus = 2;
+                    /*$parent_user->bonus = 2;
                     $parent_user->save();
-                    $this->bonus($user, $parent_user->parent_id);
+                    $this->bonus($user, $parent_user->parent_id);*/
                 }
                 else {
 
@@ -474,25 +474,45 @@ class DbUserRepository extends DbRepository implements UserRepository
         $descendants = $userToGenerate->immediateDescendants();
 
         $descendantsIds = $descendants->lists('id')->all();
-        $paymentsOfRedCount = Payment::where(function ($query) use ($descendantsIds, $data) {
+        
+        $paymentsOfRedCount = 0;
+
+        $paymentsOfRedCountM = Payment::where(function ($query) use ($descendantsIds, $data) {
             $query->whereIn('user_id', $descendantsIds)
-                ->where('payment_type', '<>', 'A') //A - Anual
-                ->where('payment_type', '<>', 'PA') // PA -Pago Adicional
+                ->where('payment_type', '=', 'M') //M - Pago desde pestaña
                 ->where('month', '=', $data['month'])//->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->subMonth()->month)
                 ->where('year', '=', $data['year']);//->where(\DB::raw('YEAR(created_at)'), '=', (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year);
 
         })->count();
+
+        $paymentsOfRedCountMA = Payment::where(function ($query) use ($descendantsIds, $data) {
+            $query->whereIn('user_id', $descendantsIds)
+                ->where('payment_type', '=', 'MA') //MA -Membresia Automatica
+                ->where('month', '=', $data['month'])//->where(\DB::raw('MONTH(created_at)'), '=', Carbon::now()->subMonth()->month)
+                ->where('year', '=', $data['year']);//->where(\DB::raw('YEAR(created_at)'), '=', (Carbon::now()->month == 1) ? Carbon::now()->subyear()->year : Carbon::now()->year);
+
+        })->count();
+
+        if($paymentsOfRedCountM > 0) // si no hay pagos hechos desde la pestaña verifica los pagos automaticos
+            $paymentsOfRedCount = $paymentsOfRedCountM;
+        else // verifica los MA para ver si tiene
+            $paymentsOfRedCount = $paymentsOfRedCountMA;
+
+
+         // if($userToGenerate->id == 2)
+         //     dd($paymentsOfRedCount);
+
        // dd(Carbon::now()->subMonth()->month);
-        if ($paymentsOfRedCount <= 5)
-            $charge = 3000; // comision 1000 si vio mas de 75 o 3000 si vio menos 75
-        if ($paymentsOfRedCount > 5 && $paymentsOfRedCount <= 10)
-            $charge = 5000;
-        if ($paymentsOfRedCount > 10 && $paymentsOfRedCount <= 15)
-            $charge = 10000;
-        if ($paymentsOfRedCount > 15 && $paymentsOfRedCount <= 25)
-            $charge = 20000;
-        if ($paymentsOfRedCount > 25)
-            $charge = 25000;
+        if ($paymentsOfRedCount <= 3) //antes 5
+            $charge = 2000; //3000; // comision 1000 si vio mas de 75 o 3000 si vio menos 75
+        if ($paymentsOfRedCount > 3 && $paymentsOfRedCount <= 6) //antest 5 a 15
+            $charge = 4000;//5000;
+        if ($paymentsOfRedCount > 6 && $paymentsOfRedCount <= 11)
+            $charge = 6000;//10000;
+        if ($paymentsOfRedCount > 12 && $paymentsOfRedCount <= 15)
+            $charge = 8000; // 20000;
+        if ($paymentsOfRedCount > 16)
+            $charge = 10000;//25000;
 
         $paymentOfMonth = Payment::where(function ($query) use ($userToGenerate, $month, $year) {
             $query->where('user_id', '=', $userToGenerate->id)
@@ -506,14 +526,15 @@ class DbUserRepository extends DbRepository implements UserRepository
             $charge = $charge - $paymentOfMonth->amount;
         }
 
-        if($paymentsOfRedCount > 5)
+       if($paymentsOfRedCount > 3)
         {
             $adsVistos = $this->getHitsPerMonth($userToGenerate, $data['month'], $data['year'] );
 
-            $comision = ($adsVistos >= 120) ? 2000 : 6000; // rebaja mil si > 75 sino  3000
+            $comision = ($adsVistos >= 120) ? 1000 : 6000; // rebaja mil si > 75 sino  3000
         }else{
             $comision = 1000;
         }
+       // $comision = 1000; // comision siempre 1000
 
         if (($possibleGain - $charge) >= 0) {
             $payment = Payment::create([

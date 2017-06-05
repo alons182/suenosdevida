@@ -59,7 +59,7 @@
             </div>
             @endif
            <div class="product-addCart">
-            <a href="javascript:;" class="btn btn-purple item_add">Agregar al carro</a>
+            <a href="javascript:;" class="btn btn-purple item_add" data-product="{!! $product->id !!}">Agregar al carro</a>
            </div>
 
 
