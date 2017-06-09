@@ -152,6 +152,7 @@ return [
         'Laracasts\Flash\FlashServiceProvider',
         'Maatwebsite\Excel\ExcelServiceProvider',
 		'Collective\Html\HtmlServiceProvider',
+		'Barryvdh\Debugbar\ServiceProvider',
 
 	],
 
@@ -207,6 +208,7 @@ return [
         'Excel'     => 'Maatwebsite\Excel\Facades\Excel',
 		'Form' 		=> 'Collective\Html\FormFacade',
 		'Html' 		=> 'Collective\Html\HtmlFacade',
+		'Debugbar' => 'Barryvdh\Debugbar\Facade',
 
 	],
 

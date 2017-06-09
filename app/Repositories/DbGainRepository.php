@@ -22,7 +22,7 @@ class DbGainRepository extends DbRepository implements GainRepository {
     {
         $this->model = $model;
         $this->limit = 20;
-        $this->membership_cost = 10000;
+        $this->membership_cost = 5000;
 
     }
 
@@ -49,7 +49,21 @@ class DbGainRepository extends DbRepository implements GainRepository {
                 ->where('year', '=', $data['year']);
         })->sum('amount');
 
-        return $gainOfMonth;
+        $gainOfMonthPrev = 0;
+
+        if($gainOfMonth < 5000)
+        {
+             $gainOfMonthPrev = $this->model->where(function ($query) use ($data)
+            {
+                $query->where('user_id', '=', Auth::user()->id)
+                    ->where('gain_type', '=', 'B')
+                    ->where('month', '=', ($data['month'] == 1) ? 12 : $data['month'] - 1)//$data['month'])//->where('month', '<=', $data['month']);
+                    ->where('year', '=', ($data['month'] == 1) ? $data['year'] - 1 : $data['year']);
+            })->sum('amount');
+
+        }
+       
+        return $gainOfMonth + $gainOfMonthPrev;
     }
 
     /**

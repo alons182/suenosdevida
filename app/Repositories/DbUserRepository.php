@@ -34,7 +34,7 @@ class DbUserRepository extends DbRepository implements UserRepository
     {
         $this->model = $model;
         $this->limit = 10;
-        $this->membership_cost = 10000;
+        $this->membership_cost = 5000;
         $this->annualCharge = 5000;
         $this->gainRepository = $gainRepository;
         $this->mailer = $mailer;
@@ -521,7 +521,7 @@ class DbUserRepository extends DbRepository implements UserRepository
                 ->where('year', '=', $year);//->where(\DB::raw('YEAR(created_at)'), '=', $year);
 
         })->get()->last();
-
+        
         if ($paymentOfMonth){
             $charge = $charge - $paymentOfMonth->amount;
         }

@@ -22,7 +22,7 @@
                 {!! Form::close() !!}
             </div>
             <div class="gains">
-                <h2>Pago de membresia : <span class="amount {{ ($paymentsOfMembership < 3000) ? 'red' : '' }}">{{ money($paymentsOfMembership,'₡') }}</span></h2>
+                <h2>Pago de membresia : <span class="amount {{ ($paymentsOfMembership < 2000) ? 'red' : '' }}">{{ money($paymentsOfMembership,'₡') }}</span></h2>
                 <h2>Posible: <span class="amount">{!! money($possible_gains,'₡') !!}</span></h2>
                 
                 <h2>Ganancia por corte : <span class="amount">{!! money($accumulatedGains,'₡') !!}</span></h2>

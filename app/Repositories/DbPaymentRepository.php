@@ -35,7 +35,7 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
     {
         $this->model = $model;
         $this->limit = 10;
-        $this->membership_cost = 10000;
+        $this->membership_cost = 5000;
         $this->mailer = $mailer;
         $this->userRepository = $userRepository;
     }
@@ -80,21 +80,33 @@ class DbPaymentRepository extends DbRepository implements PaymentRepository {
         $payment2->month = ($payment->month == 12) ? 1 : $payment->month + 1;
         $payment2->year = ($payment->month == 12) ? $payment->year + 1 : $payment->year;
         $payment2->save();
-        $payment3 = $this->model->create($data);
+
+        $paymentCO = $this->model->create([
+                    'user_id' => $data['user_id'],
+                    'payment_type' => "CO",//CO - Comision
+                    'amount' => 1000,
+                    'description' => 'Cobro de comision del pago del mes',
+                    'bank' => '--',
+                    'transfer_number' => '--',
+                    'transfer_date' => Carbon::now(),
+                    'month' => $payment->month,
+                    'year' => $payment->year
+                ]);
+        /*$payment3 = $this->model->create($data);
         $payment3->month = ($payment2->month == 12) ? 1 : $payment2->month + 1;
         $payment3->year = ($payment2->month == 12) ? $payment2->year + 1 : $payment2->year;//$payment3->created_at = $payment3->created_at->addMonths(2);
         $payment3->save();
         $payment4 = $this->model->create($data);
         $payment4->month = ($payment3->month == 12) ? 1 : $payment3->month + 1;
         $payment4->year = ($payment3->month == 12) ? $payment3->year + 1 : $payment3->year;
-        $payment4->save();
+        $payment4->save();*/
 
         //Generate Gain for the payment
         $user = $this->userRepository->findById($data['user_id']);
         $this->generateGain($user->parent_id);
         $this->generateGain($user->parent_id, $payment2->month, $payment2->year);
-        $this->generateGain($user->parent_id, $payment3->month, $payment3->year);
-        $this->generateGain($user->parent_id, $payment4->month, $payment4->year);
+        /*$this->generateGain($user->parent_id, $payment3->month, $payment3->year);
+        $this->generateGain($user->parent_id, $payment4->month, $payment4->year);*/
 
 
 
