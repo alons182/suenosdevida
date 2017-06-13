@@ -51,7 +51,7 @@ class DbGainRepository extends DbRepository implements GainRepository {
 
         $gainOfMonthPrev = 0;
 
-        if($gainOfMonth <= 5000)
+        if($gainOfMonth > 0 && $gainOfMonth <= 5000)
         {
              $gainOfMonthPrev = $this->model->where(function ($query) use ($data)
             {
