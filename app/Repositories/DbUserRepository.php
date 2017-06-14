@@ -227,7 +227,7 @@ class DbUserRepository extends DbRepository implements UserRepository
 
             if($gainsOfUserMonth > 0 && $gainsOfUserMonth <= 5000) // si es menor a 5000 la ganacia sumar la del mes anterior
             {
-                 $gainOfUserMonthPrev = $this->model->where(function ($query) use ($user, $month, $year)
+                 $gainOfUserMonthPrev = Gain::where(function ($query) use ($user, $month, $year)
                 {
                     $query->where('user_id', '=', $user->id)
                         ->where('gain_type', '=', 'B')
