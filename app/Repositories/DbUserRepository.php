@@ -215,12 +215,29 @@ class DbUserRepository extends DbRepository implements UserRepository
             $paymentsOfMembership = ($payment) ? $payment->amount : 0;
 
 
-            $gainsOfUser = Gain::where(function ($query) use ($user, $month, $year) {
+            $gainsOfUserMonth = Gain::where(function ($query) use ($user, $month, $year) {
                 $query->where('user_id', '=', $user->id)
                     ->where('gain_type', '=', 'B')
                     ->where('month', '=', $month)
                     ->where('year', '=', $year);
             })->sum('amount');
+
+             $gainOfUserMonthPrev = 0;
+             $gainsOfUser = 0;
+
+            if($gainsOfUserMonth > 0 && $gainsOfUserMonth <= 5000) // si es menor a 5000 la ganacia sumar la del mes anterior
+            {
+                 $gainOfUserMonthPrev = $this->model->where(function ($query) use ($data)
+                {
+                    $query->where('user_id', '=', Auth::user()->id)
+                        ->where('gain_type', '=', 'B')
+                        ->where('month', '=', ($data['month'] == 1) ? 12 : $data['month'] - 1)//$data['month'])//->where('month', '<=', $data['month']);
+                        ->where('year', '=', ($data['month'] == 1) ? $data['year'] - 1 : $data['year']);
+                })->sum('amount');
+
+            }
+       
+         $gainsOfUser = $gainsOfUserMonth + $gainOfUserMonthPrev;
 
 
             $paymentsAnnual = Payment::where(function ($query) use ($user, $month, $year) {
