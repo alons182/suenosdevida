@@ -71,8 +71,13 @@
                         </div>
 
                         {!! Form::close() !!}
-                        <span id="countdown" class="countdown" style="background-color:#98ba33;color:#FFFFFF"></span>
-                    </div>
+                        <!-- <span id="countdown" class="countdown" style="background-color:#98ba33;color:#FFFFFF"></span> -->
+                        <div class="countdown">
+                            <div class="clock-wrapper">
+                                <div class="clock" style="margin:2em;"></div>
+                            </div>
+                            <div class="message" style="background-color:#98ba33;color:#FFFFFF"></div>
+                        </div>
             @else
 
                 @if(!$ad->hits()->where('user_id',auth()->user()->id)->get()->last())
@@ -92,8 +97,13 @@
                         </div>
 
                         {!! Form::close() !!}
-                        <span id="countdown" class="countdown" style="background-color:#98ba33;color:#FFFFFF"></span>
-                    </div>
+                        <!-- <span id="countdown" class="countdown" style="background-color:#98ba33;color:#FFFFFF"></span> -->
+                        <div class="countdown">
+                            <div class="clock-wrapper">
+                                <div class="clock" style="margin:2em;"></div>
+                            </div>
+                            <div class="message" style="background-color:#98ba33;color:#FFFFFF"></div>
+                        </div>
                 @else
                     @if($ad->hits()->where('user_id',auth()->user()->id)->get()->last()->check == 0)
                         <div class="ads-comments">
@@ -112,8 +122,13 @@
                             </div>
 
                             {!! Form::close() !!}
-                            <span id="countdown" class="countdown" style="background-color:#98ba33;color:#FFFFFF"></span>
-                        </div>
+                            <!-- <span id="countdown" class="countdown" style="background-color:#98ba33;color:#FFFFFF"></span> -->
+                            <div class="countdown">
+                                <div class="clock-wrapper">
+                                    <div class="clock" style="margin:2em;"></div>
+                                </div>
+                                <div class="message" style="background-color:#98ba33;color:#FFFFFF"></div>
+                            </div>
                     @endif
                 @endif
             @endif
@@ -122,20 +137,34 @@
     @endif
 
 </section>
-{{ $currentDate }}<br>
-{{ $targetDate }}
+
 @stop
 @section('scripts')
     <script>
-        $('#countdown').countdown('{!! $targetDate !!}')
-                .on('update.countdown', function(event) {
-                    $(this).html(event.strftime('%H:%M:%S'));
-                })
-                .on('finish.countdown',  function(event) {
-                    $('#countdown').text('Ya puedes enviar tu comentario');
-                    $(".btn").attr('disabled',false);
-                    $("#comment").attr('disabled',false);
-                });
+        clock = $('.clock').FlipClock(60, {
+		        clockFace: 'Counter',
+		        countdown: true,
+		        autoStart: true,
+		        callbacks: {
+		        	start: function() {
+		        		$('.message').html('Espera un 1 minuto para enviar tu comentario!');
+                    },
+                    stop: function() {
+                        $('.message').text('Ya puedes enviar tu comentario');
+                        $(".btn").attr('disabled',false);
+                        $("#comment").attr('disabled',false);
+                    }
+		        }
+		    });
+        // $('#countdown').countdown('{!! $targetDate !!}')
+        //         .on('update.countdown', function(event) {
+        //             $(this).html(event.strftime('%H:%M:%S'));
+        //         })
+        //         .on('finish.countdown',  function(event) {
+        //             $('#countdown').text('Ya puedes enviar tu comentario');
+        //             $(".btn").attr('disabled',false);
+        //             $("#comment").attr('disabled',false);
+        //         });
 
     </script>
 

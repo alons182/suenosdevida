@@ -315,13 +315,53 @@ footer
 			width 100%
 .countdown
 	padding .5em
-	background-color verde
+	background-color: white
 	color white
 	&-web
-		padding .1em .5em
-		position fixed
-		left 0
-		top 0
+		padding: 0.1em 0.5em;
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		width: 20%;
+		background-color: white
+		box-shadow: 1px 1px 2px rgba(0,0,0,.95)
+		transform: scale(0.5);
+		.message
+			font-size: 2rem;
+			padding: 0.5rem;
+			
+	.message
+		text-align: center
+	.clock-wrapper
+		width: 180px
+		margin: 0 auto
+	
+/*.flip-clock-wrapper{
+	transform: scale(0.5);
+}*/
+// .flip-clock-wrapper .flip {
+// 	height: 40px;
+// 	width: 40px;
+// }
+// .flip-clock-wrapper .flip a div {
+// 	height: 49%;
+// }
+// .flip-clock-wrapper .flip .inn {
+// 	font-size: 20px;
+// 	line-height: 20px;
+// }
+// .flip-clock-wrapper ul
+// 	width: 30px;
+// 	height: 40px;
+// 	font-size: 30px;
+// .flip-clock-wrapper ul li a div div.inn
+// .flip-clock-wrapper ul li a div
+// 	font-size: 30px;
+// .flip-clock-wrapper ul li
+// 	line-height: 44px
+
+
 small
 	font-weight 400
 	font-size 16px

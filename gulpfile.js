@@ -21,6 +21,7 @@ elixir(function(mix) {
     .styles([
         'default.css',
         'default.date.css',
+        'flipclock.css',
         'main.css'
     ],'public/css/bundle.css','resources/assets/css')
 
@@ -43,6 +44,7 @@ elixir(function(mix) {
         'vendor/simpleCart.min.js',
         'vendor/jquery.cycle2.min.js',
         'vendor/jquery.countdown.js',
+        'vendor/flipclock.min.js',
         'ubicaciones.js',
         'main.js'
     ],'public/js/bundle.js','resources/assets/js')
