@@ -122,7 +122,7 @@
     @endif
 
 </section>
-
+{{ $targetDate }}
 @stop
 @section('scripts')
     <script>
