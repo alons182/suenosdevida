@@ -151,8 +151,9 @@ class AdsController extends Controller {
 	public function show($id)
 	{
         $ad = $this->adRepository->findById($id);
-        $targetDate =  Carbon::now()->addMinutes(1);
         $currentDate =  Carbon::now();
+        $targetDate =  Carbon::now()->addMinutes(1);
+        
         $hits_per_day = 0;
         $hits_per_week = 0;
 
