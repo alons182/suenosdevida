@@ -4,7 +4,8 @@
 @include('layouts/partials/_banner')
 @if(! isset($cantones))
 <section class="section-top">
-    <a href="{!! URL::route('cantones_path') !!}" class="box-info familia">
+        <!-- cantones_path -->
+    <a href="/store/nicoya/shops" class="box-info familia">
         <h1><span class="light">Tienda</span><br/> Virtual</h1>
         <span class="overlay"></span>
         <i class="icon-arrow-right"></i>

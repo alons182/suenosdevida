@@ -3,7 +3,7 @@
     Sueños de vida | Shops
 @stop
 @section('content')
-    @include('layouts/partials/_banner')
+    
     <section class="main">
         <div class="products">
             <h1>Tiendas Disponibles </h1>
