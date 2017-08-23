@@ -43,9 +43,13 @@ Route::get('opportunity', [
     'as'   => 'opportunity',
     'uses' => 'PagesController@opportunity'
 ]);
-Route::get('aid-plan', [
+/*Route::get('aid-plan', [
     'as'   => 'aid',
     'uses' => 'PagesController@aid'
+]);*/
+Route::get('growth-plan', [
+    'as'   => 'growth',
+    'uses' => 'PagesController@growth'
 ]);
 Route::get('contact', [
     'as'   => 'contact',

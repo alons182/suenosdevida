@@ -10,8 +10,8 @@
         <span class="overlay"></span>
         <i class="icon-arrow-right"></i>
     </a>
-    <a href="/aid-plan" class="box-info canasta">
-        <h1><span class="light">Plan de Crecimiento</span><br/> por Bonificación</h1>
+    <a href="/growth-plan" class="box-info canasta">
+        <h1><span class="light">Plan de Crecimiento por </span><br/>Bonificación</h1>
         <span class="overlay"></span>
         <i class="icon-arrow-right"></i>
     </a>

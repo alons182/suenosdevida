@@ -82,6 +82,15 @@ class PagesController extends Controller {
         return View::make('pages.aid_plan');
     }
 
+     /**
+     * Page Plan de ayuda
+     * @return mixed
+     */
+     public function  growth()
+     {
+         return View::make('pages.growth_plan');
+     }
+
     /**
      * Page terms & conditions
      * @return mixed
