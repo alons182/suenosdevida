@@ -28,7 +28,7 @@
         </thead>
         <tbody>
             @foreach ($products as $product)
-                @if($product->shop->responsable_id == $currentUser->id || $currentUser->hasrole('administrator'))
+                @if($product->shop && $product->shop->responsable_id == $currentUser->id || $currentUser->hasrole('administrator'))
                 <tr>
                     <td>{!! Form::checkbox('chk_product[]', $product->id, null, ['class' => 'chk-product']) !!}</td>
                     <td>{!! $product->id !!}</td>
@@ -40,7 +40,7 @@
                             {!! $category->name !!} -
                         @endforeach 
                     </td>
-                    <td> {!! ($product->shop)? $product->shop->name : '' !!} </td>
+                    <td> {!! ($product->shop) ? $product->shop->name : '' !!} </td>
                     <td>{!! $product->created_at !!}</td>
                     <td>
                             

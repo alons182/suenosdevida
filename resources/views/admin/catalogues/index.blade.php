@@ -20,7 +20,7 @@
         </thead>
         <tbody>
             @foreach ($catalogues as $catalogue)
-                @if($catalogue->shop->responsable_id == $currentUser->id || $currentUser->hasrole('administrator'))
+                @if($catalogue->shop && $catalogue->shop->responsable_id == $currentUser->id || $currentUser->hasrole('administrator'))
                 <tr>
                     <td>{!! $catalogue->id !!}</td>
                     <td>
